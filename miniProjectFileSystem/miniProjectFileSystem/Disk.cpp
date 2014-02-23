@@ -1,5 +1,5 @@
 #include "Disk.h"
-#include <time.h>
+
 
 Disk::Disk(void)
 {
@@ -24,7 +24,7 @@ void Disk::createdisk(string & nameFile, string & nameOwner, bool writeToDisk=tr
 	vhd.diskName[sizeof(vhd.diskName) - 1] = NULL;  //אם אנחנו רוצים שאחרון יהיה null?
 	strncpy(vhd.diskOwner, nameOwner.c_str(), sizeof(vhd.diskOwner));
 	vhd.diskOwner[sizeof(vhd.diskOwner) - 1] = NULL;  //אם אנחנו רוצים שאחרון יהיה null?
-	dateNow(vhd.prodDate);
+	Functions::dateNow(vhd.prodDate);
 	vhd.intClusQty=1600;
 	vhd.dataClusQty=1596;//1600-2*(vh(0.5)+dat(0.5)+rootdir(1))=1596
 	vhd.addrDAT=1; //הקלאסטר הראשון הסקטור השני
@@ -130,12 +130,7 @@ void Disk::writeSector(Sector* toWrite)
 void Disk::readSector(int, Sector*){}
 void Disk::readSector(Sector*){}
 
-void Disk::dateNow(char* date)//שומר את התאריך הנוכחי
-{
-	time_t t = time(0); 
-	tm* lt = localtime(&t);
-	sprintf(date, "%02d/%02d/%04d/0", lt->tm_mday, lt->tm_mon + 1, lt->tm_year + 1900);
-}
+
 
 
 Disk::~Disk(void)

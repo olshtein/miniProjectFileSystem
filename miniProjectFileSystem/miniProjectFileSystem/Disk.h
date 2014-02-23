@@ -7,6 +7,7 @@
 #include "Sector.h"
 #include "VolumeHeader.h"
 #include <fstream>
+#include "Functions.h"
 
 using namespace std;
 
@@ -33,8 +34,5 @@ public:
 	void writeSector(Sector*);
 	void readSector(int, Sector*);
 	void readSector(Sector*);
-private:
-	void dateNow(char* date);//שומר את התאריך הנוכחי
-
 };
 

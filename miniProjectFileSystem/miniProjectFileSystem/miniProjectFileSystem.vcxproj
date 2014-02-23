@@ -82,12 +82,14 @@
     <ClInclude Include="DirEntry.h" />
     <ClInclude Include="Disk.h" />
     <ClInclude Include="FileHeader.h" />
+    <ClInclude Include="Functions.h" />
     <ClInclude Include="RootDirectory.h" />
     <ClInclude Include="Sector.h" />
     <ClInclude Include="VolumeHeader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Disk.cpp" />
+    <ClCompile Include="Functions.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
