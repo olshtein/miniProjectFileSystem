@@ -13,5 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\BasicDiskDataTypes">
+      <UniqueIdentifier>{bd975d68-8447-4fee-ae02-7527868b7eaf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Disk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Disk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DAT.h">
+      <Filter>Header Files\BasicDiskDataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="DirEntry.h">
+      <Filter>Header Files\BasicDiskDataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="FileHeader.h">
+      <Filter>Header Files\BasicDiskDataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="RootDirectory.h">
+      <Filter>Header Files\BasicDiskDataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Sector.h">
+      <Filter>Header Files\BasicDiskDataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="VolumeHeader.h">
+      <Filter>Header Files\BasicDiskDataTypes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
