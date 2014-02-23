@@ -3,7 +3,7 @@
 
 Disk::Disk(void)
 {
-
+	createdisk(string(""),string(""), false);
 }
 Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 {
@@ -16,7 +16,7 @@ Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 
 }
 
-void Disk::createdisk(string & nameFile, string & nameOwner)
+void Disk::createdisk(string & nameFile, string & nameOwner, bool writeToDisk=true)
 {
 	//vhd
 	vhd.sectorNr=0;
@@ -50,33 +50,42 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 	dat.DAT.set(3196,0);
 
 	//disk fstream
-	dskfl.open(nameFile+".disk",ios::out  | ios::binary);
-
-	if(dskfl.is_open() )  //כתיבה לקובץ של כל הדיסק
+	if(writeToDisk)
 	{
-		dskfl.seekg(0);
-		dskfl.write(reinterpret_cast< const char * >(&vhd),sizeof(Sector));
-		dskfl.write(reinterpret_cast< const char * >(&dat),sizeof(Sector));//האים צריך בכל פעם להקפיץ את המצביע?? 
-		dskfl.write(reinterpret_cast< const char * >(&rootdir),2*sizeof(Sector));
-		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // לכל סקטורי המידע
+		dskfl.open(nameFile+".disk",ios::out  | ios::binary);
+
+		if(dskfl.is_open() )  //כתיבה לקובץ של כל הדיסק
 		{
-			Sector my;
-			my.sectorNr=i;
-			dskfl.write(reinterpret_cast< const char * >(&my),2*sizeof(Sector));
+			dskfl.seekg(0);
+			dskfl.write(reinterpret_cast< const char * >(&vhd),sizeof(Sector));
+			dskfl.write(reinterpret_cast< const char * >(&dat),sizeof(Sector));//האים צריך בכל פעם להקפיץ את המצביע?? 
+			dskfl.write(reinterpret_cast< const char * >(&rootdir),2*sizeof(Sector));
+			for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // לכל סקטורי המידע
+			{
+				Sector my;
+				my.sectorNr=i;
+				dskfl.write(reinterpret_cast< const char * >(&my),2*sizeof(Sector));
+			}
+
+			// update rootdir, vhd, dat sectorNr to fit, copies sector numbers.
+			rootdir.sectorNr_1=3196;
+			rootdir.sectorNr_2=3197;
+			dskfl.write(reinterpret_cast< const char * >(&rootdir),2*sizeof(Sector));
+			rootdir.sectorNr_1=2;
+			rootdir.sectorNr_2=3;
+			vhd.sectorNr=3198;
+			dskfl.write(reinterpret_cast< const char * >(&vhd),sizeof(Sector));
+			vhd.sectorNr=0;
+			dat.sectorNr=3199;
+			dskfl.write(reinterpret_cast< const char * >(&dat),sizeof(Sector));
+			dat.sectorNr=1;
+			dskfl.close();
 		}
+		else
+		{
+			throw new exception("ERROR: File does not open, fails to perform file creation (in Disk::createdisk(string&, string&))");
 
-		// update rootdir, vhd, dat sectorNr to fit, copies sector numbers.
-
-		dskfl.write(reinterpret_cast< const char * >(&rootdir),2*sizeof(Sector));
-		dskfl.write(reinterpret_cast< const char * >(&vhd),sizeof(Sector));
-		dskfl.write(reinterpret_cast< const char * >(&dat),sizeof(Sector));
-
-		dskfl.close();
-	}
-	else
-	{
-		throw new exception("ERROR: File does not open, fails to perform file creation (in Disk::createdisk(string&, string&))");
-
+		}
 	}
 
 
@@ -86,7 +95,9 @@ void Disk::mountdisk(string & nameFile)
 
 }
 void Disk::unmountdisk( ){}
-void Disk::recreatedisk(string &){}
+void Disk::recreatedisk(string &)
+{
+}
 
 fstream* const Disk::getdskfl()
 {
@@ -101,13 +112,21 @@ void Disk::seekToSector(unsigned int numOfSector)
 {
 	if(dskfl.is_open() ) 
 		dskfl.seekg(numOfSector*(sizeof(Sector)));
-	throw string("ERROR File does not open (seekToSector error)");
+	else
+		throw string("ERROR File does not open (seekToSector(unsigned int) error)");
 }
-void Disk::writeSector(unsigned int, Sector*)
+void Disk::writeSector(unsigned int numOfSector, Sector* toWrite)
 {
-
+	seekToSector(numOfSector);
+	dskfl.write(reinterpret_cast< const char * >(&toWrite),sizeof(Sector));
 }
-void Disk::writeSector(Sector*){}
+void Disk::writeSector(Sector* toWrite)
+{
+	if(dskfl.is_open() ) 
+		dskfl.write(reinterpret_cast< const char * >(&toWrite),sizeof(Sector));
+	else
+		throw string("ERROR: File does not open (writeSector(Sector*) error)");
+}
 void Disk::readSector(int, Sector*){}
 void Disk::readSector(Sector*){}
 

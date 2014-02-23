@@ -23,7 +23,7 @@ public:
 	Disk(void);
 	Disk (string &, string &, char);
 	~Disk(void);
-	void createdisk(string &, string &);
+	void createdisk(string &, string &, bool=true);
 	void mountdisk(string &);
 	void unmountdisk( );
 	void recreatedisk(string &);
