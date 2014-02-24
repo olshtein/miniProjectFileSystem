@@ -20,9 +20,9 @@ void Disk::createdisk(string & nameFile, string & nameOwner, bool writeToDisk=tr
 {
 	//vhd
 	vhd.sectorNr=0;
-	strncpy(vhd.diskName, nameFile.c_str(), sizeof(vhd.diskName));
+	strncpy_s(vhd.diskName, nameFile.c_str(), sizeof(vhd.diskName));
 	vhd.diskName[sizeof(vhd.diskName) - 1] = NULL;  //אם אנחנו רוצים שאחרון יהיה null?
-	strncpy(vhd.diskOwner, nameOwner.c_str(), sizeof(vhd.diskOwner));
+	strncpy_s(vhd.diskOwner, nameOwner.c_str(), sizeof(vhd.diskOwner));
 	vhd.diskOwner[sizeof(vhd.diskOwner) - 1] = NULL;  //אם אנחנו רוצים שאחרון יהיה null?
 	Functions::dateNow(vhd.prodDate);
 	vhd.intClusQty=1600;
