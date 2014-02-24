@@ -1,5 +1,7 @@
 #pragma once
 
+#include "BaseSector.h"
+
 struct DirEntry
 {
 char Filename[12]; //שם הקובץ

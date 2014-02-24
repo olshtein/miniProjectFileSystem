@@ -1,10 +1,11 @@
 #pragma once
+
+#include "BaseSector.h"
 #include "DAT.h"
 #include "DirEntry.h"
 
-struct FileHeader
+struct FileHeader : BaseSector
 {
-unsigned int sectorNr;  //מספר סידורי של הסקטור בדיסק
 DirEntry fileDesc ; // העתק של כניסתו של הקובץ בתיקייה (file descriptor)
 DATtype FAT; // FAT
 

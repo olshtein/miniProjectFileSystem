@@ -50,5 +50,11 @@
     <ClInclude Include="Functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BaseSector.h">
+      <Filter>Header Files\BasicDiskDataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="RD_Sector.h">
+      <Filter>Header Files\BasicDiskDataTypes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,7 +1,9 @@
 #pragma once
-struct Sector
+
+#include "BaseSector.h"
+
+struct Sector : BaseSector
 {
-	unsigned int sectorNr;
 	char rawData [1020];
 };
 

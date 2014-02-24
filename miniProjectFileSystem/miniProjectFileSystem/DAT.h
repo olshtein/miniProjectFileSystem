@@ -1,12 +1,14 @@
 #pragma once
+
 #include <bitset>
+#include "BaseSector.h"
+
 using namespace std;
 
 typedef bitset<1600> DATtype; 
 
-struct Dat
+struct Dat : BaseSector
 {
-	unsigned int sectorNr; //מספר סידורי של הסקטור בדיסק
 	DATtype DAT;
 	char emptyArea[820];  ///שמור לשימוש עתידי
 };

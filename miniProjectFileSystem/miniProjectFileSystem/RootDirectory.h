@@ -1,18 +1,13 @@
 #pragma once
-#include "DirEntry.h"
 
-const int MAX_DIR_IN_SECTOR = 14;
+#include "BaseSector.h"
+#include "RD_Sector.h"
 
 struct RootDirectory
 {
 
-	unsigned int sectorNr_1; //סקטור של תחילת הקלאסטר
-	DirEntry dir_1[MAX_DIR_IN_SECTOR];
-	char emptyArea_1[12];
-
-	unsigned int sectorNr_2;
-	DirEntry dir_2[MAX_DIR_IN_SECTOR];
-	char emptyArea_2[12];
+	RD_Sector sector1;
+	RD_Sector sector2;
 
 	RootDirectory(void);
 	~RootDirectory(void);
@@ -24,11 +19,11 @@ struct RootDirectory
 			if(i>=0&&i<MAX_DIR_IN_SECTOR)
 			{
 
-				return dir_1[i];
+				return sector1.dir[i];
 			}
 			if(i>=MAX_DIR_IN_SECTOR && i<MAX_DIR_IN_SECTOR*2)
 			{          
-				return dir_2[i-MAX_DIR_IN_SECTOR];
+				return sector2.dir[i-MAX_DIR_IN_SECTOR];
 			}
 
 			throw string("Invalid Index value"); 

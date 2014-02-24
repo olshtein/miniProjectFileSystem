@@ -78,11 +78,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseSector.h" />
     <ClInclude Include="DAT.h" />
     <ClInclude Include="DirEntry.h" />
     <ClInclude Include="Disk.h" />
     <ClInclude Include="FileHeader.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="RD_Sector.h" />
     <ClInclude Include="RootDirectory.h" />
     <ClInclude Include="Sector.h" />
     <ClInclude Include="VolumeHeader.h" />

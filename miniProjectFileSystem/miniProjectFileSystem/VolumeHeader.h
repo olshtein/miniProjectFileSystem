@@ -1,7 +1,9 @@
 #pragma once
-struct VolumeHeader
+
+#include "BaseSector.h"
+
+struct VolumeHeader : BaseSector
 {
-	unsigned int sectorNr; // מספר סידורי של הסקטור בדיסק 
 	char diskName[12]; //שם זיהוי הדיסק
 	char diskOwner[12]; //שם בעל הדיסק   
 	char prodDate[10]; //תאריך יצור הדיסק (ddmmyyyy)
