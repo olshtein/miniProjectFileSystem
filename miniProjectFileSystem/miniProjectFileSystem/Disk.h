@@ -24,9 +24,10 @@ public:
 	Disk(void);
 	Disk (string &, string &, char);
 	~Disk(void);
-	void createdisk(string &, string &, bool=true);
+	void createdisk(string &, string &);
+	void createdisk( string &);
 	void mountdisk(string &);
-	void unmountdisk( );
+	void unmountdisk();
 	void recreatedisk(string &);
 	fstream* const getdskfl();
 	void seekToSector(unsigned int);
