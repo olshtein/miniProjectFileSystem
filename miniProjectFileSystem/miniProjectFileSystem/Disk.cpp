@@ -10,7 +10,7 @@ Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 	if (createOrMountDisk=='c')
 		createdisk(nameFile,nameOwner);
 	else if (createOrMountDisk=='m')
-			mountdisk (nameFile);
+		mountdisk (nameFile);
 	else
 		throw new exception("ERROR: Improper initialization command (in Disk::Disk(string, string, char))");
 
@@ -65,44 +65,49 @@ void Disk::createdisk( string & nameOwner)
 	dat.DAT.set(3196,0);
 
 	//disk fstream
-	
-		if(dskfl.is_open() )  //כתיבה לקובץ של כל הדיסק
-		{
-			dskfl.seekg(0);
-			dskfl.write((char *)(&vhd),sizeof(Sector));
-			dskfl.write((char *)(&dat),sizeof(Sector));
-			dskfl.write((char *)(&rootdir),2*sizeof(Sector));
-			for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // לכל סקטורי המידע
-			{
-				Sector my;
-				my.sectorNr=i;
-				dskfl.write((char *)(&my),sizeof(Sector));
-			}
+	savechanges();
 
-			// update rootdir, vhd, dat sectorNr to fit, copies sector numbers.
-			rootdir.sector1.sectorNr=3196;
-			rootdir.sector2.sectorNr=3197;
-			dskfl.write((char *)(&rootdir),2*sizeof(Sector));
-			rootdir.sector1.sectorNr=2;
-			rootdir.sector2.sectorNr=3;
-			vhd.sectorNr=3198;
-			dskfl.write((char *)(&vhd),sizeof(Sector));
-			vhd.sectorNr=0;
-			dat.sectorNr=3199;
-			dskfl.write((char *)(&dat),sizeof(Sector));
-			dat.sectorNr=1;
-		}
-		else
-		{
-			throw new exception("ERROR: File does not open, fails to perform file creation (in Disk::createdisk(string&, string&))");
-
-		}
 }
+
 void Disk::mountdisk(string & nameFile)
 {
+	dskfl.open(nameFile + ".disk", ios::in | ios::out | ios::_Nocreate);
 
+	if (dskfl.is_open())
+	{
+		mounted=true;
+
+		dskfl.seekg(0);
+		dskfl.read((char*)(&vhd), sizeof(Sector));
+		dskfl.read((char*)(&dat), sizeof(Sector));
+		dskfl.read((char*)(&rootdir), 2*sizeof(Sector));
+
+		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // for all data sectors
+		{
+			Sector my;
+			my.sectorNr=i;
+			dskfl.read((char*)(&my),sizeof(Sector));
+		}
+	}
+	else
+		throw exception("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
 }
-void Disk::unmountdisk( ){}
+
+void Disk::unmountdisk()
+{
+	if (!dskfl.is_open())
+		throw exception("ERROR: disk not mounted, cannot unmount. (in Disk::unmountdisk())");
+
+	// step 1: update data fields.
+	savechanges();
+
+	// step 2: closing the disk.
+	dskfl.close();
+
+	// step 3: turn 'mounted' to false.
+	mounted=false;
+}
+
 void Disk::recreatedisk(string & nameOwner)
 {	
 	if (dskfl.is_open())
@@ -118,7 +123,7 @@ void Disk::recreatedisk(string & nameOwner)
 			throw new exception("ERROR: nameOwner does not match (in Disk::recreatedisk(string &))");
 	}
 	else
-				throw new exception("ERROR: the File name is not open (in Disk::recreatedisk(string &))");
+		throw new exception("ERROR: the File name is not open (in Disk::recreatedisk(string &))");
 }
 
 fstream* const Disk::getdskfl()
@@ -130,38 +135,93 @@ fstream* const Disk::getdskfl()
 	return NULL;
 
 }
+
 void Disk::seekToSector(unsigned int numOfSector)
 {
 	if(dskfl.is_open() ) 
 	{
 		dskfl.seekg(numOfSector*(sizeof(Sector)));
+		dskfl.seekp(numOfSector*(sizeof(Sector)));
 		currDiskSectorNr=numOfSector;
 	}
 	else
-		throw string("ERROR File does not open (seekToSector(unsigned int) error)");
+		throw exception("ERROR: File does not open (in Disk::seekToSector(unsigned int))");
 }
+
 void Disk::writeSector(unsigned int numOfSector, Sector* toWrite)
 {
 	seekToSector(numOfSector);
-	dskfl.write(reinterpret_cast< const char * >(&toWrite),sizeof(Sector));
+	dskfl.write((char*)(&toWrite),sizeof(Sector));
 	currDiskSectorNr++;
 }
+
 void Disk::writeSector(Sector* toWrite)
 {
 	if(dskfl.is_open() ) 
 	{
-		dskfl.write(reinterpret_cast< const char * >(&toWrite),sizeof(Sector));
-			currDiskSectorNr++;
+		dskfl.write((char*)(&toWrite),sizeof(Sector));
+		currDiskSectorNr++;
 	}
 	else
-		throw string("ERROR: File does not open (writeSector(Sector*) error)");
+		throw exception("ERROR: File does not open (in Disk::writeSector(Sector*))");
 }
-void Disk::readSector(int, Sector*){}
-void Disk::readSector(Sector*){}
+
+void Disk::readSector(int numOfSector, Sector* toRead)
+{
+	seekToSector(numOfSector);
+	dskfl.read((char*)(&toRead),sizeof(Sector));
+	currDiskSectorNr++;
+}
+
+void Disk::readSector(Sector* toRead)
+{
+	if(dskfl.is_open() ) 
+	{
+		dskfl.read((char*)(&toRead),sizeof(Sector));
+		currDiskSectorNr++;
+	}
+	else
+		throw exception("ERROR: File does not open (in Disk::readSector(Sector*))");
+}
 
 
 
 
 Disk::~Disk(void)
 {
+}
+
+void Disk::savechanges()
+{
+	if(dskfl.is_open() )  //כתיבה לקובץ של כל הדיסק
+	{
+		dskfl.seekg(0);
+		dskfl.write((char *)(&vhd),sizeof(Sector));
+		dskfl.write((char *)(&dat),sizeof(Sector));
+		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
+		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // לכל סקטורי המידע
+		{
+			Sector my;
+			my.sectorNr=i;
+			dskfl.write((char *)(&my),sizeof(Sector));
+		}
+
+		// update rootdir, vhd, dat sectorNr to fit, copies sector numbers.
+		rootdir.sector1.sectorNr=3196;
+		rootdir.sector2.sectorNr=3197;
+		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
+		rootdir.sector1.sectorNr=2;
+		rootdir.sector2.sectorNr=3;
+		vhd.sectorNr=3198;
+		dskfl.write((char *)(&vhd),sizeof(Sector));
+		vhd.sectorNr=0;
+		dat.sectorNr=3199;
+		dskfl.write((char *)(&dat),sizeof(Sector));
+		dat.sectorNr=1;
+	}
+	else
+	{
+		throw new exception("ERROR: File does not open, fails to perform file creation (in Disk::savechanges())");
+
+	}
 }

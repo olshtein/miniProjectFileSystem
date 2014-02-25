@@ -35,5 +35,8 @@ public:
 	void writeSector(Sector*);
 	void readSector(int, Sector*);
 	void readSector(Sector*);
+
+private:
+	void savechanges();
 };
 
