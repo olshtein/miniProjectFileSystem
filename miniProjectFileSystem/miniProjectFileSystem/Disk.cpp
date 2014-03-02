@@ -151,7 +151,8 @@ void Disk::seekToSector(unsigned int numOfSector)
 void Disk::writeSector(unsigned int numOfSector, Sector* toWrite)
 {
 	seekToSector(numOfSector);
-	dskfl.write((char*)(&toWrite),sizeof(Sector));
+	if (checkchanges(toWrite))
+		dskfl.write((char*)(&toWrite),sizeof(Sector));
 	currDiskSectorNr++;
 }
 
@@ -159,7 +160,8 @@ void Disk::writeSector(Sector* toWrite)
 {
 	if(dskfl.is_open() ) 
 	{
-		dskfl.write((char*)(&toWrite),sizeof(Sector));
+		if (checkchanges(toWrite))
+			dskfl.write((char*)(&toWrite),sizeof(Sector));
 		currDiskSectorNr++;
 	}
 	else
@@ -191,32 +193,52 @@ Disk::~Disk(void)
 {
 }
 
+bool Disk::checkchanges(Sector* sector)
+{
+	Sector* temp; // temp to compare sector info.
+	dskfl.read((char*)(&temp),sizeof(Sector));
+	if ( (*(char*)temp ^ *(char*)sector) != 0)
+		return true;
+	return false;
+}
+
 void Disk::savechanges()
 {
 	if(dskfl.is_open() )  //כתיבה לקובץ של כל הדיסק
 	{
+
 		dskfl.seekg(0);
-		dskfl.write((char *)(&vhd),sizeof(Sector));
+		dskfl.seekp(0);
+
+		if (checkchanges((Sector*)&vhd))
+			dskfl.write((char *)(&vhd),sizeof(Sector));
+		if (checkchanges((Sector*)&dat))
 		dskfl.write((char *)(&dat),sizeof(Sector));
+		if (checkchanges((Sector*)&rootdir.sector1) || checkchanges((Sector*)&rootdir.sector2))
 		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
-		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // לכל סקטורי המידע
+		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // for all data sectors.
 		{
 			Sector my;
 			my.sectorNr=i;
-			dskfl.write((char *)(&my),sizeof(Sector));
+			
+			if (checkchanges((Sector*)&my))
+				dskfl.write((char *)(&my),sizeof(Sector));
 		}
 
 		// update rootdir, vhd, dat sectorNr to fit, copies sector numbers.
-		rootdir.sector1.sectorNr=3196;
-		rootdir.sector2.sectorNr=3197;
-		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
+		rootdir.sector1.sectorNr=1596;
+		rootdir.sector2.sectorNr=1597;
+		if (checkchanges((Sector*)&rootdir.sector1) || checkchanges((Sector*)&rootdir.sector2))
+			dskfl.write((char *)(&rootdir),2*sizeof(Sector));
 		rootdir.sector1.sectorNr=2;
 		rootdir.sector2.sectorNr=3;
-		vhd.sectorNr=3198;
-		dskfl.write((char *)(&vhd),sizeof(Sector));
+		vhd.sectorNr=1598;
+		if (checkchanges((Sector*)&vhd))
+			dskfl.write((char *)(&vhd),sizeof(Sector));
 		vhd.sectorNr=0;
-		dat.sectorNr=3199;
-		dskfl.write((char *)(&dat),sizeof(Sector));
+		dat.sectorNr=1599;
+		if (checkchanges((Sector*)&dat))
+			dskfl.write((char *)(&dat),sizeof(Sector));
 		dat.sectorNr=1;
 	}
 	else

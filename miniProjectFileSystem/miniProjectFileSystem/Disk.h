@@ -38,5 +38,6 @@ public:
 
 private:
 	void savechanges();
+	bool checkchanges(Sector*);
 };
 
