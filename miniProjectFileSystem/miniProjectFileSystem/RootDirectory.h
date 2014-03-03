@@ -3,6 +3,15 @@
 #include "BaseSector.h"
 #include "RD_Sector.h"
 
+/*************************************************
+* STRUCT
+*	RootDirectory
+* MEANING
+*	Struct representing a 2 sector-length long root directory in a disk.
+* SEE ALSO
+*	Sector
+*	RD_Sector
+**************************************************/
 struct RootDirectory
 {
 

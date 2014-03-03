@@ -18,7 +18,6 @@ Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 
 void Disk::createdisk(string & nameFile, string & nameOwner)
 {
-	//vhd
 	dskfl.open(nameFile+".disk",ios::out  | ios::_Nocreate);
 	if (dskfl.is_open())
 	{	
@@ -26,6 +25,8 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 		throw new exception("ERROR: this File name already exists (in Disk::createdisk(string&, string&))");
 	}
 	dskfl.open(nameFile+".disk",ios::out  | ios::binary);
+
+	//vhd
 	vhd.sectorNr=0;
 	strncpy_s(vhd.diskName, nameFile.c_str(), sizeof(vhd.diskName));
 	vhd.diskName[sizeof(vhd.diskName) - 1] = NULL;  //אם אנחנו רוצים שאחרון יהיה null?

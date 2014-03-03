@@ -5,9 +5,25 @@
 
 using namespace std;
 
+/*************************************************
+* CLASS
+*	Functions
+* MEANING
+*	Class containing usefull function, used in the project.
+* SEE ALSO
+*   Disk
+**************************************************/
 class Functions
 {
 public:
-	static 	void dateNow(char* date);// saves corrent date.
+/*************************************************
+* FUNCTION
+*	dateNow
+* PARAMETERS
+*	char* - contains obtained date.
+* MEANING
+*	gets current date
+**************************************************/
+	static	void dateNow(char* date);// saves corrent date.
 };
 

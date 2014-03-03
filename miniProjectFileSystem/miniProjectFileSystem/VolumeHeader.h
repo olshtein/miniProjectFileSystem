@@ -2,6 +2,20 @@
 
 #include "BaseSector.h"
 
+/*************************************************
+* STRUCT
+*	VolumeHeader
+* INHERITS
+*	BaseSector
+* MEANING
+*	Struct representing a sector-length volume header of a disk.
+* SEE ALSO
+*   SectorBase
+*	Sector
+*   DAT
+*	FileHeader
+*	RD_Sector
+**************************************************/
 struct VolumeHeader : BaseSector
 {
 	char diskName[12]; //שם זיהוי הדיסק
