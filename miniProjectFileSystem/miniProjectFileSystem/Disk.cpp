@@ -5,6 +5,7 @@ Disk::Disk(void)
 {
 	createdisk(string(""),string(""));
 }
+
 Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 {
 	if (createOrMountDisk=='c')
@@ -16,8 +17,13 @@ Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 
 }
 
+Disk::~Disk(void)
+{
+}
+
 void Disk::createdisk(string & nameFile, string & nameOwner)
 {
+	//vhd
 	dskfl.open(nameFile+".disk",ios::out  | ios::_Nocreate);
 	if (dskfl.is_open())
 	{	
@@ -25,8 +31,6 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 		throw new exception("ERROR: this File name already exists (in Disk::createdisk(string&, string&))");
 	}
 	dskfl.open(nameFile+".disk",ios::out  | ios::binary);
-
-	//vhd
 	vhd.sectorNr=0;
 	strncpy_s(vhd.diskName, nameFile.c_str(), sizeof(vhd.diskName));
 	vhd.diskName[sizeof(vhd.diskName) - 1] = NULL;  //אם אנחנו רוצים שאחרון יהיה null?
@@ -59,11 +63,8 @@ void Disk::createdisk( string & nameOwner)
 	dat.DAT.set();
 	dat.DAT.set(0,0);
 	dat.DAT.set(1,0);
-	dat.DAT.set(2,0);
-	dat.DAT.set(3199,0);
-	dat.DAT.set(3198,0);
-	dat.DAT.set(3197,0);
-	dat.DAT.set(3196,0);
+	dat.DAT.set(1598,0);
+	dat.DAT.set(1599,0);
 
 	//disk fstream
 	savechanges();
@@ -72,7 +73,7 @@ void Disk::createdisk( string & nameOwner)
 
 void Disk::mountdisk(string & nameFile)
 {
-	dskfl.open(nameFile + ".disk", ios::in | ios::out | ios::_Nocreate);
+	dskfl.open(nameFile + ".disk", ios::in | ios::out | ios::binary);
 
 	if (dskfl.is_open())
 	{
@@ -91,7 +92,8 @@ void Disk::mountdisk(string & nameFile)
 		}
 	}
 	else
-		throw exception("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
+		throw exception("ERROR: file does not exist in path: (in Disk::mountdisk(string&))");
+		//throw exception("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
 }
 
 void Disk::unmountdisk()
@@ -152,8 +154,7 @@ void Disk::seekToSector(unsigned int numOfSector)
 void Disk::writeSector(unsigned int numOfSector, Sector* toWrite)
 {
 	seekToSector(numOfSector);
-	if (checkchanges(toWrite))
-		dskfl.write((char*)(&toWrite),sizeof(Sector));
+	dskfl.write((char*)(toWrite),sizeof(Sector));
 	currDiskSectorNr++;
 }
 
@@ -161,8 +162,7 @@ void Disk::writeSector(Sector* toWrite)
 {
 	if(dskfl.is_open() ) 
 	{
-		if (checkchanges(toWrite))
-			dskfl.write((char*)(&toWrite),sizeof(Sector));
+		dskfl.write((char*)(toWrite),sizeof(Sector));
 		currDiskSectorNr++;
 	}
 	else
@@ -172,7 +172,7 @@ void Disk::writeSector(Sector* toWrite)
 void Disk::readSector(int numOfSector, Sector* toRead)
 {
 	seekToSector(numOfSector);
-	dskfl.read((char*)(&toRead),sizeof(Sector));
+	dskfl.read((char*)(toRead),sizeof(Sector));
 	currDiskSectorNr++;
 }
 
@@ -180,66 +180,39 @@ void Disk::readSector(Sector* toRead)
 {
 	if(dskfl.is_open() ) 
 	{
-		dskfl.read((char*)(&toRead),sizeof(Sector));
+		dskfl.read((char*)(toRead),sizeof(Sector));
 		currDiskSectorNr++;
 	}
 	else
 		throw exception("ERROR: File does not open (in Disk::readSector(Sector*))");
 }
 
-
-
-
-Disk::~Disk(void)
-{
-}
-
-bool Disk::checkchanges(Sector* sector)
-{
-	Sector* temp; // temp to compare sector info.
-	dskfl.read((char*)(&temp),sizeof(Sector));
-	if ( (*(char*)temp ^ *(char*)sector) != 0)
-		return true;
-	return false;
-}
-
 void Disk::savechanges()
 {
 	if(dskfl.is_open() )  //כתיבה לקובץ של כל הדיסק
 	{
-
 		dskfl.seekg(0);
-		dskfl.seekp(0);
-
-		if (checkchanges((Sector*)&vhd))
-			dskfl.write((char *)(&vhd),sizeof(Sector));
-		if (checkchanges((Sector*)&dat))
+		dskfl.write((char *)(&vhd),sizeof(Sector));
 		dskfl.write((char *)(&dat),sizeof(Sector));
-		if (checkchanges((Sector*)&rootdir.sector1) || checkchanges((Sector*)&rootdir.sector2))
 		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
-		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // for all data sectors.
+		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // לכל סקטורי המידע
 		{
 			Sector my;
 			my.sectorNr=i;
-			
-			if (checkchanges((Sector*)&my))
-				dskfl.write((char *)(&my),sizeof(Sector));
+			dskfl.write((char *)(&my),sizeof(Sector));
 		}
 
 		// update rootdir, vhd, dat sectorNr to fit, copies sector numbers.
-		rootdir.sector1.sectorNr=1596;
-		rootdir.sector2.sectorNr=1597;
-		if (checkchanges((Sector*)&rootdir.sector1) || checkchanges((Sector*)&rootdir.sector2))
-			dskfl.write((char *)(&rootdir),2*sizeof(Sector));
+		rootdir.sector1.sectorNr=3196;
+		rootdir.sector2.sectorNr=3197;
+		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
 		rootdir.sector1.sectorNr=2;
 		rootdir.sector2.sectorNr=3;
-		vhd.sectorNr=1598;
-		if (checkchanges((Sector*)&vhd))
-			dskfl.write((char *)(&vhd),sizeof(Sector));
+		vhd.sectorNr=3198;
+		dskfl.write((char *)(&vhd),sizeof(Sector));
 		vhd.sectorNr=0;
-		dat.sectorNr=1599;
-		if (checkchanges((Sector*)&dat))
-			dskfl.write((char *)(&dat),sizeof(Sector));
+		dat.sectorNr=3199;
+		dskfl.write((char *)(&dat),sizeof(Sector));
 		dat.sectorNr=1;
 	}
 	else

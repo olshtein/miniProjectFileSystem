@@ -18,9 +18,6 @@ struct RootDirectory
 	RD_Sector sector1;
 	RD_Sector sector2;
 
-	RootDirectory(void);
-	~RootDirectory(void);
-
 
 	DirEntry &  operator [] (int i)
 	{

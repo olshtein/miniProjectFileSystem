@@ -8,7 +8,7 @@ char Filename[12]; //שם הקובץ
 char fileOwner[12];  //שם בעל הקובץ
 
 unsigned int fileAddr;  //כתובת הסקטור הראשון של הקובץ
-char crDate[10];  //תאריך יצירת הקובץ
+char crDate[11];  //תאריך יצירת הקובץ
 unsigned int fileSize;  //גודל הקובץ, כמספר סקטורים
 unsigned int eofRecNr;  //מיקום "רשומת" ה-end-of-file (המספר הסידורי של מיקומה מהתחלת הקובץ)
 unsigned int maxRecSize;  //אורך רשומה מרבי
