@@ -9,11 +9,14 @@ Disk::Disk(void)
 Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 {
 	if (createOrMountDisk=='c')
+	{
 		createdisk(nameFile,nameOwner);
+		mountdisk (nameFile);
+	}
 	else if (createOrMountDisk=='m')
 		mountdisk (nameFile);
 	else
-		throw new exception("ERROR: Improper initialization command (in Disk::Disk(string, string, char))");
+		throw new logic_error("ERROR: Improper initialization command (in Disk::Disk(string, string, char))");
 
 }
 
@@ -28,14 +31,18 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 	if (dskfl.is_open())
 	{	
 		dskfl.close();
-		throw new exception("ERROR: this File name already exists (in Disk::createdisk(string&, string&))");
+		throw new logic_error("ERROR: this File name already exists (in Disk::createdisk(string&, string&))");
 	}
+		if (nameFile!="")
+		{
 	dskfl.open(nameFile+".disk",ios::out  | ios::binary);
 	vhd.sectorNr=0;
 	strncpy_s(vhd.diskName, nameFile.c_str(), sizeof(vhd.diskName));
 	vhd.diskName[sizeof(vhd.diskName) - 1] = NULL;  //אם אנחנו רוצים שאחרון יהיה null?
+	mounted=false;
 	createdisk(nameOwner);
 	dskfl.close();
+		}
 
 }
 
@@ -92,14 +99,14 @@ void Disk::mountdisk(string & nameFile)
 		}
 	}
 	else
-		throw exception("ERROR: file does not exist in path: (in Disk::mountdisk(string&))");
-		//throw exception("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
+		throw logic_error("ERROR: file does not exist in path: (in Disk::mountdisk(string&))");
+		//throw logic_error("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
 }
 
 void Disk::unmountdisk()
 {
 	if (!dskfl.is_open())
-		throw exception("ERROR: disk not mounted, cannot unmount. (in Disk::unmountdisk())");
+		throw logic_error("ERROR: disk not mounted, cannot unmount. (in Disk::unmountdisk())");
 
 	// step 1: update data fields.
 	savechanges();
@@ -120,13 +127,13 @@ void Disk::recreatedisk(string & nameOwner)
 			if(mounted==false)
 				createdisk(nameOwner);
 			else
-				throw new exception("ERROR: the Disk is not available (in Disk::recreatedisk(string &))");
+				throw  logic_error("ERROR: the Disk is not available (in Disk::recreatedisk(string &))");
 		}
 		else
-			throw new exception("ERROR: nameOwner does not match (in Disk::recreatedisk(string &))");
+			throw  logic_error("ERROR: nameOwner does not match (in Disk::recreatedisk(string &))");
 	}
 	else
-		throw new exception("ERROR: the File name is not open (in Disk::recreatedisk(string &))");
+		throw  logic_error("ERROR: the File name is not open (in Disk::recreatedisk(string &))");
 }
 
 fstream* const Disk::getdskfl()
@@ -148,7 +155,7 @@ void Disk::seekToSector(unsigned int numOfSector)
 		currDiskSectorNr=numOfSector;
 	}
 	else
-		throw exception("ERROR: File does not open (in Disk::seekToSector(unsigned int))");
+		throw logic_error("ERROR: File does not open (in Disk::seekToSector(unsigned int))");
 }
 
 void Disk::writeSector(unsigned int numOfSector, Sector* toWrite)
@@ -166,7 +173,7 @@ void Disk::writeSector(Sector* toWrite)
 		currDiskSectorNr++;
 	}
 	else
-		throw exception("ERROR: File does not open (in Disk::writeSector(Sector*))");
+		throw logic_error("ERROR: File does not open (in Disk::writeSector(Sector*))");
 }
 
 void Disk::readSector(int numOfSector, Sector* toRead)
@@ -184,7 +191,7 @@ void Disk::readSector(Sector* toRead)
 		currDiskSectorNr++;
 	}
 	else
-		throw exception("ERROR: File does not open (in Disk::readSector(Sector*))");
+		throw logic_error("ERROR: File does not open (in Disk::readSector(Sector*))");
 }
 
 void Disk::savechanges()
@@ -217,7 +224,7 @@ void Disk::savechanges()
 	}
 	else
 	{
-		throw new exception("ERROR: File does not open, fails to perform file creation (in Disk::savechanges())");
+		throw  logic_error("ERROR: File does not open, fails to perform file creation (in Disk::savechanges())");
 
 	}
 }

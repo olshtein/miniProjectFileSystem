@@ -87,6 +87,7 @@
     <ClInclude Include="RD_Sector.h" />
     <ClInclude Include="RootDirectory.h" />
     <ClInclude Include="Sector.h" />
+    <ClInclude Include="TestLevel_0.h" />
     <ClInclude Include="VolumeHeader.h" />
   </ItemGroup>
   <ItemGroup>

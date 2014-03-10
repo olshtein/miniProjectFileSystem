@@ -25,6 +25,9 @@ using namespace std;
 **************************************************/
 class Disk
 {
+	friend class  TestLevel_0;
+private:
+
 	VolumeHeader vhd;
 	Dat dat;  
 	RootDirectory rootdir;
@@ -255,5 +258,14 @@ private:
 *	savechanges()
 **************************************************/
 	bool checkchanges(Sector*);
+
+
+
+	void format(string &);
+	int howmuchempty( );
+	void alloc(DATtype &, unsigned int, unsigned int);
+	void allocextend(DATtype &, unsigned int, unsigned int);
+	void dealloc(DATtype &);
+
 };
 
