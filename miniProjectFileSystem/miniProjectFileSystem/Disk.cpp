@@ -22,6 +22,8 @@ Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 
 Disk::~Disk(void)
 {
+	if (dskfl.is_open())
+		unmountdisk();
 }
 
 void Disk::createdisk(string & nameFile, string & nameOwner)
@@ -33,16 +35,18 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 		dskfl.close();
 		throw new logic_error("ERROR: this File name already exists (in Disk::createdisk(string&, string&))");
 	}
-		if (nameFile!="")
-		{
-	dskfl.open(nameFile+".disk",ios::out  | ios::binary);
-	vhd.sectorNr=0;
-	strncpy_s(vhd.diskName, nameFile.c_str(), sizeof(vhd.diskName));
-	vhd.diskName[sizeof(vhd.diskName) - 1] = NULL;  //אם אנחנו רוצים שאחרון יהיה null?
+
 	mounted=false;
-	createdisk(nameOwner);
-	dskfl.close();
-		}
+
+	if (nameFile!="")
+	{
+		dskfl.open(nameFile+".disk",ios::out  | ios::binary);
+		vhd.sectorNr=0;
+		strncpy_s(vhd.diskName, nameFile.c_str(), sizeof(vhd.diskName));
+		vhd.diskName[sizeof(vhd.diskName) - 1] = NULL; 
+		createdisk(nameOwner);
+		dskfl.close();
+	}
 
 }
 
@@ -100,7 +104,7 @@ void Disk::mountdisk(string & nameFile)
 	}
 	else
 		throw logic_error("ERROR: file does not exist in path: (in Disk::mountdisk(string&))");
-		//throw logic_error("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
+	//throw logic_error("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
 }
 
 void Disk::unmountdisk()
