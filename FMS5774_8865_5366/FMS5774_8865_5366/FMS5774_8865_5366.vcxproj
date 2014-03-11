@@ -11,9 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A702A7B9-99F6-4061-B30A-ECDC80BF7320}</ProjectGuid>
+    <ProjectGuid>{508B6A2C-54A0-4825-95B5-7A94A63E0D91}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>miniProjectFileSystem</RootNamespace>
+    <ProjectName>FMS5774_8865_5366</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
