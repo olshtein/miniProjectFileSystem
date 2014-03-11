@@ -14,12 +14,20 @@
 **************************************************/
 struct RootDirectory
 {
-
 	RD_Sector sector1;
 	RD_Sector sector2;
 
-
-	DirEntry &  operator [] (int i)
+/*************************************************
+* FUNCTION
+*	operator[]
+* PARAMETERS
+*	int - index
+* RETURN VALUE
+*	pointer to DirEntry
+* MEANING
+*	returns value at index i as if both sector's array was one.
+**************************************************/
+	DirEntry operator [] (int i)
 	{
 		
 			if(i>=0&&i<MAX_DIR_IN_SECTOR)
@@ -34,7 +42,6 @@ struct RootDirectory
 
 			throw string("Invalid Index value"); 
 	}
-		
-	
+
 };
 
