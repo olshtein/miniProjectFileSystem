@@ -268,7 +268,7 @@ intmap* Disk::DiskMapping( DATtype& dat)
 		{
 			int index=i;
 			int size=0;
-			while (true)
+			while (i < 1600)
 			{
 				if (dat[i]==1)
 				{
@@ -290,7 +290,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 {
 	if (howmuchempty()<numSector)
 		throw  exception("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
-	fat.set(0);
+	fat.set(1);
 
 	intmap * mapDisk = DiskMapping(dat.DAT);
 	it_intmap it=mapDisk->begin();
@@ -304,21 +304,21 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 				locationSector=it->first;
 				break;
 			}
-			break;
+		break;
 	case 1:// best fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&it->second<locationSector)
+			if (it->second>=numSector&&locationSector==-1||it->second < mapDisk->find(locationSector)->second) // need fix, second is size, locationSector is index
 			{
 				locationSector=it->first;
 			}
-			break;
+		break;
 	case 2://worst fit
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&it->second>locationSector)
+			if (it->second>=numSector&&it->second < mapDisk->find(locationSector)->second)
 			{
 				locationSector=it->first;
 			}
-			break;
+		break;
 	default:
 		throw  exception("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
 		break;
@@ -326,7 +326,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 	if (locationSector>=0)
 	{
 		for (int i=numSector;i>0;i--)
-			fat.set(++locationSector,1);
+			fat.set(locationSector++,0);
 	}
 	else//במקרה של צורך לפיצול קובץ
 	{
@@ -367,14 +367,14 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 			break;
 	case 1:// best fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&it->second<locationSector)
+			if (it->second>=numSector&&locationSector==-1||it->second < mapDisk->find(locationSector)->second)
 			{
 				locationSector=it->first;
 			}
 			break;
 	case 2://worst fit
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&it->second>locationSector)
+			if (it->second>=numSector&&it->second < mapDisk->find(locationSector)->second)
 			{
 				locationSector=it->first;
 			}
@@ -387,8 +387,8 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 	{
 		for (int i=numSector;i>0;i--)
 		{
-			fat.set(++locationSector,1);
-			dat.DAT.set(++locationSector,0);
+			fat.set(locationSector++,1);
+			dat.DAT.set(locationSector++,0);
 		}
 	}
 	else//במקרה של צורך לפיצול קובץ
