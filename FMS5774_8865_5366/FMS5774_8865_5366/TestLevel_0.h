@@ -105,7 +105,7 @@ public:
 			test_read_write(diskName, ownerName);
 
 		}   
-		catch (logic_error ex) 
+		catch (exception ex) 
 		{    cout << ex.what() << endl;   } 
 	}
 }; 

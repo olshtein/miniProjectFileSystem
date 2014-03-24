@@ -16,7 +16,7 @@ Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
 	else if (createOrMountDisk=='m')
 		mountdisk (nameFile);
 	else
-		throw new logic_error("ERROR: Improper initialization command (in Disk::Disk(string, string, char))");
+		throw exception("ERROR: Improper initialization command (in Disk::Disk(string, string, char))");
 
 }
 
@@ -33,7 +33,7 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 	if (dskfl.is_open())
 	{	
 		dskfl.close();
-		throw new logic_error("ERROR: this File name already exists (in Disk::createdisk(string&, string&))");
+		throw exception("ERROR: this File name already exists (in Disk::createdisk(string&, string&))");
 	}
 
 	mounted=false;
@@ -99,14 +99,14 @@ void Disk::mountdisk(string & nameFile)
 		}
 	}
 	else
-		throw logic_error("ERROR: file does not exist in path: (in Disk::mountdisk(string&))");
-	//throw logic_error("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
+		throw exception("ERROR: file does not exist in path: (in Disk::mountdisk(string&))");
+	//throw exception("ERROR: file does not exist in path:" + nameFile.c_str + ".disk (in Disk::mountdisk(string&))");
 }
 
 void Disk::unmountdisk()
 {
 	if (!dskfl.is_open())
-		throw logic_error("ERROR: disk not mounted, cannot unmount. (in Disk::unmountdisk())");
+		throw exception("ERROR: disk not mounted, cannot unmount. (in Disk::unmountdisk())");
 
 	// step 1: update data fields.
 	savechanges();
@@ -127,13 +127,13 @@ void Disk::recreatedisk(string & nameOwner)
 			if(mounted==false)
 				createdisk(nameOwner);
 			else
-				throw  logic_error("ERROR: the Disk is not available (in Disk::recreatedisk(string &))");
+				throw  exception("ERROR: the Disk is not available (in Disk::recreatedisk(string &))");
 		}
 		else
-			throw  logic_error("ERROR: nameOwner does not match (in Disk::recreatedisk(string &))");
+			throw  exception("ERROR: nameOwner does not match (in Disk::recreatedisk(string &))");
 	}
 	else
-		throw  logic_error("ERROR: the File name is not open (in Disk::recreatedisk(string &))");
+		throw  exception("ERROR: the File name is not open (in Disk::recreatedisk(string &))");
 }
 
 fstream* const Disk::getdskfl()
@@ -155,7 +155,7 @@ void Disk::seekToSector(unsigned int numOfSector)
 		currDiskSectorNr=numOfSector;
 	}
 	else
-		throw logic_error("ERROR: File does not open (in Disk::seekToSector(unsigned int))");
+		throw exception("ERROR: File does not open (in Disk::seekToSector(unsigned int))");
 }
 
 void Disk::writeSector(unsigned int numOfSector, Sector* toWrite)
@@ -173,7 +173,7 @@ void Disk::writeSector(Sector* toWrite)
 		currDiskSectorNr++;
 	}
 	else
-		throw logic_error("ERROR: File does not open (in Disk::writeSector(Sector*))");
+		throw exception("ERROR: File does not open (in Disk::writeSector(Sector*))");
 }
 
 void Disk::readSector(int numOfSector, Sector* toRead)
@@ -191,7 +191,7 @@ void Disk::readSector(Sector* toRead)
 		currDiskSectorNr++;
 	}
 	else
-		throw logic_error("ERROR: File does not open (in Disk::readSector(Sector*))");
+		throw exception("ERROR: File does not open (in Disk::readSector(Sector*))");
 }
 
 void Disk::savechanges()
@@ -224,7 +224,7 @@ void Disk::savechanges()
 	}
 	else
 	{
-		throw  logic_error("ERROR: File does not open, fails to perform file creation (in Disk::savechanges())");
+		throw  exception("ERROR: File does not open, fails to perform file creation (in Disk::savechanges())");
 
 	}
 }
@@ -241,16 +241,16 @@ void Disk::resetDat()
 
 void Disk::format(string & nameOwner)
 {
-	if (this->getdskfl()->is_open()&&nameOwner==vhd.diskOwner)
+	if (!this->getdskfl()->is_open() || nameOwner!=vhd.diskOwner)
 	{
-		resetDat();
-		for (int i=0;i<(MAX_DIR_IN_SECTOR/2);i++)
-		{
-			rootdir.sector1.emptyArea[i]=NULL;
-			rootdir.sector2.emptyArea[i]=NULL;
-		}
-
+		throw exception("ERROR: unable to open file, or file owner does not match data in vhd (at Disk::format(string&))");
 	}
+
+	resetDat();
+
+	for (int i=0; i < MAX_DIR_IN_SECTOR; i++)
+		rootdir[i] = DirEntry();
+
 }
 
 int  Disk::howmuchempty( )
@@ -289,11 +289,11 @@ intmap* Disk::DiskMapping( DATtype& dat)
 void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 {
 	if (howmuchempty()<numSector)
-		throw  logic_error("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+		throw  exception("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
 	fat.set(0);
 
 	intmap * mapDisk = DiskMapping(dat.DAT);
-	itmap it=mapDisk->begin();
+	it_intmap it=mapDisk->begin();
 	int locationSector=-1;
 	switch (typeFit)
 	{
@@ -320,7 +320,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 			}
 			break;
 	default:
-		throw  logic_error("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+		throw  exception("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
 		break;
 	}
 	if (locationSector>=0)
@@ -343,17 +343,17 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 		}
 	}
 	dat.DAT^=fat;
-
+	delete mapDisk;
 }
 
 void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 {
 	if (howmuchempty()<numSector)
-		throw  logic_error("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
+		throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
 
 	intmap * mapDisk = DiskMapping(dat.DAT);
-	intmap * mapFaile =DiskMapping(fat);
-	itmap it=mapDisk->find(mapFaile->end()->first+mapFaile->end()->second);	// צריך להתחיל רק אחרי המיקום הנוכחי
+	intmap * mapFile =DiskMapping(fat);
+	it_intmap it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);	// צריך להתחיל רק אחרי המיקום הנוכחי
 	int locationSector=-1;
 	switch (typeFit)
 	{
@@ -380,7 +380,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 			}
 			break;
 	default:
-		throw  logic_error("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+		throw  exception("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
 		break;
 	}
 	if (locationSector>=0)
@@ -395,7 +395,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 	{
 		while (numSector>0)
 		{
-			it=mapDisk->find(mapFaile->end()->first+mapFaile->end()->second);
+			it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);
 			for (;it!= mapDisk->end(); ++it)
 				if (mapDisk->find(locationSector)->first<=it->second)
 					locationSector=it->second;
@@ -405,8 +405,11 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 			mapDisk->erase(locationSector);
 		}
 	}
+	delete mapDisk;
+	delete mapFile;
 
 }
+
 void Disk::dealloc(DATtype & fat)
 {
 	dat.DAT^=fat;

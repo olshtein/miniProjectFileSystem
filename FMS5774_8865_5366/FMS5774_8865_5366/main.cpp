@@ -14,7 +14,7 @@ void main()
 		myTest.test_0();
 		
 	}
-	catch (logic_error e)
+	catch (exception e)
 	{
 		cout << e.what() << '\n';
 		system("pause");

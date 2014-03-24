@@ -29,5 +29,22 @@ unsigned char entryStatus; /* שדה זה מעיד על מצב הכניסה הספציפית בתיקייה. המצב י
 							0        -  כניסה ריקה (empty): הכניסה עדיין לא הייתה בשימוש מאז שבוצע format  על הדיסק .
 							1        -  כניסה פעילה (active): הכניסה מייצגת קובץ קיים ופעיל.
 							2        -  כניסה לא פעילה (inactive): הכניסה מייצגת קובץ מחוק.*/
+
+DirEntry()
+{
+	strcpy_s(Filename,1,"");
+	strcpy_s(fileOwner,1,"");
+	fileAddr = -1;
+	strcpy_s(crDate,11,"01/01/1970");
+	fileSize = 0; 
+	eofRecNr = 0; 
+	maxRecSize = 0; 
+	actualRecSize = 0;
+	strcpy_s(recFormat,2,"F");
+	keyOffset=0;
+	keySize=0;
+	strcpy_s(keyType,2,"I");
+	entryStatus = 0;
+}
 };
 

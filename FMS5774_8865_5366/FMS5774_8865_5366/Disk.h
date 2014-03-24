@@ -15,7 +15,7 @@
 using namespace std;
 
 typedef  map<int,int> intmap;
-typedef  map<int,int>::iterator itmap;
+typedef  map<int,int>::iterator it_intmap;
 /*************************************************
 * CLASS
 *	Disk

@@ -40,7 +40,7 @@ struct RootDirectory
 				return sector2.dir[i-MAX_DIR_IN_SECTOR];
 			}
 
-			throw string("Invalid Index value"); 
+			throw exception("ERROR: Invalid Index value (at RootDirectory::operator[](int))"); 
 	}
 
 };
