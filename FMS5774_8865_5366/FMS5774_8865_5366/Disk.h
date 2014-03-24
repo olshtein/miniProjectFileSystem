@@ -16,6 +16,7 @@ using namespace std;
 
 typedef  map<int,int> intmap;
 typedef  map<int,int>::iterator it_intmap;
+
 /*************************************************
 * CLASS
 *	Disk
@@ -364,7 +365,7 @@ intmap* DiskMapping(DATtype&);
 * SEE ALSO
 *	
 **************************************************/
-void createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, [unsigned int]) ;
+//void createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, [unsigned int]) ;
 
 /*************************************************
 * FUNCTION

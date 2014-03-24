@@ -268,14 +268,14 @@ intmap* Disk::DiskMapping( DATtype& dat)
 		{
 			int index=i;
 			int size=0;
-			while (i < 1600)
+			while (true)
 			{
 				if (dat[i]==1)
 				{
 					i++;
 					size++;
 				}
-				else
+				if (dat[i]!=1||i==1599)
 				{
 					mapDisk->insert(pair<int,int>(index,size));
 					break;
@@ -288,7 +288,7 @@ intmap* Disk::DiskMapping( DATtype& dat)
 
 void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 {
-	if (howmuchempty()<numSector)
+	if (howmuchempty() < numSector)
 		throw  exception("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
 	fat.set(1);
 
@@ -303,22 +303,22 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 			{
 				locationSector=it->first;
 				break;
-			}
-		break;
+			} 
+			break;
 	case 1:// best fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&locationSector==-1||it->second < mapDisk->find(locationSector)->second) // need fix, second is size, locationSector is index
+			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector]) 
 			{
 				locationSector=it->first;
 			}
-		break;
+			break;
 	case 2://worst fit
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&it->second < mapDisk->find(locationSector)->second)
+			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
-		break;
+			break;
 	default:
 		throw  exception("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
 		break;
@@ -334,7 +334,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 		{
 			it=mapDisk->begin();
 			for (;it!= mapDisk->end(); ++it)
-				if (mapDisk->find(locationSector)->first<=it->second)
+				if ((*mapDisk)[locationSector]<=it->second)
 					locationSector=it->second;
 			int j=locationSector;
 			for (int i=mapDisk->find(locationSector)->first ;i>0;i--)
@@ -367,14 +367,14 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 			break;
 	case 1:// best fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&locationSector==-1||it->second < mapDisk->find(locationSector)->second)
+			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
 			break;
 	case 2://worst fit
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&it->second < mapDisk->find(locationSector)->second)
+			if (it->second>=numSector&&it->second < (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
