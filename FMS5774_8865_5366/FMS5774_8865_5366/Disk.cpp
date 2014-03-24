@@ -71,11 +71,7 @@ void Disk::createdisk( string & nameOwner)
 
 	//dat
 	dat.sectorNr=1;
-	dat.DAT.set();
-	dat.DAT.set(0,0);
-	dat.DAT.set(1,0);
-	dat.DAT.set(1598,0);
-	dat.DAT.set(1599,0);
+	resetDat();
 
 	//disk fstream
 	savechanges();
@@ -231,4 +227,187 @@ void Disk::savechanges()
 		throw  logic_error("ERROR: File does not open, fails to perform file creation (in Disk::savechanges())");
 
 	}
+}
+
+void Disk::resetDat()
+{
+	dat.DAT.set();
+	dat.DAT.set(0,0);
+	dat.DAT.set(1,0);
+	dat.DAT.set(1598,0);
+	dat.DAT.set(1599,0);
+}
+//שלב 1
+
+void Disk::format(string & nameOwner)
+{
+	if (this->getdskfl()->is_open()&&nameOwner==vhd.diskOwner)
+	{
+		resetDat();
+		for (int i=0;i<(MAX_DIR_IN_SECTOR/2);i++)
+		{
+			rootdir.sector1.emptyArea[i]=NULL;
+			rootdir.sector2.emptyArea[i]=NULL;
+		}
+
+	}
+}
+
+int  Disk::howmuchempty( )
+{
+	return dat.DAT.size()-dat.DAT.count();
+}
+
+intmap* Disk::DiskMapping( DATtype& dat)
+{
+
+	intmap *mapDisk=new intmap;
+	for (int i=0;i<1600;i++)
+	{
+		if (dat[i]==1)
+		{
+			int index=i;
+			int size=0;
+			while (true)
+			{
+				if (dat[i]==1)
+				{
+					i++;
+					size++;
+				}
+				else
+				{
+					mapDisk->insert(pair<int,int>(index,size));
+					break;
+				}
+			}
+		}
+	}
+	return mapDisk;
+}
+
+void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
+{
+	if (howmuchempty()<numSector)
+		throw  logic_error("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+	fat.set(0);
+
+	intmap * mapDisk = DiskMapping(dat.DAT);
+	itmap it=mapDisk->begin();
+	int locationSector=-1;
+	switch (typeFit)
+	{
+	case 0://first fit 
+		for (;it!= mapDisk->end(); ++it)
+			if (it->second>=numSector)
+			{
+				locationSector=it->first;
+				break;
+			}
+			break;
+	case 1:// best fit 
+		for (;it!= mapDisk->end(); ++it)
+			if (it->second>=numSector&&it->second<locationSector)
+			{
+				locationSector=it->first;
+			}
+			break;
+	case 2://worst fit
+		for (;it!= mapDisk->end(); ++it)
+			if (it->second>=numSector&&it->second>locationSector)
+			{
+				locationSector=it->first;
+			}
+			break;
+	default:
+		throw  logic_error("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+		break;
+	}
+	if (locationSector>=0)
+	{
+		for (int i=numSector;i>0;i--)
+			fat.set(++locationSector,1);
+	}
+	else//במקרה של צורך לפיצול קובץ
+	{
+		while (numSector>0)
+		{
+			it=mapDisk->begin();
+			for (;it!= mapDisk->end(); ++it)
+				if (mapDisk->find(locationSector)->first<=it->second)
+					locationSector=it->second;
+			int j=locationSector;
+			for (int i=mapDisk->find(locationSector)->first ;i>0;i--)
+				fat.set(j++,1);
+			mapDisk->erase(locationSector);
+		}
+	}
+	dat.DAT^=fat;
+
+}
+
+void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeFit)
+{
+	if (howmuchempty()<numSector)
+		throw  logic_error("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
+
+	intmap * mapDisk = DiskMapping(dat.DAT);
+	intmap * mapFaile =DiskMapping(fat);
+	itmap it=mapDisk->find(mapFaile->end()->first+mapFaile->end()->second);	// צריך להתחיל רק אחרי המיקום הנוכחי
+	int locationSector=-1;
+	switch (typeFit)
+	{
+	case 0://first fit 
+		for (;it!= mapDisk->end(); ++it)
+			if (it->second>=numSector)
+			{
+				locationSector=it->first;
+				break;
+			}
+			break;
+	case 1:// best fit 
+		for (;it!= mapDisk->end(); ++it)
+			if (it->second>=numSector&&it->second<locationSector)
+			{
+				locationSector=it->first;
+			}
+			break;
+	case 2://worst fit
+		for (;it!= mapDisk->end(); ++it)
+			if (it->second>=numSector&&it->second>locationSector)
+			{
+				locationSector=it->first;
+			}
+			break;
+	default:
+		throw  logic_error("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+		break;
+	}
+	if (locationSector>=0)
+	{
+		for (int i=numSector;i>0;i--)
+		{
+			fat.set(++locationSector,1);
+			dat.DAT.set(++locationSector,0);
+		}
+	}
+	else//במקרה של צורך לפיצול קובץ
+	{
+		while (numSector>0)
+		{
+			it=mapDisk->find(mapFaile->end()->first+mapFaile->end()->second);
+			for (;it!= mapDisk->end(); ++it)
+				if (mapDisk->find(locationSector)->first<=it->second)
+					locationSector=it->second;
+			int j=locationSector;
+			for (int i=mapDisk->find(locationSector)->first ;i>0;i--)
+				fat.set(j++,1);
+			mapDisk->erase(locationSector);
+		}
+	}
+
+}
+void Disk::dealloc(DATtype & fat)
+{
+	dat.DAT^=fat;
 }

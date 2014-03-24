@@ -1,4 +1,4 @@
-#pragma once
+ο»Ώ#pragma once
 
 #include "DAT.h"
 #include "DirEntry.h"
@@ -8,9 +8,14 @@
 #include "VolumeHeader.h"
 #include <fstream>
 #include "Functions.h"
+#include <Tuple>
+#include <vector>
+#include <map>
 
 using namespace std;
 
+typedef  map<int,int> intmap;
+typedef  map<int,int>::iterator itmap;
 /*************************************************
 * CLASS
 *	Disk
@@ -33,7 +38,7 @@ private:
 	RootDirectory rootdir;
 	bool mounted;
 	fstream dskfl;
-	unsigned int currDiskSectorNr; //δξρτψ δριγεψι ωμ δρχθεψ αγιρχ ωλψβς αηεφυ ωμ χεαυ ξρειν
+	unsigned int currDiskSectorNr; //Χ”ΧΧ΅Χ¤Χ¨ Χ”Χ΅Χ™Χ“Χ•Χ¨Χ™ Χ©Χ Χ”Χ΅Χ§ΧΧ•Χ¨ Χ‘Χ“Χ™Χ΅Χ§ Χ©Χ›Χ¨Χ’ΧΆ Χ‘Χ—Χ•Χ¦Χ¥ Χ©Χ Χ§Χ•Χ‘Χ¥ ΧΧ΅Χ•Χ™Χ
 
 public:
 	
@@ -245,7 +250,7 @@ private:
 **************************************************/
 	void savechanges();
 
-/*************************************************
+	/*************************************************
 * FUNCTION
 *	checkchanges
 * PARAMETERS
@@ -259,13 +264,146 @@ private:
 **************************************************/
 	bool checkchanges(Sector*);
 
-
-
+/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
 	void format(string &);
+	/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
 	int howmuchempty( );
+/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
 	void alloc(DATtype &, unsigned int, unsigned int);
+	/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
 	void allocextend(DATtype &, unsigned int, unsigned int);
-	void dealloc(DATtype &);
+	/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+void dealloc(DATtype &);
+
+/*************************************************
+* FUNCTION
+*	resetDat	
+* MEANING
+*  Reset the initial values β€‹β€‹DAT	
+* SEE ALSO
+*	
+**************************************************/
+void resetDat();
+	/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+intmap* DiskMapping(DATtype&);
+	/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+void createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, [unsigned int]) ;
+
+/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+
+/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+
+	/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
 
 };
 
