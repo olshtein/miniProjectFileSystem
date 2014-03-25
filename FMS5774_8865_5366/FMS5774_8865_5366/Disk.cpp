@@ -249,7 +249,7 @@ void Disk::format(string & nameOwner)
 	resetDat();
 
 	for (int i=0; i < MAX_DIR_IN_SECTOR; i++)
-		rootdir[i] = DirEntry();
+		*rootdir[i] = DirEntry();
 
 }
 
@@ -333,6 +333,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 		while (numSector>0)
 		{
 			it=mapDisk->begin();
+			//Using in worst fit for minimal splitting
 			for (;it!= mapDisk->end(); ++it)
 				if ((*mapDisk)[locationSector]<=it->second)
 					locationSector=it->second;
@@ -353,7 +354,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 
 	intmap * mapDisk = DiskMapping(dat.DAT);
 	intmap * mapFile =DiskMapping(fat);
-	it_intmap it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);	// צריך להתחיל רק אחרי המיקום הנוכחי
+	it_intmap it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);	// Should begin only after the current position
 	int locationSector=-1;
 	switch (typeFit)
 	{
@@ -393,6 +394,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 	}
 	else//במקרה של צורך לפיצול קובץ
 	{
+		//Using in worst fit for minimal splitting
 		while (numSector>0)
 		{
 			it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);
@@ -405,6 +407,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 			mapDisk->erase(locationSector);
 		}
 	}
+
 	delete mapDisk;
 	delete mapFile;
 

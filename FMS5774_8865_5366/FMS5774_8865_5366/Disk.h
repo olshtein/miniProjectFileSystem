@@ -23,7 +23,7 @@ enum FitType
 	firstFit,
 	bestFit,
 	worstFit
-}
+};
 
 /*************************************************
 * CLASS
@@ -246,15 +246,21 @@ public:
 *	readSector(int, Sector*)
 **************************************************/
 	void readSector(Sector*);
-
+	/*************************************************
+* FUNCTION
+*	format
+* PARAMETERS
+* string & - Owner Name of the disk
+* MEANING
+*	Logically formatted disk (reset DAT)
+*	
+**************************************************/
 	void format(string &);
 	/*************************************************
 * FUNCTION
-*	
-* PARAMETERS
-*	
+*	howmuchempty
 * RETURN VALUE
-*
+*  int - Number of vacancy clusters
 * MEANING
 *	
 * SEE ALSO
