@@ -324,6 +324,34 @@ void dealloc(DATtype &);
 **************************************************/
 void createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH, FitType=firstFit);
 
+/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+void delfile(string &, string &);
+
+/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+void extendfile(string &, string &, unsigned int);
+
 private:
 /*************************************************
 * FUNCTION
@@ -334,9 +362,9 @@ private:
 *	createdisk(string&)
 *	unmountdisk()
 **************************************************/
-	void savechanges();
+void savechanges();
 
-	/*************************************************
+/*************************************************
 * FUNCTION
 *	checkchanges
 * PARAMETERS

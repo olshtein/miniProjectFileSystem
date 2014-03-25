@@ -422,7 +422,7 @@ void Disk::dealloc(DATtype & fat)
 void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen=KEY_DEFAULT_LENGTH, FitType fitType=firstFit)
 {
 	//check file name does not exist
-	for (int i=0; i < MAX_DIR_IN_SECTOR*2; i++)
+	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
 		if (rootdir[i]->Filename == fileName)
 			throw exception("ERROR: file name already exists (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
 
@@ -436,11 +436,8 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 
 	//search RootDir for space for entry
 	int i;
-	for (i=0; i < MAX_DIR_IN_SECTOR*2; i++)
-	{
-		if (rootdir[i]->fileAddr != -1) // entry is dummy => space is free
-			break;
-	}
+
+	for (i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++) ;
 
 	if (i == MAX_DIR_IN_SECTOR*2) // no empty slot was found
 		throw exception("ERROR: can't add entry, rootDir is full. (at void Disk::createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH))");
@@ -457,7 +454,6 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	rootdir[i]->keySize = keyLen;
 
 	//allocate space for entry
-	DATtype fat;
 	try
 	{
 		alloc(fat, rootdir[i]->fileAddr, fitType);
@@ -469,4 +465,44 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 
 	//sign entry as entered
 	rootdir[i]->entryStatus=1;
+}
+
+void Disk::delfile(string & fileName, string & fileOwner)
+{
+	//search file in rootdir
+	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
+	{
+		if (rootdir[i]->Filename == fileName)
+		{
+			if (rootdir[i]->fileOwner != fileOwner)
+				throw exception("ERROR: user not allowed to delete the file (at void Disk::delfile(string &, string &)");
+
+			// delete file
+			dealloc(fat);
+			rootdir[i]->entryStatus = 2;
+			return;
+		}
+	}
+
+	//file not found
+	throw exception("ERROR: file not found (at void Disk::delfile(string &, string &)");
+}
+
+void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedSectors)
+{
+		//search file in rootdir
+	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
+	{
+		if (rootdir[i]->Filename == fileName)
+		{
+			if (rootdir[i]->fileOwner != fileOwner)
+				throw exception("ERROR: user not allowed to delete the file (at void Disk::extendfile(string &, string &, unsigned int)");
+
+			//extend allocation for file
+			allocextend(fat, addedSectors, firstFit);
+		}
+	}
+
+	//file not found
+	throw exception("ERROR: file not found (at void Disk::extendfile(string &, string &, unsigned int)");
 }
