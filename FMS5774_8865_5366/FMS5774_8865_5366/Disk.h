@@ -16,6 +16,14 @@ using namespace std;
 
 typedef  map<int,int> intmap;
 typedef  map<int,int>::iterator it_intmap;
+const int KEY_DEFAULT_LENGTH = 0;
+
+enum FitType
+{
+	firstFit,
+	bestFit,
+	worstFit
+}
 
 /*************************************************
 * CLASS
@@ -239,44 +247,6 @@ public:
 **************************************************/
 	void readSector(Sector*);
 
-private:
-/*************************************************
-* FUNCTION
-*	savechanges
-* MEANING
-*	writes to file all changes in disk
-* SEE ALSO
-*	createdisk(string&)
-*	unmountdisk()
-**************************************************/
-	void savechanges();
-
-	/*************************************************
-* FUNCTION
-*	checkchanges
-* PARAMETERS
-*	Sector*- sector to check changes in
-* RETURN VALUE
-*	true if changes where made, false otherwise.
-* MEANING
-*	check if data in sector is diffrent then data on file
-* SEE ALSO
-*	savechanges()
-**************************************************/
-	bool checkchanges(Sector*);
-
-/*************************************************
-* FUNCTION
-*	
-* PARAMETERS
-*	
-* RETURN VALUE
-*
-* MEANING
-*	
-* SEE ALSO
-*	
-**************************************************/
 	void format(string &);
 	/*************************************************
 * FUNCTION
@@ -339,6 +309,60 @@ void dealloc(DATtype &);
 * SEE ALSO
 *	
 **************************************************/
+
+/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+void createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH, FitType=firstFit);
+
+private:
+/*************************************************
+* FUNCTION
+*	savechanges
+* MEANING
+*	writes to file all changes in disk
+* SEE ALSO
+*	createdisk(string&)
+*	unmountdisk()
+**************************************************/
+	void savechanges();
+
+	/*************************************************
+* FUNCTION
+*	checkchanges
+* PARAMETERS
+*	Sector*- sector to check changes in
+* RETURN VALUE
+*	true if changes where made, false otherwise.
+* MEANING
+*	check if data in sector is diffrent then data on file
+* SEE ALSO
+*	savechanges()
+**************************************************/
+	bool checkchanges(Sector*);
+
+/*************************************************
+* FUNCTION
+*	
+* PARAMETERS
+*	
+* RETURN VALUE
+*
+* MEANING
+*	
+* SEE ALSO
+*	
+**************************************************/
+
 void resetDat();
 	/*************************************************
 * FUNCTION
@@ -353,19 +377,7 @@ void resetDat();
 *	
 **************************************************/
 intmap* DiskMapping(DATtype&);
-	/*************************************************
-* FUNCTION
-*	
-* PARAMETERS
-*	
-* RETURN VALUE
-*
-* MEANING
-*	
-* SEE ALSO
-*	
-**************************************************/
-//void createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, [unsigned int]) ;
+
 
 /*************************************************
 * FUNCTION

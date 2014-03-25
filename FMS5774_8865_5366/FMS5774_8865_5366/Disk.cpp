@@ -297,7 +297,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 	int locationSector=-1;
 	switch (typeFit)
 	{
-	case 0://first fit 
+	case firstFit://first fit 
 		for (;it!= mapDisk->end(); ++it)
 			if (it->second>=numSector)
 			{
@@ -305,14 +305,14 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 				break;
 			} 
 			break;
-	case 1:// best fit 
+	case bestFit:// best fit 
 		for (;it!= mapDisk->end(); ++it)
 			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector]) 
 			{
 				locationSector=it->first;
 			}
 			break;
-	case 2://worst fit
+	case worstFit://worst fit
 		for (;it!= mapDisk->end(); ++it)
 			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector])
 			{
@@ -357,7 +357,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 	int locationSector=-1;
 	switch (typeFit)
 	{
-	case 0://first fit 
+	case firstFit://first fit 
 		for (;it!= mapDisk->end(); ++it)
 			if (it->second>=numSector)
 			{
@@ -365,14 +365,14 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 				break;
 			}
 			break;
-	case 1:// best fit 
+	case bestFit:// best fit 
 		for (;it!= mapDisk->end(); ++it)
 			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
 			break;
-	case 2://worst fit
+	case worstFit://worst fit
 		for (;it!= mapDisk->end(); ++it)
 			if (it->second>=numSector&&it->second < (*mapDisk)[locationSector])
 			{
@@ -413,4 +413,60 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 void Disk::dealloc(DATtype & fat)
 {
 	dat.DAT^=fat;
+}
+
+//Stage 2
+
+
+
+void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen=KEY_DEFAULT_LENGTH, FitType fitType=firstFit)
+{
+	//check file name does not exist
+	for (int i=0; i < MAX_DIR_IN_SECTOR*2; i++)
+		if (rootdir[i]->Filename == fileName)
+			throw exception("ERROR: file name already exists (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
+
+	// check key format
+	if (keyDT != "I" || keyDT != "F" || keyDT != "D" || keyDT != "C")
+		throw exception("ERROR: key format is unrecognized, please use I,F,D or C (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
+	
+	//check key length for strings
+	if ((keyDT == "C") && keyLen == KEY_DEFAULT_LENGTH)
+		throw exception("ERROR: if key is a string or a char*, length of key must be specified. (at void Disk::createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH))");
+
+	//search RootDir for space for entry
+	int i;
+	for (i=0; i < MAX_DIR_IN_SECTOR*2; i++)
+	{
+		if (rootdir[i]->fileAddr != -1) // entry is dummy => space is free
+			break;
+	}
+
+	if (i == MAX_DIR_IN_SECTOR*2) // no empty slot was found
+		throw exception("ERROR: can't add entry, rootDir is full. (at void Disk::createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH))");
+
+	//create entry.
+	strcpy_s(rootdir[i]->Filename, 12, fileName.c_str());
+	strcpy_s(rootdir[i]->fileOwner, 12, fileOwner.c_str());
+	strcpy_s(rootdir[i]->recFormat, 2, fileFormat.c_str());
+	rootdir[i]->maxRecSize = entryLen;
+	rootdir[i]->actualRecSize = fileFormat == "F"? entryLen : 0;
+	rootdir[i]->fileSize = requestedSectors;
+	strcpy_s(rootdir[i]->keyType, 2, keyDT.c_str());
+	rootdir[i]->keyOffset = offset;
+	rootdir[i]->keySize = keyLen;
+
+	//allocate space for entry
+	DATtype fat;
+	try
+	{
+		alloc(fat, rootdir[i]->fileAddr, fitType);
+	}
+	catch (exception ex)
+	{
+		throw exception(ex);
+	}
+
+	//sign entry as entered
+	rootdir[i]->entryStatus=1;
 }

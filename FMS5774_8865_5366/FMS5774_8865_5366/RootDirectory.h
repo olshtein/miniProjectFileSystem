@@ -27,17 +27,17 @@ struct RootDirectory
 * MEANING
 *	returns value at index i as if both sector's array was one.
 **************************************************/
-	DirEntry operator [] (int i)
+	DirEntry* operator [] (int i)
 	{
 		
 			if(i>=0&&i<MAX_DIR_IN_SECTOR)
 			{
 
-				return sector1.dir[i];
+				return &sector1.dir[i];
 			}
 			if(i>=MAX_DIR_IN_SECTOR && i<MAX_DIR_IN_SECTOR*2)
 			{          
-				return sector2.dir[i-MAX_DIR_IN_SECTOR];
+				return &sector2.dir[i-MAX_DIR_IN_SECTOR];
 			}
 
 			throw exception("ERROR: Invalid Index value (at RootDirectory::operator[](int))"); 
