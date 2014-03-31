@@ -352,7 +352,6 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 		int j=locationSector;
 		for (int i=mapDisk->find(locationSector)->second ;i>0;i--,numSector--)
 			fat.set(j++,1);
-		mapDisk->erase(locationSector);
 		alloc(fat, numSector, typeFit);
 	}
 	dat.DAT^=fat;
@@ -373,7 +372,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 
 	intmap * mapDisk = DiskMapping(dat.DAT);
 	intmap * mapFile =DiskMapping(fat);
-	it_intmap it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);	// Should begin only after the current position
+	it_intmap it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);	// Allocation only after the current allocation
 	int locationSector=-1;
 	switch (typeFit)
 	{
@@ -420,9 +419,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 		int j=locationSector;
 		for (int i=mapDisk->find(locationSector)->second ;i>0;i--,numSector--)
 			fat.set(j++,1);
-		mapDisk->erase(locationSector);
 		allocextend( fat, numSector,typeFit);
-
 	}
 
 	delete mapDisk;
