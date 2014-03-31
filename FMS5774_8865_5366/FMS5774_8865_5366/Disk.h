@@ -14,8 +14,8 @@
 
 using namespace std;
 
-typedef  map<int,int> intmap;
-typedef  map<int,int>::iterator it_intmap;
+typedef  map<unsigned int,unsigned int> intmap;
+typedef  map<unsigned int,unsigned int>::iterator it_intmap;
 const int KEY_DEFAULT_LENGTH = 0;
 
 enum FitType
@@ -266,7 +266,7 @@ public:
 * SEE ALSO
 *	
 **************************************************/
-	int howmuchempty( );
+	unsigned int howmuchempty( );
 /*************************************************
 * FUNCTION
 *	

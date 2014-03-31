@@ -202,7 +202,7 @@ void Disk::savechanges()
 		dskfl.write((char *)(&vhd),sizeof(Sector));
 		dskfl.write((char *)(&dat),sizeof(Sector));
 		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
-		for (int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // לכל סקטורי המידע
+		for (unsigned int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // לכל סקטורי המידע
 		{
 			Sector my;
 			my.sectorNr=i;
@@ -253,9 +253,16 @@ void Disk::format(string & nameOwner)
 
 }
 
-int  Disk::howmuchempty( )
+unsigned int  Disk::howmuchempty( )
 {
-	return dat.DAT.size()-dat.DAT.count();
+	try 
+	{
+			return dat.DAT.size()-dat.DAT.count();
+	}
+	catch (...)
+	{
+		throw exception("ERROR: DAT count bigger then DAT size(in Disk::howmuchempty())");
+	}
 }
 
 intmap* Disk::DiskMapping( DATtype& dat)
@@ -288,8 +295,16 @@ intmap* Disk::DiskMapping( DATtype& dat)
 
 void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 {
-	if (howmuchempty() < numSector)
-		throw  exception("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+	try
+	{
+		if (howmuchempty() < numSector)
+			throw  exception("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+	}
+	catch(exception ex)
+	{
+		throw ex;
+	}
+
 	fat.set(1);
 
 	intmap * mapDisk = DiskMapping(dat.DAT);
@@ -349,8 +364,15 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 
 void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 {
-	if (howmuchempty() < numSector)
-		throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
+	try
+	{
+		if (howmuchempty() < numSector)
+			throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
+	}
+	catch(exception ex)
+	{
+		throw ex;
+	}
 
 	intmap * mapDisk = DiskMapping(dat.DAT);
 	intmap * mapFile =DiskMapping(fat);

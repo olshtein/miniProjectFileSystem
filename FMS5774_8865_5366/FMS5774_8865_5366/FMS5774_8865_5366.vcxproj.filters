@@ -16,6 +16,9 @@
     <Filter Include="Header Files\BasicDiskDataTypes">
       <UniqueIdentifier>{bd975d68-8447-4fee-ae02-7527868b7eaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Tests">
+      <UniqueIdentifier>{4d4b9432-8f5b-4ca3-bc68-536dca2a0cb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Disk.cpp">
@@ -60,7 +63,10 @@
       <Filter>Header Files\BasicDiskDataTypes</Filter>
     </ClInclude>
     <ClInclude Include="TestLevel_0.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="TestLevel_1_2.h">
+      <Filter>Header Files\Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
