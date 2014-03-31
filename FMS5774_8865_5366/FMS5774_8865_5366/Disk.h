@@ -280,6 +280,9 @@ public:
 *	
 **************************************************/
 	void alloc(DATtype &, unsigned int, unsigned int);
+
+	void alloc(DATtype &, unsigned int , unsigned int , unsigned int );
+
 	/*************************************************
 * FUNCTION
 *	

@@ -306,15 +306,39 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 	}
 
 	fat.set(1);
+	alloc( fat, numSector, typeFit ,0);
 
+}
+
+void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeFit)
+{
+	try
+	{
+		if (howmuchempty() < numSector)
+			throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
+	}
+	catch(exception ex)
+	{
+		throw ex;
+	}
+	int locationStart=0;
+	for (int i =0;i<fat.size();i++)// Allocation only after the current allocation
+		if (fat[i]==1)
+			locationStart=i;
+	alloc( fat, numSector, typeFit ,locationStart);
+}
+
+void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit, unsigned int locationStart)
+{
 	intmap * mapDisk = DiskMapping(dat.DAT);
 	it_intmap it=mapDisk->begin();
+	advance( it,locationStart );
 	int locationSector=-1;
 	switch (typeFit)
 	{
 	case firstFit://first fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second >= numSector)
+			if ( it->second >= numSector)
 			{
 				locationSector=it->first;
 				break;
@@ -322,7 +346,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 			break;
 	case bestFit:// best fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second >= numSector && locationSector == -1 || it->second < (*mapDisk)[locationSector]) 
+			if ( it->second >= numSector && locationSector == -1 || it->second < (*mapDisk)[locationSector]) 
 			{
 				locationSector=it->first;
 			}
@@ -352,80 +376,12 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 		int j=locationSector;
 		for (int i=mapDisk->find(locationSector)->second ;i>0;i--,numSector--)
 			fat.set(j++,1);
-		alloc(fat, numSector, typeFit);
+		alloc(fat, numSector, typeFit,locationStart);
 	}
 	dat.DAT^=fat;
 	delete mapDisk;
 }
 
-void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeFit)
-{
-	try
-	{
-		if (howmuchempty() < numSector)
-			throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
-	}
-	catch(exception ex)
-	{
-		throw ex;
-	}
-
-	intmap * mapDisk = DiskMapping(dat.DAT);
-	intmap * mapFile =DiskMapping(fat);
-	it_intmap it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);	// Allocation only after the current allocation
-	int locationSector=-1;
-	switch (typeFit)
-	{
-	case firstFit://first fit 
-		for (;it!= mapDisk->end(); ++it)
-			if (it->second >= numSector)
-			{
-				locationSector=it->first;
-				break;
-			}
-			break;
-	case bestFit:// best fit 
-		for (;it!= mapDisk->end(); ++it)
-			if (it->second >= numSector && locationSector==-1 || it->second < (*mapDisk)[locationSector])
-			{
-				locationSector=it->first;
-			}
-			break;
-	case worstFit://worst fit
-		for (;it!= mapDisk->end(); ++it)
-			if (it->second >= numSector && it->second < (*mapDisk)[locationSector])
-			{
-				locationSector=it->first;
-			}
-			break;
-	default:
-		throw  exception("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
-		break;
-	}
-	if (locationSector>=0)
-	{
-		for (int i=numSector;i>0;i--)
-		{
-			fat.set(locationSector++,1);
-			dat.DAT.set(locationSector++,0);
-		}
-	}
-	else//במקרה של צורך לפיצול קובץ
-	{
-		//Using in worst fit for minimal splitting
-		for (it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);it!= mapDisk->end(); ++it)
-			if (locationSector == -1 || mapDisk->find(locationSector)->first < it->second)
-				locationSector=it->second;
-		int j=locationSector;
-		for (int i=mapDisk->find(locationSector)->second ;i>0;i--,numSector--)
-			fat.set(j++,1);
-		allocextend( fat, numSector,typeFit);
-	}
-
-	delete mapDisk;
-	delete mapFile;
-
-}
 
 void Disk::dealloc(DATtype & fat)
 {
