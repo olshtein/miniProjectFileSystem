@@ -257,7 +257,7 @@ unsigned int  Disk::howmuchempty( )
 {
 	try 
 	{
-			return dat.DAT.size()-dat.DAT.count();
+		return dat.DAT.size()-dat.DAT.count();
 	}
 	catch (...)
 	{
@@ -344,19 +344,16 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 			fat.set(locationSector++,0);
 	}
 	else//במקרה של צורך לפיצול קובץ
-	{
-		while (numSector>0)
-		{
-			it=mapDisk->begin();
-			//Using in worst fit for minimal splitting
-			for (;it!= mapDisk->end(); ++it)
-				if ((*mapDisk)[locationSector]<=it->second)
-					locationSector=it->second;
-			int j=locationSector;
-			for (int i=mapDisk->find(locationSector)->first ;i>0;i--)
-				fat.set(j++,1);
-			mapDisk->erase(locationSector);
-		}
+	{	
+		//Using in worst fit for minimal splitting
+		for (it=mapDisk->begin();it!= mapDisk->end(); ++it)
+			if (locationSector == -1 ||(*mapDisk)[locationSector]< it->second)
+				locationSector=it->second;
+		int j=locationSector;
+		for (int i=mapDisk->find(locationSector)->second ;i>0;i--,numSector--)
+			fat.set(j++,1);
+		mapDisk->erase(locationSector);
+		alloc(fat, numSector, typeFit);
 	}
 	dat.DAT^=fat;
 	delete mapDisk;
@@ -417,17 +414,15 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 	else//במקרה של צורך לפיצול קובץ
 	{
 		//Using in worst fit for minimal splitting
-		while (numSector>0)
-		{
-			it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);
-			for (;it!= mapDisk->end(); ++it)
-				if (mapDisk->find(locationSector)->first<=it->second)
-					locationSector=it->second;
-			int j=locationSector;
-			for (int i=mapDisk->find(locationSector)->first ;i>0;i--)
-				fat.set(j++,1);
-			mapDisk->erase(locationSector);
-		}
+		for (it=mapDisk->find(mapFile->end()->first+mapFile->end()->second);it!= mapDisk->end(); ++it)
+			if (locationSector == -1 || mapDisk->find(locationSector)->first < it->second)
+				locationSector=it->second;
+		int j=locationSector;
+		for (int i=mapDisk->find(locationSector)->second ;i>0;i--,numSector--)
+			fat.set(j++,1);
+		mapDisk->erase(locationSector);
+		allocextend( fat, numSector,typeFit);
+
 	}
 
 	delete mapDisk;
@@ -454,7 +449,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	// check key format
 	if (keyDT != "I" || keyDT != "F" || keyDT != "D" || keyDT != "C")
 		throw exception("ERROR: key format is unrecognized, please use I,F,D or C (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
-	
+
 	//check key length for strings
 	if ((keyDT == "C") && keyLen == KEY_DEFAULT_LENGTH)
 		throw exception("ERROR: if key is a string or a char*, length of key must be specified. (at void Disk::createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH))");
@@ -512,7 +507,7 @@ void Disk::delfile(string & fileName, string & fileOwner)
 			FileHeader fh;
 			try
 			{
-			readSector(rootdir[i]->fileAddr, (Sector*)&fh);
+				readSector(rootdir[i]->fileAddr, (Sector*)&fh);
 			}
 
 			catch(exception ex)
@@ -544,7 +539,7 @@ void Disk::delfile(string & fileName, string & fileOwner)
 
 void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedSectors)
 {
-		//search file in rootdir
+	//search file in rootdir
 	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
 	{
 		if (rootdir[i]->Filename == fileName)
@@ -557,7 +552,7 @@ void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedS
 			{
 				//retrive fileHeader
 				readSector(rootdir[i]->fileAddr, (Sector*)&fh);
-				
+
 				//extend allocation for file
 				allocextend(fh.FAT, addedSectors, firstFit);
 
