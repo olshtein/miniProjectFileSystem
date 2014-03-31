@@ -91,7 +91,7 @@ void Disk::mountdisk(string & nameFile)
 		dskfl.read((char*)(&dat), sizeof(Sector));
 		dskfl.read((char*)(&rootdir), 2*sizeof(Sector));
 
-		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // for all data sectors
+		for (unsigned int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // for all data sectors
 		{
 			Sector my;
 			my.sectorNr=i;
@@ -202,7 +202,7 @@ void Disk::savechanges()
 		dskfl.write((char *)(&vhd),sizeof(Sector));
 		dskfl.write((char *)(&dat),sizeof(Sector));
 		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
-		for (int i=vhd.addrDataStart;i<vhd.addrRootDirCpy;i++) // לכל סקטורי המידע
+		for (int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // לכל סקטורי המידע
 		{
 			Sector my;
 			my.sectorNr=i;
@@ -299,7 +299,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 	{
 	case firstFit://first fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector)
+			if (it->second >= numSector)
 			{
 				locationSector=it->first;
 				break;
@@ -307,14 +307,14 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 			break;
 	case bestFit:// best fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector]) 
+			if (it->second >= numSector && locationSector == -1 || it->second < (*mapDisk)[locationSector]) 
 			{
 				locationSector=it->first;
 			}
 			break;
 	case worstFit://worst fit
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector])
+			if (it->second >= numSector && locationSector == -1 || it->second < (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
@@ -349,7 +349,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 
 void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 {
-	if (howmuchempty()<numSector)
+	if (howmuchempty() < numSector)
 		throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
 
 	intmap * mapDisk = DiskMapping(dat.DAT);
@@ -360,7 +360,7 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 	{
 	case firstFit://first fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector)
+			if (it->second >= numSector)
 			{
 				locationSector=it->first;
 				break;
@@ -368,14 +368,14 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 			break;
 	case bestFit:// best fit 
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&locationSector==-1||it->second < (*mapDisk)[locationSector])
+			if (it->second >= numSector && locationSector==-1 || it->second < (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
 			break;
 	case worstFit://worst fit
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second>=numSector&&it->second < (*mapDisk)[locationSector])
+			if (it->second >= numSector && it->second < (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
@@ -422,7 +422,7 @@ void Disk::dealloc(DATtype & fat)
 
 
 
-void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen=KEY_DEFAULT_LENGTH, FitType fitType=firstFit)
+void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen, FitType fitType)
 {
 	//check file name does not exist
 	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
@@ -456,10 +456,16 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	rootdir[i]->keyOffset = offset;
 	rootdir[i]->keySize = keyLen;
 
-	//allocate space for entry
+	//create FileHeader
+	FileHeader fh;
+	fh.fileDesc = *rootdir[i];
+	fh.FAT = DATtype(0);
+
+	//allocate space for entry and save.
 	try
 	{
-		alloc(fat, rootdir[i]->fileAddr, fitType);
+		alloc(fh.FAT, rootdir[i]->fileAddr, fitType);
+		writeSector((Sector*)&fh);
 	}
 	catch (exception ex)
 	{
@@ -480,9 +486,32 @@ void Disk::delfile(string & fileName, string & fileOwner)
 			if (rootdir[i]->fileOwner != fileOwner)
 				throw exception("ERROR: user not allowed to delete the file (at void Disk::delfile(string &, string &)");
 
-			// delete file
-			dealloc(fat);
+			//retrive fileHeader
+			FileHeader fh;
+			try
+			{
+			readSector(rootdir[i]->fileAddr, (Sector*)&fh);
+			}
+
+			catch(exception ex)
+			{
+				throw exception(ex);
+			}
+
+			//delete file
+			dealloc(fh.FAT);
 			rootdir[i]->entryStatus = 2;
+
+			//save
+			try
+			{
+				writeSector(rootdir[i]->fileAddr, (Sector*)&fh);
+			}
+			catch (exception ex)
+			{
+				throw exception(ex);
+			}
+
 			return;
 		}
 	}
@@ -501,8 +530,26 @@ void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedS
 			if (rootdir[i]->fileOwner != fileOwner)
 				throw exception("ERROR: user not allowed to delete the file (at void Disk::extendfile(string &, string &, unsigned int)");
 
-			//extend allocation for file
-			allocextend(fat, addedSectors, firstFit);
+			FileHeader fh;
+			try
+			{
+				//retrive fileHeader
+				readSector(rootdir[i]->fileAddr, (Sector*)&fh);
+				
+				//extend allocation for file
+				allocextend(fh.FAT, addedSectors, firstFit);
+
+				//save
+				writeSector(rootdir[i]->fileAddr, (Sector*)&fh);
+			}
+
+			catch(exception ex)
+			{
+				throw exception(ex);
+			}
+
+
+
 		}
 	}
 
