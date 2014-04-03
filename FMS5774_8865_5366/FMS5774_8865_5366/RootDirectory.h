@@ -14,6 +14,7 @@
 **************************************************/
 struct RootDirectory
 {
+	// sectors of entries in the directory
 	RD_Sector sector1;
 	RD_Sector sector2;
 

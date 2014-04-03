@@ -20,9 +20,8 @@
 **************************************************/
 struct FileHeader : BaseSector
 {
-DirEntry fileDesc ; // העתק של כניסתו של הקובץ בתיקייה (file descriptor)
+DirEntry fileDesc ; // file description - a DirEntry containing the file data.
 DATtype FAT; // FAT
-
-char emptyArea[744];  //שמור לשימוש עתידי
+char emptyArea[744];
 };
 

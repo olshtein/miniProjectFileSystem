@@ -2,50 +2,104 @@
 
 #include "BaseSector.h"
 
+// represent key length for non string keys.
+const unsigned int KEY_DEFAULT_LENGTH = 0;
+
+/*************************************************
+* ENUM
+*	EntryStatus
+* MEANING
+*	represents the different statueses of a dirEntry.
+* SEE ALSO
+*   DirEntry
+**************************************************/
+enum EntryStatus
+{
+	empty,
+	active,
+	inactive
+};
+
+/*************************************************
+* ENUM
+*	RecordFormat
+* MEANING
+*	represents the different record formats of a dirEntry.
+* SEE ALSO
+*   DirEntry
+**************************************************/
+enum RecordFormat
+{
+	directory = 'D',
+	fixed = 'F',
+	veriable = 'V'
+};
+
+/*************************************************
+* ENUM
+*	KeyType
+* MEANING
+*	represents the different types of a dirEntry key.
+* SEE ALSO
+*   DirEntry
+**************************************************/
+enum KeyType
+{
+	Integer = 'I',
+	Float = 'F',
+	Double = 'D',
+	CharString = 'C'
+};
+
 struct DirEntry
 {
-char Filename[12]; //שם הקובץ
-char fileOwner[12];  //שם בעל הקובץ
+	char Filename[12]; //entry name
+	char fileOwner[12];  //entry owner name
+	unsigned int fileAddr;  //address of the first sector in the entry
+	char crDate[11];  //creation date
+	unsigned int fileSize;  //size of file
+	unsigned int eofRecNr;  //location of the EOF(End of File) entry, relative to the start location of this entry
+	unsigned int maxRecSize;  //entry max length
+	unsigned int actualRecSize;  //actual entry length
+	char recFormat [2];	/*	file type:
+						*	file of [F]ixed length
+						*	file of [V]eriable length
+						*	[D]irectory					*/
+	unsigned int keyOffset; //key offset in the entry
+	unsigned int keySize;  //key lenght
+	char keyType[2];	/*	key datatype:
+						*	[I]nteger
+						*	[F]loat
+						*	[D]ouble
+						*	[C]haracter string	*/
 
-unsigned int fileAddr;  //כתובת הסקטור הראשון של הקובץ
-char crDate[11];  //תאריך יצירת הקובץ
-unsigned int fileSize;  //גודל הקובץ, כמספר סקטורים
-unsigned int eofRecNr;  //מיקום "רשומת" ה-end-of-file (המספר הסידורי של מיקומה מהתחלת הקובץ)
-unsigned int maxRecSize;  //אורך רשומה מרבי
-unsigned int actualRecSize;  //אורך רשומה בפועל
-char recFormat [2];  /*  סוג:
-			-          אם מדובר בקובץ נתונים, זה מסמל סוג רשומה כלומר, אורך קבוע או משתנה "F" : או  "V"
-			-          אם מדובר בתת-תיקיה, ערך השדה הזה יהיה האות "D".*/
+	unsigned char entryStatus;	/* the status of the entry
+								*	0 - empty - not yet used since format.
+								*	1 - active - entry in use.
+								*	2 - inactive - entry was deleted		*/
 
-unsigned int keyOffset; //Offset של התחלת המפתח בתוך הרשומה
-unsigned int keySize;  // אורך המפתח, כמספר בתים
-char keyType[2];  /*טיפוס נתונים של ערך המפתח:
-						"I" -  מספר שלם (int)
-						"F" – מספר ממשי  (float)
-						"D" – מספר ממשי כפול (double)
-						"C"  - מחרוזת תווים*/
-
-unsigned char entryStatus; /* שדה זה מעיד על מצב הכניסה הספציפית בתיקייה. המצב יכול להיות אחד מתוך שלושה:
-							0        -  כניסה ריקה (empty): הכניסה עדיין לא הייתה בשימוש מאז שבוצע format  על הדיסק .
-							1        -  כניסה פעילה (active): הכניסה מייצגת קובץ קיים ופעיל.
-							2        -  כניסה לא פעילה (inactive): הכניסה מייצגת קובץ מחוק.*/
-
-DirEntry()
-{
-	strcpy_s(Filename,1,"");
-	strcpy_s(fileOwner,1,"");
-	fileAddr = -1;
-	strcpy_s(crDate,11,"01/01/1970");
-	fileSize = 0; 
-	eofRecNr = 0; 
-	maxRecSize = 0; 
-	actualRecSize = 0;
-	strcpy_s(recFormat,2,"F");
-	keyOffset=0;
-	keySize=0;
-	strcpy_s(keyType,2,"I");
-	entryStatus = 0;
-}
+	/*************************************************
+	* FUNCTION
+	*	contor
+	* MEANING
+	*	constracts the DirEntry with default values.
+	**************************************************/
+	DirEntry()
+	{
+		strcpy_s(Filename,1,"");
+		strcpy_s(fileOwner,1,"");
+		fileAddr = -1; // no first sector, so address in non existant.
+		strcpy_s(crDate,11,"01/01/1970");
+		fileSize = 0; 
+		eofRecNr = 0; 
+		maxRecSize = 0; 
+		actualRecSize = 0;
+		strcpy_s(recFormat,2,"F");
+		keyOffset=0;
+		keySize=KEY_DEFAULT_LENGTH;
+		strcpy_s(keyType,2,"I");
+		entryStatus = empty;
+	}
 
 };
 

@@ -5,6 +5,7 @@
 
 using namespace std;
 
+//a set of 1600 bits representing a DAT like structure.
 typedef bitset<1600> DATtype; 
 
 /*************************************************
@@ -23,6 +24,6 @@ typedef bitset<1600> DATtype;
 **************************************************/
 struct Dat : BaseSector
 {
-	DATtype DAT;
+	DATtype DAT; // the DAT
 	char emptyArea[812];  ///שמור לשימוש עתידי
 };

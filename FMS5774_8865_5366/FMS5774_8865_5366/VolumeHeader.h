@@ -18,18 +18,17 @@
 **************************************************/
 struct VolumeHeader : BaseSector
 {
-	char diskName[12]; //שם זיהוי הדיסק
-	char diskOwner[12]; //שם בעל הדיסק   
-	char prodDate[11]; //תאריך יצור הדיסק (ddmmyyyy)
-	unsigned intClusQty; //סה"כ יחידות הקצאה (clusters)  בדיסק
-	unsigned int dataClusQty; //מספר יחידות הקצאה לנתונים בלבד
-	unsigned int addrDAT; //כתובת הסקטור שמכיל את ה-DAT
-	unsigned int addrRootDir; //כתובת ה-cluster שמכיל את התיקייה הראשית (Root Directory)
-	unsigned int addrDATcpy; //כתובת הסקטור שמכיל עותק שני של ה-DAT 
-	unsigned int addrRootDirCpy; //כתובת ה-cluster שמכיל עותק שני של התיקייה הראשית (Root Directory)  
-	unsigned int addrDataStart;  //כתובת ה-cluster הראשון בדיסק המיועד לנתונים.
-	char formatDate [11];  //תאריך פירמוט (ddmmyyyy)
-	bool isFormated; // האם כבר מפורמט?
-	char emptyArea [944]; //שמור לשימוש עתידי
+	char diskName[12]; //disk name
+	char diskOwner[12]; //disk owner name   
+	char prodDate[11]; //file creation date in dd/mm/yyyy format
+	unsigned intClusQty; //sum of clusters in disk
+	unsigned int dataClusQty; //sum of data only clusters in disk
+	unsigned int addrDAT; //address in disk containing the DAT
+	unsigned int addrRootDir; //address in disk containing the first sector of the Root Directory
+	unsigned int addrDATcpy; //address in disk containing the copy of the DAT
+	unsigned int addrRootDirCpy; //address in disk containing the first sector of the copy of the Root  Directory
+	unsigned int addrDataStart;  //first cluster in the disk dedicated for data
+	char formatDate [11];  //last format date in dd/mm/yyyy format
+	bool isFormated; // is the disk formated
+	char emptyArea [944];
 };
-

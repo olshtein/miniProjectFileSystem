@@ -1,22 +1,23 @@
 #include "Disk.h"
 
+// Stage 0
 
 Disk::Disk(void)
 {
 	createdisk(string(""),string(""));
 }
 
-Disk::Disk (string & nameFile, string & nameOwner, char createOrMountDisk)
+Disk::Disk (string & nameFile, string & nameOwner, DiskConstractType createOrMountDisk)
 {
-	if (createOrMountDisk=='c')
+	if (createOrMountDisk == create)
 	{
 		createdisk(nameFile,nameOwner);
 		mountdisk (nameFile);
 	}
-	else if (createOrMountDisk=='m')
+	else if (createOrMountDisk == mount)
 		mountdisk (nameFile);
 	else
-		throw exception("ERROR: Improper initialization command (in Disk::Disk(string, string, char))");
+		throw exception("ERROR: Improper initialization command (in Disk::Disk(string, string, DiskConstractType))");
 
 }
 
@@ -196,8 +197,10 @@ void Disk::readSector(Sector* toRead)
 
 void Disk::savechanges()
 {
-	if(dskfl.is_open() )  //כתיבה לקובץ של כל הדיסק
+	if(dskfl.is_open()) 
 	{
+		//write all disk to file
+
 		dskfl.seekg(0);
 		dskfl.write((char *)(&vhd),sizeof(Sector));
 		dskfl.write((char *)(&dat),sizeof(Sector));
@@ -237,7 +240,8 @@ void Disk::resetDat()
 	dat.DAT.set(1598,0);
 	dat.DAT.set(1599,0);
 }
-//שלב 1
+
+//Stage 1
 
 void Disk::format(string & nameOwner)
 {
@@ -265,40 +269,34 @@ unsigned int  Disk::howmuchempty( )
 	}
 }
 
-intmap* Disk::DiskMapping( DATtype& dat)
+diskmap* Disk::DiskMapping(const DATtype& dat)
 {
 
-	intmap *mapDisk=new intmap;
+	diskmap *mapDisk=new diskmap;
 	for (int i=0;i<1600;i++)
 	{
 		if (dat[i]==1)
 		{
 			int index=i;
 			int size=0;
-			while (true)
+
+			while (dat[i] ==1 && i != 1599)
 			{
-				if (dat[i]==1)
-				{
-					i++;
-					size++;
-				}
-				if (dat[i]!=1||i==1599)
-				{
-					mapDisk->insert(pair<int,int>(index,size));
-					break;
-				}
+				i++;
+				size++;
 			}
+			mapDisk->insert(pair<int,int>(index,size));
 		}
 	}
 	return mapDisk;
 }
 
-void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
+void Disk::alloc(DATtype & fat, unsigned int numSector, FitType typeFit)
 {
 	try
 	{
 		if (howmuchempty() < numSector)
-			throw  exception("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+			throw  exception("ERROR:There is not enough free space  (in Disk::alloc(DATtype & , unsigned int , FitType))");
 	}
 	catch(exception ex)
 	{
@@ -310,12 +308,12 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit)
 
 }
 
-void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeFit)
+void Disk::allocextend(DATtype & fat, unsigned int numSector, FitType typeFit)
 {
 	try
 	{
 		if (howmuchempty() < numSector)
-			throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , unsigned int )");
+			throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , FitType))");
 	}
 	catch(exception ex)
 	{
@@ -328,10 +326,10 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, unsigned int typeF
 	alloc( fat, numSector, typeFit ,locationStart);
 }
 
-void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit, unsigned int locationStart)
+void Disk::alloc(DATtype & fat, unsigned int numSector, FitType typeFit, unsigned int locationStart)
 {
-	intmap * mapDisk = DiskMapping(dat.DAT);
-	it_intmap it=mapDisk->begin();
+	diskmap * mapDisk = DiskMapping(dat.DAT);
+	it_diskmap it=mapDisk->begin();
 	advance( it,locationStart );
 	int locationSector=-1;
 	switch (typeFit)
@@ -359,7 +357,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit, un
 			}
 			break;
 	default:
-		throw  exception("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , unsigned int )");
+		throw  exception("ERROR: the value of typeFit not suitable (in Disk::alloc(DATtype & , unsigned int , FitType))");
 		break;
 	}
 	if (locationSector>=0)
@@ -367,7 +365,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, unsigned int typeFit, un
 		for (int i=numSector;i>0;i--)
 			fat.set(locationSector++,0);
 	}
-	else//במקרה של צורך לפיצול קובץ
+	else//if needed - split file
 	{	
 		//Using in worst fit for minimal splitting
 		for (it=mapDisk->begin();it!= mapDisk->end(); ++it)
@@ -389,8 +387,6 @@ void Disk::dealloc(DATtype & fat)
 }
 
 //Stage 2
-
-
 
 void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen, FitType fitType)
 {
@@ -425,6 +421,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	strcpy_s(rootdir[i]->keyType, 2, keyDT.c_str());
 	rootdir[i]->keyOffset = offset;
 	rootdir[i]->keySize = keyLen;
+	Functions::dateNow(rootdir[i]->crDate);
 
 	//create FileHeader
 	FileHeader fh;
@@ -517,9 +514,6 @@ void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedS
 			{
 				throw exception(ex);
 			}
-
-
-
 		}
 	}
 

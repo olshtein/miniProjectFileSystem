@@ -72,8 +72,8 @@ class TestLevel_0
 	{
 		cout<<"pres to test read and write"<<endl<<endl;
 		system("pause");
-		Disk newMyDisk(diskName,ownerName,'c');
-		Disk newMyDisk1(diskName,ownerName,'m');
+		Disk newMyDisk(diskName,ownerName,create);
+		Disk newMyDisk1(diskName,ownerName,mount);
 		newMyDisk.seekToSector(0);
 		newMyDisk1.seekToSector(0);
 

@@ -3,6 +3,7 @@
 #include "BaseSector.h"
 #include "DirEntry.h"
 
+// max number of directories in a sector.
 const int MAX_DIR_IN_SECTOR = 14;
 
 /*************************************************
@@ -21,6 +22,6 @@ const int MAX_DIR_IN_SECTOR = 14;
 **************************************************/
 struct RD_Sector : BaseSector
 {
-	DirEntry dir[MAX_DIR_IN_SECTOR];
+	DirEntry dir[MAX_DIR_IN_SECTOR]; // an array of the entries in the sector
 	char emptyArea[12];
 };
