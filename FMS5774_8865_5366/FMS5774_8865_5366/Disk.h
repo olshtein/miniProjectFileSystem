@@ -65,13 +65,14 @@ class Disk
 private:
 
 	VolumeHeader vhd; // disk volume header
-	Dat dat;  // the disk's DAT
 	RootDirectory rootdir; // the disk's Root Directory
 	bool mounted; // is the disk mounted
 	fstream dskfl; // the file stream to the disk
 	unsigned int currDiskSectorNr; //corrent sector pointed at in the disk.
 
 public:
+		Dat dat;  // the disk's DAT
+
 	/*************************************************
 	* FUNCTION
 	*	ctor
@@ -420,6 +421,17 @@ private:
 	*	unmountdisk()
 	**************************************************/
 	void savechanges();
+	/*************************************************
+	* FUNCTION
+	*	resetSector
+	* MEANING
+	*	writes reset all Sectors
+	* SEE ALSO
+	*	createdisk(string&)
+	*	unmountdisk()
+	*	savechanges()
+	**************************************************/
+	void resetSector();
 
 	/*************************************************
 	* FUNCTION

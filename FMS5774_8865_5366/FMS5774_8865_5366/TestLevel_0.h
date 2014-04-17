@@ -76,19 +76,20 @@ class TestLevel_0
 		Disk newMyDisk1(diskName,ownerName,mount);
 		newMyDisk.seekToSector(0);
 		newMyDisk1.seekToSector(0);
-
-		for (int i=0;i<3200;i++)
-		{
-			Sector my;
-			Sector my2;
-			newMyDisk.readSector(i,&my);
-			newMyDisk1.readSector(&my2);
-			cout<<"num of sector newMyDisk:"<<my.sectorNr<<" newMyDisk1: "<<my2.sectorNr<<endl;
-		}
-
+		printSectors(newMyDisk);
 		newMyDisk.unmountdisk();
 		newMyDisk1.unmountdisk();
 		system("pause");
+
+	}
+	static void printSectors(Disk& my)
+	{
+		for (int i=0;i<3200;i++)
+		{
+			Sector my1;
+			my.readSector(i,&my1);
+			cout<<"num of sector :"<<my1.sectorNr<<endl;
+		}
 	}
 public: 
 

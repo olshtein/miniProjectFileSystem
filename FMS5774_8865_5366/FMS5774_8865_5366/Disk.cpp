@@ -76,6 +76,7 @@ void Disk::createdisk( string & nameOwner)
 
 	//disk fstream
 	savechanges();
+	resetSector();
 
 }
 
@@ -205,14 +206,9 @@ void Disk::savechanges()
 		dskfl.write((char *)(&vhd),sizeof(Sector));
 		dskfl.write((char *)(&dat),sizeof(Sector));
 		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
-		for (unsigned int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // לכל סקטורי המידע
-		{
-			Sector my;
-			my.sectorNr=i;
-			dskfl.write((char *)(&my),sizeof(Sector));
-		}
-
+		
 		// update rootdir, vhd, dat sectorNr to fit, copies sector numbers.
+		seekToSector(3196);
 		rootdir.sector1.sectorNr=3196;
 		rootdir.sector2.sectorNr=3197;
 		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
@@ -230,6 +226,18 @@ void Disk::savechanges()
 		throw  exception("ERROR: File does not open, fails to perform file creation (in Disk::savechanges())");
 
 	}
+}
+
+void Disk::resetSector()
+{
+			seekToSector(4);
+	for (unsigned int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // לכל סקטורי המידע
+		{
+			Sector my;
+			my.sectorNr=i;
+			dskfl.write((char *)(&my),sizeof(Sector));
+		}
+
 }
 
 void Disk::resetDat()
@@ -261,7 +269,7 @@ unsigned int  Disk::howmuchempty( )
 {
 	try 
 	{
-		return dat.DAT.size()-dat.DAT.count();
+		return dat.DAT.count();
 	}
 	catch (...)
 	{
@@ -303,7 +311,6 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, FitType typeFit)
 		throw ex;
 	}
 
-	fat.set(1);
 	alloc( fat, numSector, typeFit ,0);
 
 }
@@ -351,7 +358,7 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, FitType typeFit, unsigne
 			break;
 	case worstFit://worst fit
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second >= numSector && locationSector == -1 || it->second < (*mapDisk)[locationSector])
+			if (it->second >= numSector && locationSector == -1 || it->second > (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
@@ -363,23 +370,23 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, FitType typeFit, unsigne
 	if (locationSector>=0)
 	{
 		for (int i=numSector;i>0;i--)
-			fat.set(locationSector++,0);
+			fat.set(locationSector++,1);
 	}
 	else//if needed - split file
 	{	
 		//Using in worst fit for minimal splitting
 		for (it=mapDisk->begin();it!= mapDisk->end(); ++it)
 			if (locationSector == -1 ||(*mapDisk)[locationSector]< it->second)
-				locationSector=it->second;
+				locationSector=it->first;
 		int j=locationSector;
 		for (int i=mapDisk->find(locationSector)->second ;i>0;i--,numSector--)
 			fat.set(j++,1);
+		dat.DAT^=fat;
 		alloc(fat, numSector, typeFit,locationStart);
 	}
 	dat.DAT^=fat;
 	delete mapDisk;
 }
-
 
 void Disk::dealloc(DATtype & fat)
 {
@@ -391,12 +398,12 @@ void Disk::dealloc(DATtype & fat)
 void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen, FitType fitType)
 {
 	//check file name does not exist
-	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
+	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus == 1; i++)
 		if (rootdir[i]->Filename == fileName)
 			throw exception("ERROR: file name already exists (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
 
 	// check key format
-	if (keyDT != "I" || keyDT != "F" || keyDT != "D" || keyDT != "C")
+	if (keyDT != "I" && keyDT != "F" && keyDT != "D" && keyDT != "C")
 		throw exception("ERROR: key format is unrecognized, please use I,F,D or C (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
 
 	//check key length for strings
@@ -406,7 +413,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	//search RootDir for space for entry
 	int i;
 
-	for (i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++) ;
+	for (i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus == 1; i++) ;
 
 	if (i == MAX_DIR_IN_SECTOR*2) // no empty slot was found
 		throw exception("ERROR: can't add entry, rootDir is full. (at void Disk::createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH))");
@@ -425,14 +432,26 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 
 	//create FileHeader
 	FileHeader fh;
-	fh.fileDesc = *rootdir[i];
 	fh.FAT = DATtype(0);
 
 	//allocate space for entry and save.
 	try
 	{
-		alloc(fh.FAT, rootdir[i]->fileAddr, fitType);
-		writeSector((Sector*)&fh);
+		alloc(fh.FAT, rootdir[i]->fileSize, fitType);
+		int j=0;//עדיף להוציא לפונקציה נפרדת
+		for (;j<=1600;j++)
+		{
+			 if (j==1600)
+				throw (" ERORR: Can not find the place allocated (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
+			else if (fh.FAT[j]==1)
+				break;
+		}
+		writeSector(j,(Sector*)&fh);
+		rootdir[i]->fileAddr=j;
+		rootdir[i]->entryStatus=1;
+		fh.fileDesc = *rootdir[i];
+
+		savechanges();
 	}
 	catch (exception ex)
 	{
@@ -440,7 +459,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	}
 
 	//sign entry as entered
-	rootdir[i]->entryStatus=1;
+
 }
 
 void Disk::delfile(string & fileName, string & fileOwner)
