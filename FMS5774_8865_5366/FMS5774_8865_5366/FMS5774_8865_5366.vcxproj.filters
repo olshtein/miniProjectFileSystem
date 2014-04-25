@@ -30,6 +30,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FCB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Disk.h">
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="TestLevel_1_2.h">
       <Filter>Header Files\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="FCB.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

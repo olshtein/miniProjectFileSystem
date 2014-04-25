@@ -398,7 +398,7 @@ void Disk::dealloc(DATtype & fat)
 void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen, FitType fitType)
 {
 	//check file name does not exist
-	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus == 1; i++)
+	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
 		if (rootdir[i]->Filename == fileName)
 			throw exception("ERROR: file name already exists (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
 
@@ -467,7 +467,7 @@ void Disk::delfile(string & fileName, string & fileOwner)
 	//search file in rootdir
 	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
 	{
-		if (rootdir[i]->Filename == fileName)
+		if (rootdir[i]->Filename == fileName&&rootdir[i]->entryStatus==1)
 		{
 			if (rootdir[i]->fileOwner != fileOwner)
 				throw exception("ERROR: user not allowed to delete the file (at void Disk::delfile(string &, string &)");
@@ -488,7 +488,7 @@ void Disk::delfile(string & fileName, string & fileOwner)
 			dealloc(fh.FAT);
 			rootdir[i]->entryStatus = 2;
 
-			//save
+			//save???
 			try
 			{
 				writeSector(rootdir[i]->fileAddr, (Sector*)&fh);

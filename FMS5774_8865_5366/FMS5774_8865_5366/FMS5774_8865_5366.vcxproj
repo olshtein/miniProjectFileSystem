@@ -83,6 +83,7 @@
     <ClInclude Include="DAT.h" />
     <ClInclude Include="DirEntry.h" />
     <ClInclude Include="Disk.h" />
+    <ClInclude Include="FCB.h" />
     <ClInclude Include="FileHeader.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="RD_Sector.h" />
@@ -94,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Disk.cpp" />
+    <ClCompile Include="FCB.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
