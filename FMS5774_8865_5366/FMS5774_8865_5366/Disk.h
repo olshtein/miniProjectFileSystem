@@ -11,6 +11,7 @@
 #include <Tuple>
 #include <vector>
 #include <map>
+#include "FCB.h"
 
 using namespace std;
 
@@ -409,6 +410,10 @@ public:
 	*	void allocextend(DATtype &, unsigned int, unsigned int)
 	**************************************************/
 	void extendfile(string &, string &, unsigned int);
+
+	void saveFileChanges(unsigned int  , FileHeader &);
+	FCB * openfile(string &, string &, string &);
+
 
 private:
 	/*************************************************

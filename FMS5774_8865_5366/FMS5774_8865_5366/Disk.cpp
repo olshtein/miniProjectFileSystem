@@ -446,10 +446,10 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 			else if (fh.FAT[j]==1)
 				break;
 		}
-		writeSector(j,(Sector*)&fh);
 		rootdir[i]->fileAddr=j;
 		rootdir[i]->entryStatus=1;
 		fh.fileDesc = *rootdir[i];
+		writeSector(j,(Sector*)&fh);
 
 		savechanges();
 	}
@@ -539,3 +539,24 @@ void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedS
 	//file not found
 	throw exception("ERROR: file not found (at void Disk::extendfile(string &, string &, unsigned int)");
 }
+
+void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
+{
+	try
+			{
+				writeSector(numOfSector, (Sector*)&fh);
+				savechanges();
+
+			}
+			catch (exception ex)
+			{
+				throw exception(ex);
+			}
+}
+//level 3
+
+	FCB *Disk::openfile(string & filename, string & fileOwner, string & IO)
+	{
+	;
+	}
+	 

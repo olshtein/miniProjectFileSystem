@@ -4,6 +4,13 @@
 
 using namespace std;
 
+enum IO
+{
+	I,
+	O,
+	IandO
+};
+
 class FCB
 {
 public:
@@ -14,9 +21,11 @@ public:
 	unsigned int currRecNr;
 	unsigned int currSecNr;
 	unsigned int currRecNrInBuff;
-
- FCB *openfile(string &, string &, string &);
+	IO io; //האם הפתיחה היא לכתיבה וקריאה
+	bool change;
 	FCB();
+	FCB(Disk *);
+
 	~FCB(void);
 	void closefile();
 	 void flushfile();
