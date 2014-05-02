@@ -398,7 +398,7 @@ void Disk::dealloc(DATtype & fat)
 void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen, FitType fitType)
 {
 	//check file name does not exist
-	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
+	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != 0; i++)
 		if (rootdir[i]->Filename == fileName)
 			throw exception("ERROR: file name already exists (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
 
@@ -413,9 +413,9 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	//search RootDir for space for entry
 	int i;
 
-	for (i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus == 1; i++) ;
+	for (i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus == 1; i++) ;
 
-	if (i == MAX_DIR_IN_SECTOR*2) // no empty slot was found
+	if (i == ROOT_DIR_LENGTH) // no empty slot was found
 		throw exception("ERROR: can't add entry, rootDir is full. (at void Disk::createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH))");
 
 	//create entry.
@@ -465,7 +465,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 void Disk::delfile(string & fileName, string & fileOwner)
 {
 	//search file in rootdir
-	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
+	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != 0; i++)
 	{
 		if (rootdir[i]->Filename == fileName&&rootdir[i]->entryStatus==1)
 		{
@@ -509,7 +509,7 @@ void Disk::delfile(string & fileName, string & fileOwner)
 void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedSectors)
 {
 	//search file in rootdir
-	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus != 0; i++)
+	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != 0; i++)
 	{
 		if (rootdir[i]->Filename == fileName)
 		{
@@ -555,8 +555,48 @@ void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 }
 //level 3
 
-	FCB *Disk::openfile(string & filename, string & fileOwner, string & IO)
+	FCB *Disk::openfile(string & filename, string & fileOwner, string & IOString)
 	{
-	;
+		if (filename != vhd.diskName)
+			throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");
+
+		if (IOString != "I" && IOString != "O" && IOString != "IO" && IOString != "E")
+			throw exception("ERROR: Invalid IOString, please enter I/O/IO/E only. (at void Disk::openfile(string &, string &, string &)");
+
+		if (IOString != "I" && fileOwner != vhd.diskOwner)
+			throw exception("ERROR: file writting premision denied, user not owner of file. (at void Disk::openfile(string &, string &, string &)");
+
+		for (int i=0; i < ROOT_DIR_LENGTH; i++)
+		{
+			if (rootdir[i]->Filename == filename)
+			{
+				FCB* fcb;
+				FileHeader fh;
+
+				readSector(rootdir[i]->fileAddr, (Sector*)&fh);
+				DirEntry fhCopy(fh.fileDesc);
+				DATtype FATCopy(fh.FAT);
+
+				fcb->fileDesc = fhCopy;
+				fcb->FAT = FATCopy;
+
+				if (IOString == "I" || IOString == "O" || IOString == "IO")
+				{
+					//fcb.currRecNr = ?
+					fcb->currSecNr = fh.fileDesc.fileAddr;
+					fcb->currRecNrInBuff = 0;
+				}
+				else
+				{
+					//fcb.currRecNr = ?
+					fcb->currSecNr = fh.fileDesc.fileAddr + fh.fileDesc.eofRecNr;
+					//fcb.currRecNrInBuff = ?
+				}
+				
+				return fcb;
+			}
+		}
+
+		throw exception("ERROR: file does not exist. (at void Disk::openfile(string &, string &, string &)");
 	}
 	 
