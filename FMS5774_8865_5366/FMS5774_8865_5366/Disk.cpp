@@ -555,8 +555,37 @@ void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 }
 //level 3
 
-	FCB *Disk::openfile(string & filename, string & fileOwner, string & IO)
+FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
 	{
-	;
-	}
+		FCB *newFcb=new FCB(this);
+		for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus !=0; i++)
+			{
+			if (rootdir[i]->Filename&&rootdir[i]->entryStatus !=1)
+			{
+				newFcb->fileDesc=*rootdir[i];
+				break;
+			}
+		
+			if (io!=I &&newFcb->fileDesc.fileOwner!=fileOwner)
+				throw exception("ERROR: user not allowed to delete the file (at FCB *Disk::openfile(string & , string & , IO & )");
+			if (io!=E)
+			{
+				newFcb->currRecNrInBuff=0;
+				newFcb->currRecNr=0;
+				newFcb->currSecNr=0;
+			}
+			else
+			{
+				newFcb->currRecNrInBuff=(newFcb->fileDesc.eofRecNr%newFcb->fileDesc.fileSize);
+				newFcb->currRecNr=newFcb->fileDesc.eofRecNr;
+				newFcb->currSecNr=(newFcb->fileDesc.eofRecNr/newFcb->fileDesc.fileSize);
+			}
+			return newFcb;
+		}
+		throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
+
+}
+
+
+
 	 

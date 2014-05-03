@@ -412,7 +412,8 @@ public:
 	void extendfile(string &, string &, unsigned int);
 
 	void saveFileChanges(unsigned int  , FileHeader &);
-	FCB * openfile(string &, string &, string &);
+
+	FCB * openfile(string &, string &, IO &);
 
 
 private:
