@@ -3,6 +3,9 @@
 #include "BaseSector.h"
 #include "RD_Sector.h"
 
+// root dir length
+const int ROOT_DIR_LENGTH = MAX_DIR_IN_SECTOR * 2;
+
 /*************************************************
 * STRUCT
 *	RootDirectory
@@ -36,7 +39,7 @@ struct RootDirectory
 
 				return &sector1.dir[i];
 			}
-			if(i>=MAX_DIR_IN_SECTOR && i<MAX_DIR_IN_SECTOR*2)
+			if(i>=MAX_DIR_IN_SECTOR && i<ROOT_DIR_LENGTH)
 			{          
 				return &sector2.dir[i-MAX_DIR_IN_SECTOR];
 			}
