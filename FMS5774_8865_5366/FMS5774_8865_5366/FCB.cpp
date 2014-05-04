@@ -76,3 +76,25 @@ void FCB::flushfile()
 		throw exception(ex);
 	}
 }
+
+void FCB::readRec(char * data, unsigned int updateFlag)
+{
+	if (iostate == O)
+		throw exception("ERROR: The file open to read-only (at void FCB::readRec(char * , unsigned int )");
+	memcpy(data,&Buffer,fileDesc.actualRecSize);
+	if (updateFlag==0 && currRecNr <= fileDesc.eofRecNr)
+	{
+		currRecNr++;
+		if (1020/fileDesc.actualRecSize <=currRecNrInBuff)
+		currRecNrInBuff++;
+
+	}
+
+
+}
+void FCB::readNewSectorToBuffer()
+{
+	if(fileDesc.fileSize<=1+currSecNr)
+		throw exception("ERROR: There is not more sector (at void FCB::readNewSectorToBuffer()");
+
+}

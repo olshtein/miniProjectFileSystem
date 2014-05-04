@@ -556,7 +556,7 @@ void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 //level 3
 
 
-FCB *Disk::openfile(string & filename, string & fileOwner, IOState & io)
+FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 {
 	if (filename != vhd.diskName)
 		throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");
@@ -572,23 +572,24 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IOState & io)
 			memcpy(&my,&newFcb->Buffer,sizeof(Sector));
 			newFcb->fileDesc = my.fileDesc;
 			newFcb->FAT = my.FAT;
-			newFcb->iostate=io;
+			newFcb->iostate=conver(io);
 			newFcb->placeDir=i;
 
-			if (io!=I && newFcb->fileDesc.fileOwner!=fileOwner)
+			if (io != "I" && newFcb->fileDesc.fileOwner!=fileOwner)
 				throw exception("ERROR: user not allowed to chnge the file (at FCB *Disk::openfile(string & , string & , IO & )");
-			if (io!=E)
+			if (io != "E")
 			{
+				writeSector(rootdir[i]->fileAddr+1,&newFcb->Buffer);
 				newFcb->currRecNrInBuff=0;
 				newFcb->currRecNr=0;
-				newFcb->currSecNr=0;
+				newFcb->currSecNr=1;
 			}
 			else
 			{
 				newFcb->currRecNrInBuff=(newFcb->fileDesc.eofRecNr%newFcb->fileDesc.fileSize);
 				newFcb->currRecNr=newFcb->fileDesc.eofRecNr;
 				newFcb->currSecNr=(newFcb->fileDesc.eofRecNr/newFcb->fileDesc.fileSize);
-
+				writeSector(rootdir[i]->fileAddr+newFcb->currSecNr,&newFcb->Buffer);
 				return newFcb;
 			}
 		}

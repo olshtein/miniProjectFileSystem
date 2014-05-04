@@ -16,7 +16,18 @@ enum IOState
 
 
 };
-
+IOState conver(const string & io)
+{
+	if (io=="I")
+		return I;
+	if (io=="O")
+		return I;
+	if (io=="IO")
+		return I;
+	if (io=="E")
+		return I;
+	throw exception("ERROR: Bad I/O value");
+};
 
 class FCB
 {
@@ -31,9 +42,9 @@ public:
 	bool changeBuf;
 	bool changeDir;
 	unsigned int placeDir;
-	unsigned int currRecNr;
-	unsigned int currSecNr;
-	unsigned int currRecNrInBuff;
+	unsigned int currRecNr;//מספר סידורי של הרשומה הנוכחית, בתוך הקובץ
+	unsigned int currSecNr;//מספר סידורי של סקטור הנוכחית, בתוך הקובץ
+	unsigned int currRecNrInBuff;//מספר סידורי של הרשומה הנוכחית, בתוך הסקטור
 	IOState iostate; //האם הפתיחה היא לכתיבה וקריאה
 
 
@@ -41,14 +52,14 @@ public:
 	FCB(Disk *);
 	~FCB(void);
 	void closefile();
-
 	void flushfile();
-	 void readRec(char *, [unsigned int]);
+	 void readRec(char *, unsigned int = 0);
 	 void writeRec(char *);
 	 void seekRec(unsigned int, int);
-	 void writeRec(char *);
 	 void deleteRec();
 	 void updateRec(char *);
+	 void readNewSectorToBuffer();
+
 
 };
 
