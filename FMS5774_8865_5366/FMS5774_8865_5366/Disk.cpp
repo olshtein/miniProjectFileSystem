@@ -603,7 +603,7 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
 		{
 			if (rootdir[i]->Filename == filename)
 			{
-				FCB* fcb;
+				FCB* fcb = new FCB(this);
 				FileHeader fh;
 
 				readSector(rootdir[i]->fileAddr, (Sector*)&fh);
