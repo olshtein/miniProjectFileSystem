@@ -555,13 +555,20 @@ void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 }
 //level 3
 
+<<<<<<< HEAD
 FCB *Disk::openfile(string & filename, string & fileOwner, IOState  io)
+=======
+FCB *Disk::openfile(string & filename, string & fileOwner, IOState & io)
+>>>>>>> da6510f63494945978b472fe136b62402a2ed510
 {
+	if (filename != vhd.diskName)
+		throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");
+
 	FCB *newFcb=new FCB(this);
 	unsigned int fileAddr;
 	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus !=0; i++)
 	{
-		if (rootdir[i]->Filename&&rootdir[i]->entryStatus !=1)
+		if (rootdir[i]->Filename && rootdir[i]->entryStatus !=1)
 		{
 			writeSector(rootdir[i]->fileAddr,&newFcb->Buffer);
 			FileHeader my=FileHeader();
@@ -569,7 +576,10 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IOState  io)
 			newFcb->fileDesc = my.fileDesc;
 			newFcb->FAT = my.FAT;
 			newFcb->iostate=io;
+<<<<<<< HEAD
 			newFcb->placeDir=i;
+=======
+>>>>>>> da6510f63494945978b472fe136b62402a2ed510
 			if (io!=I && newFcb->fileDesc.fileOwner!=fileOwner)
 				throw exception("ERROR: user not allowed to chnge the file (at FCB *Disk::openfile(string & , string & , IO & )");
 			if (io!=E)
@@ -587,6 +597,7 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IOState  io)
 				return newFcb;
 			}
 		}
+<<<<<<< HEAD
 			throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
 
 }
@@ -636,6 +647,9 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & IOString)
 		throw exception("ERROR: file does not exist. (at void Disk::openfile(string &, string &, string &)");
 	}
 
-
+=======
+	}
+}
+>>>>>>> da6510f63494945978b472fe136b62402a2ed510
 
 
