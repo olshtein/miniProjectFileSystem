@@ -53,6 +53,7 @@ public:
 	~FCB(void);
 	void closefile();
 	void flushfile();
+<<<<<<< HEAD
 	 void readRec(char *, unsigned int = 0);
 	 void writeRec(char *);
 	 void seekRec(unsigned int, int);
@@ -60,6 +61,15 @@ public:
 	 void updateRec(char *);
 	 void readNewSectorToBuffer();
 
+=======
+	void readRec(char *, unsigned int=0);
+	void writeRec(char *);
+	void seekRec(unsigned int, int);
+	void writeRec(char *);
+	void updateCancel();
+	void deleteRec();
+	void updateRec(char *);
+>>>>>>> cc4ba045de7c2e665a1edcbcdf9e15e70e62da62
 
 };
 
