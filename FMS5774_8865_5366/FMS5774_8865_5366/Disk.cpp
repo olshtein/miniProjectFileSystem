@@ -555,21 +555,23 @@ void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 }
 //level 3
 
-<<<<<<< HEAD
-FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
+FCB *Disk::openfile(string & filename, string & fileOwner, IOState & io)
 {
+	if (filename != vhd.diskName)
+		throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");
+
 	FCB *newFcb=new FCB(this);
 	unsigned int fileAddr;
-	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus !=0; i++)
+	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus !=0; i++)
 	{
-		if (rootdir[i]->Filename&&rootdir[i]->entryStatus !=1)
+		if (rootdir[i]->Filename && rootdir[i]->entryStatus !=1)
 		{
 			writeSector(rootdir[i]->fileAddr,&newFcb->Buffer);
 			FileHeader my=FileHeader();
 			memcpy(&my,&newFcb->Buffer,sizeof(Sector));
 			newFcb->fileDesc = my.fileDesc;
 			newFcb->FAT = my.FAT;
-			newFcb->io=io;
+			newFcb->iostate=io;
 			if (io!=I && newFcb->fileDesc.fileOwner!=fileOwner)
 				throw exception("ERROR: user not allowed to delete the file (at FCB *Disk::openfile(string & , string & , IO & )");
 			if (io!=E)
@@ -587,55 +589,7 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
 				return newFcb;
 			}
 		}
-=======
-	FCB *Disk::openfile(string & filename, string & fileOwner, string & IOString)
-	{
-		if (filename != vhd.diskName)
-			throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");
-
-		if (IOString != "I" && IOString != "O" && IOString != "IO" && IOString != "E")
-			throw exception("ERROR: Invalid IOString, please enter I/O/IO/E only. (at void Disk::openfile(string &, string &, string &)");
-
-		if (IOString != "I" && fileOwner != vhd.diskOwner)
-			throw exception("ERROR: file writting premision denied, user not owner of file. (at void Disk::openfile(string &, string &, string &)");
-
-		for (int i=0; i < ROOT_DIR_LENGTH; i++)
-		{
-			if (rootdir[i]->Filename == filename)
-			{
-				FCB* fcb = new FCB(this);
-				FileHeader fh;
-
-				readSector(rootdir[i]->fileAddr, (Sector*)&fh);
-				DirEntry fhCopy(fh.fileDesc);
-				DATtype FATCopy(fh.FAT);
-
-				fcb->fileDesc = fhCopy;
-				fcb->FAT = FATCopy;
-
-				if (IOString == "I" || IOString == "O" || IOString == "IO")
-				{
-					//fcb.currRecNr = ?
-					fcb->currSecNr = fh.fileDesc.fileAddr;
-					fcb->currRecNrInBuff = 0;
-				}
-				else
-				{
-					//fcb.currRecNr = ?
-					fcb->currSecNr = fh.fileDesc.fileAddr + fh.fileDesc.eofRecNr;
-					//fcb.currRecNrInBuff = ?
-				}
-				
-				return fcb;
-			}
-		}
-
-		throw exception("ERROR: file does not exist. (at void Disk::openfile(string &, string &, string &)");
->>>>>>> 67792b9121b4b2b2e8895a71ab1c115dfb27fb67
 	}
-	throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
-
 }
-
 
 

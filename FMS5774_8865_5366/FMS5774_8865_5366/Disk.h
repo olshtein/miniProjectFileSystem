@@ -413,7 +413,7 @@ public:
 
 	void saveFileChanges(unsigned int  , FileHeader &);
 
-	FCB * openfile(string &, string &, IO &);
+	FCB * openfile(string &, string &, IOState &);
 
 
 private:
