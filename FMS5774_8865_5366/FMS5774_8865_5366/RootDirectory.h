@@ -46,6 +46,12 @@ struct RootDirectory
 
 			throw exception("ERROR: Invalid Index value (at RootDirectory::operator[](int))"); 
 	}
-
+DirEntry* fondFile(string & fileOwner)
+{
+	for(int i=0;i<ROOT_DIR_LENGTH;i++)
+		if (operator[](i)->fileOwner == fileOwner)
+			return &sector1.dir[i];
+	return NULL;
+}
 };
 

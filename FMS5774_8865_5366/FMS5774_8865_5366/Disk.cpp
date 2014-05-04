@@ -555,12 +555,11 @@ void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 }
 //level 3
 
-<<<<<<< HEAD
-FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
+FCB *Disk::openfile(string & filename, string & fileOwner, IOState  io)
 {
 	FCB *newFcb=new FCB(this);
 	unsigned int fileAddr;
-	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus !=0; i++)
+	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus !=0; i++)
 	{
 		if (rootdir[i]->Filename&&rootdir[i]->entryStatus !=1)
 		{
@@ -569,9 +568,10 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
 			memcpy(&my,&newFcb->Buffer,sizeof(Sector));
 			newFcb->fileDesc = my.fileDesc;
 			newFcb->FAT = my.FAT;
-			newFcb->io=io;
+			newFcb->iostate=io;
+			newFcb->placeDir=i;
 			if (io!=I && newFcb->fileDesc.fileOwner!=fileOwner)
-				throw exception("ERROR: user not allowed to delete the file (at FCB *Disk::openfile(string & , string & , IO & )");
+				throw exception("ERROR: user not allowed to chnge the file (at FCB *Disk::openfile(string & , string & , IO & )");
 			if (io!=E)
 			{
 				newFcb->currRecNrInBuff=0;
@@ -587,8 +587,11 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
 				return newFcb;
 			}
 		}
-=======
-	FCB *Disk::openfile(string & filename, string & fileOwner, string & IOString)
+			throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
+
+}
+}
+FCB *Disk::openfile(string & filename, string & fileOwner, string & IOString)
 	{
 		if (filename != vhd.diskName)
 			throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");
@@ -631,11 +634,8 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
 		}
 
 		throw exception("ERROR: file does not exist. (at void Disk::openfile(string &, string &, string &)");
->>>>>>> 67792b9121b4b2b2e8895a71ab1c115dfb27fb67
 	}
-	throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
 
-}
 
 
 

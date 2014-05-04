@@ -18,6 +18,7 @@ using namespace std;
 // a map containing sets of indecies and sizes of empty DAT clusters, and an iterator for it.
 typedef  map<unsigned int,unsigned int> diskmap;
 typedef  map<unsigned int,unsigned int>::iterator it_diskmap;
+class FCB;
 
 /*************************************************
 * ENUM
@@ -66,12 +67,11 @@ class Disk
 private:
 
 	VolumeHeader vhd; // disk volume header
-	RootDirectory rootdir; // the disk's Root Directory
 	bool mounted; // is the disk mounted
 	fstream dskfl; // the file stream to the disk
 	unsigned int currDiskSectorNr; //corrent sector pointed at in the disk.
-
 public:
+		RootDirectory rootdir; // the disk's Root Directory
 		Dat dat;  // the disk's DAT
 
 	/*************************************************
@@ -413,7 +413,8 @@ public:
 
 	void saveFileChanges(unsigned int  , FileHeader &);
 
-	FCB * openfile(string &, string &, IO &);
+	FCB * openfile(string &, string &,  IOState );
+	FCB * openfile(string &, string &,  string &);
 
 
 private:
