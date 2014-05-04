@@ -556,7 +556,7 @@ void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 //level 3
 
 
-FCB *Disk::openfile(string & filename, string & fileOwner, IOState & io)
+FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 {
 	if (filename != vhd.diskName)
 		throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");

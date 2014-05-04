@@ -76,3 +76,53 @@ void FCB::flushfile()
 		throw exception(ex);
 	}
 }
+
+void FCB::updateCancel()
+{
+	if (iostate == I || iostate == O)
+		throw exception("ERROR: can't update in I, O modes, so can't cancel an update (at void FCB::updateCancel())");
+
+	if (lock == false)
+		throw exception("ERROR: no update to cancel. (at void FCB::updateCancel())");
+
+	lock = false;
+}
+
+void FCB::deleteRec()
+{
+	if (lock == false)
+		throw exception("ERROR:need to lock record before deleting it. (at void FCB::deleteRec())");
+
+	//delete by putting logical 0's at key.
+	//for (int i = 4 + fileDesc.fileAddr + fileDesc.keyOffset; i < fileDesc.fileAddr + fileDesc.keyOffset + fileDesc.keySize; i++) ?
+	for (int i = /* ? */; i < /* ? */; i++) 
+	{
+		Buffer.rawData[i] = 0;
+	}
+
+	lock = false;
+
+	//move to next record.
+	currRecNr++;
+	currRecNrInBuff=(currRecNr%fileDesc.fileSize);
+	currSecNr=(currRecNr/fileDesc.fileSize);
+}
+
+void FCB::updateRec(char * recPtr)
+{
+	if (iostate == I || iostate == O)
+		throw exception("ERROR: can't update in I, O modes (at void FCB::updateRec(char *))");
+
+	if (lock == false)
+		throw exception("ERROR:need to lock record before updating it. (at void FCB::updateRec())");
+
+	//update
+	//?
+	
+	lock = false;
+
+	//move to next record.
+	currRecNr++;
+	currRecNrInBuff=(currRecNr%fileDesc.fileSize);
+	currSecNr=(currRecNr/fileDesc.fileSize);
+}

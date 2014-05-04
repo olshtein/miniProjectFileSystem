@@ -43,12 +43,13 @@ public:
 	void closefile();
 
 	void flushfile();
-	 void readRec(char *, [unsigned int]);
-	 void writeRec(char *);
-	 void seekRec(unsigned int, int);
-	 void writeRec(char *);
-	 void deleteRec();
-	 void updateRec(char *);
+	void readRec(char *, unsigned int=0);
+	void writeRec(char *);
+	void seekRec(unsigned int, int);
+	void writeRec(char *);
+	void updateCancel();
+	void deleteRec();
+	void updateRec(char *);
 
 };
 

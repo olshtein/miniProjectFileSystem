@@ -415,7 +415,7 @@ public:
 
 //	FCB * openfile(string &, string &,  string &);
 	
-	FCB * openfile(string &, string &, IOState &);
+	FCB * openfile(string &, string &, string &);
 
 
 private:
