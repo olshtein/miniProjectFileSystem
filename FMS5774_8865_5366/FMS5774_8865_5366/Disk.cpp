@@ -206,7 +206,7 @@ void Disk::savechanges()
 		dskfl.write((char *)(&vhd),sizeof(Sector));
 		dskfl.write((char *)(&dat),sizeof(Sector));
 		dskfl.write((char *)(&rootdir),2*sizeof(Sector));
-		
+
 		// update rootdir, vhd, dat sectorNr to fit, copies sector numbers.
 		seekToSector(3196);
 		rootdir.sector1.sectorNr=3196;
@@ -230,13 +230,13 @@ void Disk::savechanges()
 
 void Disk::resetSector()
 {
-			seekToSector(4);
+	seekToSector(4);
 	for (unsigned int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // לכל סקטורי המידע
-		{
-			Sector my;
-			my.sectorNr=i;
-			dskfl.write((char *)(&my),sizeof(Sector));
-		}
+	{
+		Sector my;
+		my.sectorNr=i;
+		dskfl.write((char *)(&my),sizeof(Sector));
+	}
 
 }
 
@@ -441,7 +441,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 		int j=0;//עדיף להוציא לפונקציה נפרדת
 		for (;j<=1600;j++)
 		{
-			 if (j==1600)
+			if (j==1600)
 				throw (" ERORR: Can not find the place allocated (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
 			else if (fh.FAT[j]==1)
 				break;
@@ -543,30 +543,33 @@ void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedS
 void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 {
 	try
-			{
-				writeSector(numOfSector, (Sector*)&fh);
-				savechanges();
+	{
+		writeSector(numOfSector, (Sector*)&fh);
+		savechanges();
 
-			}
-			catch (exception ex)
-			{
-				throw exception(ex);
-			}
+	}
+	catch (exception ex)
+	{
+		throw exception(ex);
+	}
 }
 //level 3
 
 FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
+{
+	FCB *newFcb=new FCB(this);
+	unsigned int fileAddr;
+	for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus !=0; i++)
 	{
-		FCB *newFcb=new FCB(this);
-		for (int i=0; i < MAX_DIR_IN_SECTOR*2 && rootdir[i]->entryStatus !=0; i++)
-			{
-			if (rootdir[i]->Filename&&rootdir[i]->entryStatus !=1)
-			{
-				newFcb->fileDesc=*rootdir[i];
-				break;
-			}
-		
-			if (io!=I &&newFcb->fileDesc.fileOwner!=fileOwner)
+		if (rootdir[i]->Filename&&rootdir[i]->entryStatus !=1)
+		{
+			writeSector(rootdir[i]->fileAddr,&newFcb->Buffer);
+			FileHeader my=FileHeader();
+			memcpy(&my,&newFcb->Buffer,sizeof(Sector));
+			newFcb->fileDesc = my.fileDesc;
+			newFcb->FAT = my.FAT;
+			newFcb->io=io;
+			if (io!=I && newFcb->fileDesc.fileOwner!=fileOwner)
 				throw exception("ERROR: user not allowed to delete the file (at FCB *Disk::openfile(string & , string & , IO & )");
 			if (io!=E)
 			{
@@ -579,13 +582,14 @@ FCB *Disk::openfile(string & filename, string & fileOwner, IO & io)
 				newFcb->currRecNrInBuff=(newFcb->fileDesc.eofRecNr%newFcb->fileDesc.fileSize);
 				newFcb->currRecNr=newFcb->fileDesc.eofRecNr;
 				newFcb->currSecNr=(newFcb->fileDesc.eofRecNr/newFcb->fileDesc.fileSize);
+
+				return newFcb;
 			}
-			return newFcb;
 		}
-		throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
+	}
+	throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
 
 }
 
 
 
-	 

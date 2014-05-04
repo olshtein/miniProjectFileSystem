@@ -31,11 +31,11 @@ public:
 	~FCB(void);
 	void closefile();
 	 void flushfile();
-	 void read(char *, [unsigned int]);
-	 void write(char *);
-	 void seek(unsigned int, int);
-	 void write(char *);
-	 void Delete();
-	 void update(char *);
+	 void readRec(char *, [unsigned int]);
+	 void writeRec(char *);
+	 void seekRec(unsigned int, int);
+	 void writeRec(char *);
+	 void deleteRec();
+	 void updateRec(char *);
 };
 
