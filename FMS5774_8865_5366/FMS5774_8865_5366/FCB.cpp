@@ -77,7 +77,6 @@ void FCB::flushfile()
 	}
 }
 
-<<<<<<< HEAD
 void FCB::readRec(char * data, unsigned int updateFlag)
 {
 	if (iostate == O)
@@ -99,7 +98,6 @@ void FCB::readNewSectorToBuffer()
 		throw exception("ERROR: There is not more sector (at void FCB::readNewSectorToBuffer()");
 
 }
-=======
 void FCB::updateCancel()
 {
 	if (iostate == I || iostate == O)
@@ -149,4 +147,3 @@ void FCB::updateRec(char * recPtr)
 	currRecNrInBuff=(currRecNr%fileDesc.fileSize);
 	currSecNr=(currRecNr/fileDesc.fileSize);
 }
->>>>>>> cc4ba045de7c2e665a1edcbcdf9e15e70e62da62
