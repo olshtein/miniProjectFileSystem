@@ -82,6 +82,9 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 	if (iostate == O)
 		throw exception("ERROR: The file open to read-only (at void FCB::readRec(char * , unsigned int )");
 
+	if (lock == true && updateFlag == 1)
+		throw exception("ERROR: You can not edit a record that is already being edited (at void FCB::readRec(char * , unsigned int )");
+
 	memcpy(data,&Buffer+(currRecNrInBuff*fileDesc.actualRecSize)+4,fileDesc.actualRecSize);
 
 	if (updateFlag==0 && currRecNr <= fileDesc.eofRecNr)
@@ -92,6 +95,7 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 
 void FCB::seekRec(unsigned int startingPoint, int num)
 {
+
 	switch (startingPoint)
 	{
 	case 0:	
@@ -111,14 +115,17 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 		throw exception ("Starting point is invalid. (at void FCB::seekRec(unsigned int , int )");
 		break;
 	}
+	if ( iostate == E && num != fileDesc.eofRecNr+1)
+			throw exception ("Open the file for editing only, you can not move to the requested address. (at void FCB::seekRec(unsigned int , int )");
 
-	if (num < 0 && num > fileDesc.eofRecNr )
+	if (num < 0 && num >= fileDesc.eofRecNr )
 		throw exception ("The address is not valid. (at void FCB::seekRec(unsigned int , int )");
 
 	if (num/1024 != currSecNr)
 		readNewSectorToBuffer(num/1024);
 	currRecNr = num;
 	currRecNrInBuff = num%1024;
+	lock=false;
 }
 
 void FCB::readNewSectorToBuffer(unsigned int numSector)
@@ -134,6 +141,16 @@ void FCB::readNewSectorToBuffer(unsigned int numSector)
 	else
 		throw exception("ERROR: There is not more sector (at void FCB::readNewSectorToBuffer()");
 }
+
+void  FCB::writeRec(char * data)
+{
+	if (iostate ==I || (iostate == E && currRecNr != fileDesc.eofRecNr))
+		throw exception ("No permission to write to address current. (at void FCB::readNewSectorToBuffer(unsigned int )");
+
+		memcpy(&Buffer+(currRecNrInBuff*fileDesc.actualRecSize)+4,data,fileDesc.actualRecSize);
+		seekRec(1,1);
+}
+
 
 void FCB::updateCancel()
 {
