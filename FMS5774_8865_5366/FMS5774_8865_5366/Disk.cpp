@@ -590,12 +590,13 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 				newFcb->currRecNr=newFcb->fileDesc.eofRecNr;
 				newFcb->currSecNr=(newFcb->fileDesc.eofRecNr/newFcb->fileDesc.fileSize);
 				writeSector(rootdir[i]->fileAddr+newFcb->currSecNr,&newFcb->Buffer);
-				return newFcb;
+				
 			}
+			return newFcb;
 		}
-		throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
-
 	}
+	throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
+
 }
 //FCB *Disk::openfile(string & filename, string & fileOwner, string & IOString)
 //	{

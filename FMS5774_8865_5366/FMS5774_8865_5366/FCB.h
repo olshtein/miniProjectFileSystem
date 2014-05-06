@@ -58,7 +58,7 @@ public:
 	 void seekRec(unsigned int, int);
 	 void deleteRec();
 	 void updateRec(char *);
-	 void readNewSectorToBuffer();
+	 void readNewSectorToBuffer(unsigned int );
 
 	void updateCancel();
 
