@@ -74,6 +74,9 @@
     <ClInclude Include="FCB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TestLevel_3.h">
+      <Filter>Header Files\Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

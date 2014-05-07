@@ -16,16 +16,17 @@ enum IOState
 
 
 };
-IOState conver(const string & io)
+
+IOState static conver(const string & io)
 {
 	if (io=="I")
 		return I;
 	if (io=="O")
-		return I;
+		return O;
 	if (io=="IO")
-		return I;
+		return IO;
 	if (io=="E")
-		return I;
+		return E;
 	throw exception("ERROR: Bad I/O value");
 };
 
@@ -55,6 +56,7 @@ public:
 	void flushfile();
 	 void readRec(char *, unsigned int = 0);
 	 void writeRec(char *);
+	 void writeUpdateRec(char *);
 	 void seekRec(unsigned int, int);
 	 void deleteRec();
 	 void updateRec(char *);
