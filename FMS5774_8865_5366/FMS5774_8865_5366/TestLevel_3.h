@@ -23,7 +23,7 @@ public:
 		
 		d1.createdisk(diskName1, ownerName1);
 		d1.mountdisk(diskName1);
-		d1.createfile(diskName1,ownerName1,string("F"),250,2,string("I"),0);
+		d1.createfile(diskName1,ownerName1,string("F"),20,2,string("I"),0);
 
 			string diskName2 = "disk 2";  
 			string ownerName2= "sara";  
@@ -37,8 +37,9 @@ public:
 	//גם לנעמה נאפשר ונקצה עבור fcb חדש שגם הוא מכיל את כל המידע שבקובץ
 	FCB* ptr2 = d1.openfile(diskName1,string("naama"),string("I"));
 
-	char arr[250];
+	char *arr =new char[ptr1->fileDesc.actualRecSize];
 	ptr1->readRec(arr);//עכשיו המערך מכיל את פרטי הרשומה הראשונה שבקובץ fil1 
+
 	ptr1->readRec(arr);//עכשיו המערך מכיל את פרטי הרשומה השניה שבקובץ fil1 
 
 	//נסגור את הקובץ fil1 שנועה פתחה 
@@ -47,11 +48,11 @@ public:
 
 	ptr2->readRec(arr);//עכשיו המערך מכיל את פרטי הרשומה הראשונה שבקובץ fil1
 
-	ptr1->readRec(arr);//נזרוק חריגה במקרה כזה כי סגרנו כבר את הקובץ
+	//ptr1->readRec(arr);//נזרוק חריגה במקרה כזה כי סגרנו כבר את הקובץ
 
 	//נאפשר לה
 	FCB* ptr3 = d2.openfile(diskName2,ownerName2,string("IO"));
-	//לא ניתן לה - חריגה
+
 	FCB* ptr4= d2.openfile(diskName2,string("noa"),string("I"));
 	
 

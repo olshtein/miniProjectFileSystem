@@ -49,6 +49,7 @@ public:
 	IOState iostate; //האם הפתיחה היא לכתיבה וקריאה
 
 
+
 	FCB();
 	FCB(Disk *);
 	~FCB(void);
@@ -61,7 +62,7 @@ public:
 	 void deleteRec();
 	 void updateRec(char *);
 	 void readNewSectorToBuffer(unsigned int );
-
+	 bool isClose(){ return d != NULL ?  true : throw exception("File closed! You can not access the file.");}
 	void updateCancel();
 
 

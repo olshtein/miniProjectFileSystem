@@ -152,8 +152,7 @@ void Disk::seekToSector(unsigned int numOfSector)
 {
 	if(dskfl.is_open() ) 
 	{
-		dskfl.seekg(numOfSector*(sizeof(Sector)));
-		dskfl.seekp(numOfSector*(sizeof(Sector)));
+		dskfl.seekg(numOfSector*(sizeof(Sector)),dskfl.beg);
 		currDiskSectorNr=numOfSector;
 	}
 	else
@@ -437,8 +436,8 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	//allocate space for entry and save.
 	try
 	{
-		alloc(fh.FAT, rootdir[i]->fileSize, fitType);
-		int j=0;//עדיף להוציא לפונקציה נפרדת
+		alloc(fh.FAT , (rootdir[i]->fileSize+1)/2, fitType);
+		int j=0;  //עדיף להוציא לפונקציה נפרדת
 		for (;j<=1600;j++)
 		{
 			if (j==1600)
@@ -446,9 +445,11 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 			else if (fh.FAT[j]==1)
 				break;
 		}
+		j=j*2;
 		rootdir[i]->fileAddr=j;
 		rootdir[i]->entryStatus=1;
 		fh.fileDesc = *rootdir[i];
+		fh.sectorNr=j;
 		writeSector(j,(Sector*)&fh);
 
 		savechanges();
@@ -558,44 +559,51 @@ void Disk::saveFileChanges(unsigned int numOfSector , FileHeader & fh)
 
 FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 {
-	if (filename != vhd.diskName)
-		throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");
-
-	FCB *newFcb=new FCB(this);
-
-	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus !=0; i++)
+	//if (filename != vhd.diskName)
+	//	throw exception("ERROR: file not found (at void Disk::openfile(string &, string &, string &)");
+	try
 	{
-		if (rootdir[i]->Filename && rootdir[i]->entryStatus !=1)
+		FCB *newFcb=new FCB(this);
+		for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus !=0; i++)
 		{
-			writeSector(rootdir[i]->fileAddr,&newFcb->Buffer);
-			FileHeader my;
-			memcpy(&my,&newFcb->Buffer,sizeof(Sector));
-			newFcb->fileDesc = my.fileDesc;
-			newFcb->FAT = my.FAT;
-			newFcb->iostate=conver(io);
-			newFcb->placeDir=i;
+			cout<<rootdir[i]->Filename<<endl;
 
-			if (io != "I" && newFcb->fileDesc.fileOwner!=fileOwner)
-				throw exception("ERROR: user not allowed to chnge the file (at FCB *Disk::openfile(string & , string & , IO & )");
-			if (io != "E")
+			if (rootdir[i]->Filename==filename && rootdir[i]->entryStatus ==1)
 			{
-				writeSector(rootdir[i]->fileAddr+1,&newFcb->Buffer);
-				newFcb->currRecNrInBuff=0;
-				newFcb->currRecNr=0;
-				newFcb->currSecNr=1;
+				readSector(rootdir[i]->fileAddr,&newFcb->Buffer);
+				FileHeader my;
+				memcpy(&my,&newFcb->Buffer,sizeof(Sector));
+				newFcb->fileDesc = my.fileDesc;
+				newFcb->FAT = my.FAT;
+				newFcb->iostate=conver(io);
+				newFcb->placeDir=i;
+
+				if (io != "I" && newFcb->fileDesc.fileOwner!=fileOwner)
+					throw exception("ERROR: user not allowed to chnge the file (at FCB *Disk::openfile(string & , string & , IO & )");
+				if (io != "E")
+				{
+					readSector(newFcb->fileDesc.fileAddr+1,&newFcb->Buffer);
+					newFcb->currRecNrInBuff=0;
+					newFcb->currRecNr=0;
+					newFcb->currSecNr=1;
+				}
+				else
+				{
+					newFcb->currRecNrInBuff=(newFcb->fileDesc.eofRecNr%newFcb->fileDesc.fileSize);
+					newFcb->currRecNr=newFcb->fileDesc.eofRecNr;
+					newFcb->currSecNr=(newFcb->fileDesc.eofRecNr/newFcb->fileDesc.fileSize);
+					readSector(newFcb->fileDesc.fileAddr+newFcb->currSecNr,&newFcb->Buffer);
+
+				}
+				return newFcb;
 			}
-			else
-			{
-				newFcb->currRecNrInBuff=(newFcb->fileDesc.eofRecNr%newFcb->fileDesc.fileSize);
-				newFcb->currRecNr=newFcb->fileDesc.eofRecNr;
-				newFcb->currSecNr=(newFcb->fileDesc.eofRecNr/newFcb->fileDesc.fileSize);
-				writeSector(rootdir[i]->fileAddr+newFcb->currSecNr,&newFcb->Buffer);
-				
-			}
-			return newFcb;
 		}
+		throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
 	}
-	throw exception("ERROR: file not found (at FCB *Disk::openfile(string & , string & , IO & )");
+	catch(exception ex)
+	{
+		throw exception(ex);
+	}
 
 }
 //FCB *Disk::openfile(string & filename, string & fileOwner, string & IOString)

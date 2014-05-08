@@ -7,6 +7,7 @@
 #include "Sector.h"
 #include "VolumeHeader.h"
 #include <fstream>
+#include <iostream>
 #include "Functions.h"
 #include <Tuple>
 #include <vector>
