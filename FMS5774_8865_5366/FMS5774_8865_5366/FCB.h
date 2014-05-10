@@ -25,7 +25,6 @@ enum IOState
 
 };
 
-<<<<<<< HEAD
 /*************************************************
 * FUNCTION
 *	conver
@@ -38,10 +37,7 @@ enum IOState
 * SEE ALSO
 *   IOState
 **************************************************/
-IOState conver(const string & io)
-=======
 IOState static conver(const string & io)
->>>>>>> 6346c173a022d0b781754206555647ca183bae20
 {
 	if (io=="I")
 		return I;
@@ -137,16 +133,6 @@ public:
 	*
 	**************************************************/
 	void flushfile();
-<<<<<<< HEAD
-=======
-	 void readRec(char *, unsigned int = 0);
-	 void writeRec(char *);
-	 void writeUpdateRec(char *);
-	 void seekRec(unsigned int, int);
-	 void deleteRec();
-	 void updateRec(char *);
-	 void readNewSectorToBuffer(unsigned int );
->>>>>>> 6346c173a022d0b781754206555647ca183bae20
 
 	/*************************************************
 	* FUNCTION
