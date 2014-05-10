@@ -412,8 +412,37 @@ public:
 	**************************************************/
 	void extendfile(string &, string &, unsigned int);
 
+	/*************************************************
+	* FUNCTION
+	*	saveFileChanges
+	* PARAMETERS
+	*	unsigned int - sector number to save
+	*	FileHeader & - file header sector data to save
+	* MEANING
+	*	saves a fileheader and commits changes
+	* SEE ALSO
+	*	
+	**************************************************/
 	void saveFileChanges(unsigned int  , FileHeader &);
 	
+	/*************************************************
+	* FUNCTION
+	*	openfile
+	* PARAMETERS
+	*	string& - File name
+	*	string& - user opening file
+	*	string& - type of opening:
+	*		[I]nput,
+	*		[O]utput,
+	*		both [IO],
+	*		[E]dition only.
+	* RETURN VALUE
+	*	pointer to FCB of file
+	* MEANING
+	*	opens a file and creates an FCB.
+	* SEE ALSO
+	*	FCB
+	**************************************************/
 	FCB * openfile(string &, string &, string &);
 
 
@@ -499,32 +528,5 @@ private:
 	*	void dealloc(DATtype &)
 	**************************************************/
 	void alloc(DATtype &, unsigned int, FitType, unsigned int);
-
-	/*************************************************
-	* FUNCTION
-	*	
-	* PARAMETERS
-	*	
-	* RETURN VALUE
-	*
-	* MEANING
-	*	
-	* SEE ALSO
-	*	
-	**************************************************/
-
-	/*************************************************
-	* FUNCTION
-	*	
-	* PARAMETERS
-	*	
-	* RETURN VALUE
-	*
-	* MEANING
-	*	
-	* SEE ALSO
-	*	
-	**************************************************/
-
 };
 
