@@ -95,6 +95,8 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 
 void FCB::seekRec(unsigned int startingPoint, int num)
 {
+	if ( fileDesc.recFormat == "v" && (startingPoint == 1 || num != 0))
+			throw exception ("ERROR: Jump is unavailable. (at void FCB::seekRec(unsigned int , int )");
 
 	switch (startingPoint)
 	{
@@ -102,8 +104,6 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 		break;
 
 	case 1:
-		if ( fileDesc.recFormat == "v" )
-			throw exception ("You can not jump to the middle of the file,in records with varying size. (at void FCB::seekRec(unsigned int , int )");
 		num += currRecNr;
 		break;
 
@@ -112,11 +112,11 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 		break;
 
 	default:
-		throw exception ("Starting point is invalid. (at void FCB::seekRec(unsigned int , int )");
+		throw exception ("ERROR: Starting point is invalid. (at void FCB::seekRec(unsigned int , int )");
 		break;
 	}
 	if ( iostate == E && num != fileDesc.eofRecNr+1)
-			throw exception ("Open the file for editing only, you can not move to the requested address. (at void FCB::seekRec(unsigned int , int )");
+			throw exception ("ERROR: Open the file for editing only, you can not move to the requested address. (at void FCB::seekRec(unsigned int , int )");
 
 	if (num < 0 && num >= fileDesc.eofRecNr )
 		throw exception ("The address is not valid. (at void FCB::seekRec(unsigned int , int )");
@@ -142,15 +142,18 @@ void FCB::readNewSectorToBuffer(unsigned int numSector)
 		throw exception("ERROR: There is not more sector (at void FCB::readNewSectorToBuffer()");
 }
 
-void  FCB::writeRec(char * data)
+void  FCB::writeUpdateRec(char * data)
 {
 	if (iostate ==I || (iostate == E && currRecNr != fileDesc.eofRecNr))
 		throw exception ("No permission to write to address current. (at void FCB::readNewSectorToBuffer(unsigned int )");
 
-		memcpy(&Buffer+(currRecNrInBuff*fileDesc.actualRecSize)+4,data,fileDesc.actualRecSize);
-		seekRec(1,1);
-}
+	if (lock == false)
+		throw exception("ERROR: need to lock record before read/update (at void FCB::readUpdateRec(char*))");
 
+	memcpy(&Buffer+(currRecNrInBuff*fileDesc.actualRecSize)+4,data,fileDesc.actualRecSize);
+	changeBuf = true;
+	seekRec(1,1);
+}
 
 void FCB::updateCancel()
 {
@@ -169,18 +172,16 @@ void FCB::deleteRec()
 		throw exception("ERROR:need to lock record before deleting it. (at void FCB::deleteRec())");
 
 	//delete by putting logical 0's at key.
-	//for (int i = 4 + fileDesc.fileAddr + fileDesc.keyOffset; i < fileDesc.fileAddr + fileDesc.keyOffset + fileDesc.keySize; i++) ?
-	for (int i = /* ? */; i < /* ? */; i++) 
+	unsigned int keyStart =  currRecNrInBuff * fileDesc.actualRecSize + 4 + fileDesc.keyOffset;
+	for (int i = keyStart; i < keyStart + fileDesc.keySize; i++) 
 	{
 		Buffer.rawData[i] = 0;
 	}
-
+	
 	lock = false;
 
 	//move to next record.
-	currRecNr++;
-	currRecNrInBuff=(currRecNr%fileDesc.fileSize);
-	currSecNr=(currRecNr/fileDesc.fileSize);
+	seekRec(1,1);
 }
 
 void FCB::updateRec(char * recPtr)
@@ -192,12 +193,23 @@ void FCB::updateRec(char * recPtr)
 		throw exception("ERROR:need to lock record before updating it. (at void FCB::updateRec())");
 
 	//update
-	//?
+	writeUpdateRec(recPtr);
 
 	lock = false;
 
 	//move to next record.
-	currRecNr++;
-	currRecNrInBuff=(currRecNr%fileDesc.fileSize);
-	currSecNr=(currRecNr/fileDesc.fileSize);
+	seekRec(1,1);
+}
+
+void  FCB::writeRec(char * data)
+{
+	unsigned int keyStart =  currRecNrInBuff * fileDesc.actualRecSize + 4 + fileDesc.keyOffset;
+
+	for (int i = keyStart; i < keyStart + fileDesc.keySize; i++) 
+	{
+		if (Buffer.rawData[i] != 0)
+			throw exception("ERROR:can not write, another record is writen here. (at void  FCB::writeRec(char * data))");
+
+	}
+	writeUpdateRec(data);
 }
