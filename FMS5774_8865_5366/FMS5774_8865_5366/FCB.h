@@ -65,24 +65,7 @@ class FCB
 {
 	
 public:
-<<<<<<< HEAD
-	Disk * d;
-	DirEntry fileDesc;
-	DATtype FAT;
-	Sector Buffer;
 
-	bool lock;
-	bool changeBuf;
-	bool changeDir;
-	unsigned int placeDir;
-	unsigned int currRecNr;//מספר סידורי של הרשומה הנוכחית, בתוך הקובץ
-	unsigned int currSecNr;//מספר סידורי של סקטור הנוכחית, בתוך הקובץ
-	unsigned int currRecNrInBuff;//מספר סידורי של הרשומה הנוכחית, בתוך הסקטור
-	IOState iostate; //האם הפתיחה היא לכתיבה וקריאה
-
-
-
-=======
 	Disk * d; // disk file is on
 	DirEntry fileDesc; // copy of file description from disk
 	DATtype FAT; // copy of file FAT.
@@ -106,7 +89,6 @@ public:
 	* SEE ALSO
 	*   FCB(Disk *)
 	**************************************************/
->>>>>>> 8b581884361687e828207545a3cd956e800511a4
 	FCB();
 
 	/*************************************************
@@ -152,16 +134,9 @@ public:
 	*
 	**************************************************/
 	void flushfile();
-<<<<<<< HEAD
-	 void readRec(char *, unsigned int = 0);
-	 void writeRec(char *);
-	 void writeUpdateRec(char *);
-	 void seekRec(unsigned int, int);
-	 void deleteRec();
-	 void updateRec(char *);
-	 void readNewSectorToBuffer(unsigned int );
+
+
 	 bool isClose(){ return d != NULL ?  true : throw exception("File closed! You can not access the file.");}
-=======
 
 	/*************************************************
 	* FUNCTION
@@ -253,7 +228,6 @@ public:
 	*	updateRec(char *)
 	*	updateCancel()
 	**************************************************/
->>>>>>> 8b581884361687e828207545a3cd956e800511a4
 	void updateCancel();
 
 	private:
@@ -268,5 +242,8 @@ public:
 	*	seekRec(unsigned int, int)
 	**************************************************/
 	void readNewSectorToBuffer(unsigned int );
+
+	void writeUpdateRec(char *);
+
 };
 
