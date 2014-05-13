@@ -89,7 +89,7 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 		if (lock == true && updateFlag == 1)
 			throw exception("ERROR: You can not edit a record that is already being edited (at void FCB::readRec(char * , unsigned int )");
 
-		memcpy(data,&(Buffer.rawData[ (currRecNrInBuff*fileDesc.actualRecSize)]),fileDesc.actualRecSize);
+		memcpy(data,&(Buffer.rawData[ (currRecNrInBuff*fileDesc.maxRecSize)]),fileDesc.maxRecSize);
 
 		if (updateFlag==0 && currRecNr <= fileDesc.eofRecNr)
 			seekRec(1,1);
@@ -113,14 +113,14 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 
 		switch (startingPoint)
 		{
-		case 0:	
+		case 0:	//Start file
 			break;
 
-		case 1:
+		case 1: //Current record
 			num += currRecNr;
 			break;
 
-		case 2:
+		case 2: //end file
 			num += fileDesc.eofRecNr;;		
 			break;
 
@@ -131,14 +131,15 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 		if ( iostate == E && num != fileDesc.eofRecNr+1)
 			throw exception ("ERROR: Open the file for editing only, you can not move to the requested address. (at void FCB::seekRec(unsigned int , int )");
 
-		if (num < 0 && num >= fileDesc.eofRecNr )
+		if (num < 0 && num >= fileDesc.eofRecNr+1 )
 			throw exception ("The address is not valid. (at void FCB::seekRec(unsigned int , int )");
+		cout<<(num+1)*fileDesc.maxRecSize/SIZE_DATA_IN_SECTOR<<endl<<currSecNr<<endl;
 
-		if (num/1024 != currSecNr)
-			readNewSectorToBuffer(num/1024);
+		if ((((num+1)*fileDesc.maxRecSize)/SIZE_DATA_IN_SECTOR) >= currSecNr)
+			readNewSectorToBuffer(((num+1)*fileDesc.maxRecSize)/SIZE_DATA_IN_SECTOR);
 		currRecNr = num;
-		currRecNrInBuff = num%1024;
-		lock=false;
+		currRecNrInBuff = num%(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize);//fixxxxxx
+		//lock=false;
 
 	}
 	catch (exception ex)
@@ -152,7 +153,7 @@ void FCB::readNewSectorToBuffer(unsigned int numSector)
 	try
 	{
 		isClose();
-
+		numSector=numSector+1;//הראשון הוא הסקטור של הfile headr
 		if ( numSector >= 0 && numSector < fileDesc.fileSize )
 		{
 			flushfile();
@@ -181,7 +182,7 @@ void  FCB::writeUpdateRec(char * data)
 		if (lock == false)
 			throw exception("ERROR: need to lock record before read/update (at void FCB::readUpdateRec(char*))");
 
-		memcpy(&(Buffer.rawData[(currRecNrInBuff*fileDesc.actualRecSize)]),data,fileDesc.actualRecSize);
+		memcpy(&(Buffer.rawData[(currRecNrInBuff*fileDesc.maxRecSize)]),data,fileDesc.maxRecSize);
 		changeBuf = true;
 		seekRec(1,1);
 	}
@@ -210,7 +211,7 @@ void FCB::deleteRec()
 			throw exception("ERROR:need to lock record before deleting it. (at void FCB::deleteRec())");
 
 		//delete by putting logical 0's at key.
-		unsigned int keyStart =  currRecNrInBuff * fileDesc.actualRecSize + 4 + fileDesc.keyOffset;
+		unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize  + fileDesc.keyOffset;
 		for (int i = keyStart; i < keyStart + fileDesc.keySize; i++) 
 		{
 			Buffer.rawData[i] = 0;
@@ -255,7 +256,7 @@ void  FCB::writeRec(char * data)
 {
 	try
 	{
-		unsigned int keyStart =  currRecNrInBuff * fileDesc.actualRecSize + 4 + fileDesc.keyOffset;
+		unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize + fileDesc.keyOffset;
 
 		for (int i = keyStart; i < keyStart + fileDesc.keySize; i++) 
 		{
@@ -264,6 +265,13 @@ void  FCB::writeRec(char * data)
 
 		}
 		writeUpdateRec(data);
+
+		if ( currRecNrInBuff== fileDesc.eofRecNr+1)//אם הוספנו רשומה חדשה בסוף הרשומות
+		{
+			fileDesc.eofRecNr++;
+			changeDir=true;
+		}
+
 	}
 	catch (exception ex)
 	{

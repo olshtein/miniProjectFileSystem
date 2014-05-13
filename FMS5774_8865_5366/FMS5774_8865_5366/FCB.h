@@ -136,7 +136,10 @@ public:
 	void flushfile();
 
 
-	 bool isClose(){ return d != NULL ?  true : throw exception("File closed! You can not access the file.");}
+	 bool isClose()
+	 {
+		 return d != NULL ?  true : throw exception("File closed! You can not access the file.");
+	 }
 
 	/*************************************************
 	* FUNCTION

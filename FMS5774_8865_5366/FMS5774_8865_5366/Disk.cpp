@@ -566,8 +566,6 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 		FCB *newFcb=new FCB(this);
 		for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus !=0; i++)
 		{
-			cout<<rootdir[i]->Filename<<endl;
-
 			if (rootdir[i]->Filename==filename && rootdir[i]->entryStatus ==1)
 			{
 				readSector(rootdir[i]->fileAddr,&newFcb->Buffer);
@@ -577,6 +575,8 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 				newFcb->FAT = my.FAT;
 				newFcb->iostate=conver(io);
 				newFcb->placeDir=i;
+				if (newFcb->iostate != I)
+					newFcb->lock = true;
 
 				if (io != "I" && newFcb->fileDesc.fileOwner!=fileOwner)
 					throw exception("ERROR: user not allowed to chnge the file (at FCB *Disk::openfile(string & , string & , IO & )");

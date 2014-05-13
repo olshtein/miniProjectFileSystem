@@ -1,7 +1,8 @@
 #pragma once
 
 #include "BaseSector.h"
-
+ 
+const int SIZE_DATA_IN_SECTOR = 1024-sizeof(unsigned int);
 /*************************************************
 * STRUCT
 *	Sector
@@ -18,6 +19,6 @@
 **************************************************/
 struct Sector : BaseSector
 {
-	char rawData [1020];
+	char rawData [SIZE_DATA_IN_SECTOR];
 };
 
