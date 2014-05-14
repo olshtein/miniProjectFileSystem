@@ -82,7 +82,11 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 {
 	try
 	{
+		//if (!isEmpty())//בודק אם הרשומה לא ריקה צריך לבדוק רך ניתן לעשות את זה כי ברשומה חדשה לגמרי  היא לא תהיה שווה ל0
+		//	throw exception("ERROR: There is no record at this location. (at void  FCB::readRec(char * , unsigned int ))");
+
 		isClose();
+
 		if (iostate == O)
 			throw exception("ERROR: The file open to read-only (at void FCB::readRec(char * , unsigned int )");
 
@@ -113,6 +117,7 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 
 		switch (startingPoint)
 		{
+
 		case 0:	//Start file
 			break;
 
@@ -128,18 +133,20 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 			throw exception ("ERROR: Starting point is invalid. (at void FCB::seekRec(unsigned int , int )");
 			break;
 		}
-		if ( iostate == E && num != fileDesc.eofRecNr+1)
+		if ( iostate == E && num != fileDesc.eofRecNr+1)//כתיבה במצב "הוספה" למקום לא מורשה
 			throw exception ("ERROR: Open the file for editing only, you can not move to the requested address. (at void FCB::seekRec(unsigned int , int )");
 
-		if (num < 0 && num >= fileDesc.eofRecNr+1 )
-			throw exception ("The address is not valid. (at void FCB::seekRec(unsigned int , int )");
-		cout<<(num+1)*fileDesc.maxRecSize/SIZE_DATA_IN_SECTOR<<endl<<currSecNr<<endl;
+		if (num < 0 || num > (fileDesc.fileSize-1)*(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize) )// כתיבה אל מחוץ לקובץ קדימה או אחורה
+			throw exception ("ERROR: The address is not valid. (at void FCB::seekRec(unsigned int , int )");
 
-		if ((((num+1)*fileDesc.maxRecSize)/SIZE_DATA_IN_SECTOR) >= currSecNr)
+		if (num > fileDesc.eofRecNr+1)//כתיבת רשומה תוך דילוג על מקום ריק
+			throw exception ("ERROR: Unauthorized location. (at void FCB::seekRec(unsigned int , int )");
+
+		if ((((num+1)*fileDesc.maxRecSize)/SIZE_DATA_IN_SECTOR) >= currSecNr)//אם יש צורך לעבור סקטור
 			readNewSectorToBuffer(((num+1)*fileDesc.maxRecSize)/SIZE_DATA_IN_SECTOR);
+
 		currRecNr = num;
-		currRecNrInBuff = num%(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize);//fixxxxxx
-		//lock=false;
+		currRecNrInBuff = num%(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize);
 
 	}
 	catch (exception ex)
@@ -212,7 +219,8 @@ void FCB::deleteRec()
 
 		//delete by putting logical 0's at key.
 		unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize  + fileDesc.keyOffset;
-		for (int i = keyStart; i < keyStart + fileDesc.keySize; i++) 
+
+		for (int i = keyStart; i < keyStart + (fileDesc.keySize ? fileDesc.keySize : fileDesc.maxRecSize); i++) //כאשר ה .keySize מוגדר ל 0 יש צורך למחוק את כל הרשומה
 		{
 			Buffer.rawData[i] = 0;
 		}
@@ -256,17 +264,13 @@ void  FCB::writeRec(char * data)
 {
 	try
 	{
-		unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize + fileDesc.keyOffset;
+		unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize + fileDesc.keyOffset;//המיקום של המפתח בכל רשומה
 
-		for (int i = keyStart; i < keyStart + fileDesc.keySize; i++) 
-		{
-			if (Buffer.rawData[i] != 0)
+		if (isEmpty())
 				throw exception("ERROR:can not write, another record is writen here. (at void  FCB::writeRec(char * data))");
-
-		}
 		writeUpdateRec(data);
 
-		if ( currRecNrInBuff== fileDesc.eofRecNr+1)//אם הוספנו רשומה חדשה בסוף הרשומות
+		if ( currRecNr== fileDesc.eofRecNr+1)//אם הוספנו רשומה חדשה בסוף הרשומות
 		{
 			fileDesc.eofRecNr++;
 			changeDir=true;
@@ -277,4 +281,14 @@ void  FCB::writeRec(char * data)
 	{
 		throw exception(ex);
 	}
+}
+
+bool FCB::isEmpty()
+{
+	unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize  + fileDesc.keyOffset;
+	
+	for (int i = keyStart; i < keyStart + (fileDesc.keySize ? fileDesc.keySize : fileDesc.maxRecSize); i++) 
+		if (Buffer.rawData[i] != 0)
+			return false;
+	return true;
 }

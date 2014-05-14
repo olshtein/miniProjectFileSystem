@@ -54,7 +54,7 @@ public:
 		Record R2 [100];
 		for (int i=0;i<16;i++)
 		{
-			fcb2->readRec((char *)&R1[i]);
+			fcb2->readRec((char *)&R2[i]);
 		}
 
 			string diskName2 = "disk 2";  

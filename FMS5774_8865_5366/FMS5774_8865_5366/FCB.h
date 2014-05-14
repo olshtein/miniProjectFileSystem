@@ -248,5 +248,7 @@ public:
 
 	void writeUpdateRec(char *);
 
+	bool isEmpty();
+
 };
 
