@@ -29,7 +29,6 @@ FCB::FCB(Disk * disk)
 	changeDir = false;
 }
 
-
 FCB::~FCB(void)
 {
 	delete this;
@@ -95,7 +94,7 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 
 		memcpy(data,&(Buffer.rawData[ (currRecNrInBuff*fileDesc.maxRecSize)]),fileDesc.maxRecSize);
 
-		if (updateFlag==0 && currRecNr <= fileDesc.eofRecNr)
+		if (updateFlag==0 && currRecNr < fileDesc.eofRecNr)
 			seekRec(1,1);
 		else if (updateFlag==1)
 			lock=true;
@@ -142,8 +141,11 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 		if (num > fileDesc.eofRecNr+1)//כתיבת רשומה תוך דילוג על מקום ריק
 			throw exception ("ERROR: Unauthorized location. (at void FCB::seekRec(unsigned int , int )");
 
-		if ((((num+1)*fileDesc.maxRecSize)/SIZE_DATA_IN_SECTOR) >= currSecNr)//אם יש צורך לעבור סקטור
-			readNewSectorToBuffer(((num+1)*fileDesc.maxRecSize)/SIZE_DATA_IN_SECTOR);
+		int numSector = (num)/(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize)+1;//מיקום הסקטור הדרוש לרשימה
+
+		cout<<num<<"  "<<numSector <<endl<< currSecNr<<endl;
+		if (numSector != currSecNr)//אם יש צורך לעבור סקטור
+			readNewSectorToBuffer(numSector);
 
 		currRecNr = num;
 		currRecNrInBuff = num%(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize);
@@ -160,11 +162,10 @@ void FCB::readNewSectorToBuffer(unsigned int numSector)
 	try
 	{
 		isClose();
-		numSector=numSector+1;//הראשון הוא הסקטור של הfile headr
 		if ( numSector >= 0 && numSector < fileDesc.fileSize )
 		{
 			flushfile();
-			d->readSector(fileDesc.fileAddr+numSector,&Buffer);
+			d->readSector(locationSector(numSector),&Buffer);
 			currRecNrInBuff = 0;
 			currSecNr = numSector;
 			changeBuf = false;
@@ -291,4 +292,31 @@ bool FCB::isEmpty()
 		if (Buffer.rawData[i] != 0)
 			return false;
 	return true;
+}
+
+unsigned int  FCB::locationSector(unsigned int num)
+{
+	diskmap *mymap = d->DiskMapping(FAT);//del??
+	int sum = 0;
+	for (it_diskmap it= mymap->begin(); it!=mymap->end(); ++it)
+	{
+		sum += it->second;
+		if (sum*2>num)
+			return it->first*2+num-(sum - it->second-1);
+	}
+	throw exception("ERROR: Unusual surface data on file. (at  unsigned int  FCB::locationSector(unsigned int )");
+}
+
+void FCB::addMemory(unsigned int num)
+{
+	try
+	{
+	d->allocextend(FAT,num,firstFit);
+	fileDesc.fileSize+=num;
+	changeDir = true;
+	}
+	catch (exception ex)
+	{
+		throw exception(ex);
+	}
 }

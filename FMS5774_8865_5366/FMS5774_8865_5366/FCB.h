@@ -233,6 +233,10 @@ public:
 	**************************************************/
 	void updateCancel();
 
+
+	void addMemory(unsigned int num);
+
+
 	private:
 	/*************************************************
 	* FUNCTION
@@ -249,6 +253,9 @@ public:
 	void writeUpdateRec(char *);
 
 	bool isEmpty();
+
+	unsigned int locationSector(unsigned int);
+
 
 };
 

@@ -16,7 +16,7 @@
 
 using namespace std;
 
-// a map containing sets of indecies and sizes of empty DAT clusters, and an iterator for it.
+// a map containing sets of indecies and sizes of empty DAT clusters, and an iterator for it. (<location in disk,num of clasters>
 typedef  map<unsigned int,unsigned int> diskmap;
 typedef  map<unsigned int,unsigned int>::iterator it_diskmap;
 class FCB;
@@ -424,7 +424,22 @@ public:
 	*	
 	**************************************************/
 	void saveFileChanges(unsigned int  , FileHeader &);
+
 	
+	/*************************************************
+	* FUNCTION
+	*	DiskMapping
+	* PARAMETERS
+	*	DATtype - File's DAT
+	* RETURN VALUE
+	*	an diskmap(defined map<int,int>) who contains pairs of indecies of first sectors of empty areas in the DAT and sizes of of said empty areas.
+	* MEANING
+	*	finds a list of all empty areas in the DAT, their start indecies and size.
+	* SEE ALSO
+	*	void alloc(DATtype &, unsigned int, FitType, unsigned int)
+	**************************************************/
+	diskmap* DiskMapping(const DATtype&);
+
 	/*************************************************
 	* FUNCTION
 	*	openfile
@@ -493,20 +508,6 @@ private:
 	*	void format(string &)
 	**************************************************/
 	void resetDat();
-
-	/*************************************************
-	* FUNCTION
-	*	DiskMapping
-	* PARAMETERS
-	*	DATtype - File's DAT
-	* RETURN VALUE
-	*	an diskmap(defined map<int,int>) who contains pairs of indecies of first sectors of empty areas in the DAT and sizes of of said empty areas.
-	* MEANING
-	*	finds a list of all empty areas in the DAT, their start indecies and size.
-	* SEE ALSO
-	*	void alloc(DATtype &, unsigned int, FitType, unsigned int)
-	**************************************************/
-	diskmap* DiskMapping(const DATtype&);
 
 	/*************************************************
 	* FUNCTION

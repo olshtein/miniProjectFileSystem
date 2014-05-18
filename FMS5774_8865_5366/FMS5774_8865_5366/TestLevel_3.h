@@ -32,18 +32,22 @@ public:
 	{ 
 		try  
 		{    
-			string diskName1 = "disk 1";  
+			string diskName1 = "disk 1";
+			string Name = "momo";  
+
 			string ownerName1 = "meir";  
 			Disk d1; 
 		
 		d1.createdisk(diskName1, ownerName1);
 		d1.mountdisk(diskName1);
-		d1.createfile(diskName1,ownerName1,string("F"),sizeof(Record),6,string("I"),0);
-
+		d1.createfile(diskName1,ownerName1,string("F"),sizeof(Record),2,string("I"),0);
+		d1.createfile(Name,ownerName1,string("F"),sizeof(Record),6,string("I"),0);
 		Record R1 [100];
-		FCB* fcb1 = d1.openfile(diskName1,string(ownerName1),string("IO"));
 
-		for (int i=0;i<16;i++)
+		FCB* fcb1 = d1.openfile(diskName1,string(ownerName1),string("IO"));
+		fcb1->addMemory(5);
+
+		for (int i=0;i<36;i++)
 		{
 			R1[i] =Record(i+1000,ownerName1,string("olshtein"),string("12345678901234567890..."));
 			fcb1->writeRec((char *)&R1[i]);
@@ -52,7 +56,7 @@ public:
 		fcb1->closefile();
 		FCB* fcb2 = d1.openfile(diskName1,string(ownerName1),string("I"));
 		Record R2 [100];
-		for (int i=0;i<16;i++)
+		for (int i=0;i<36;i++)
 		{
 			fcb2->readRec((char *)&R2[i]);
 		}

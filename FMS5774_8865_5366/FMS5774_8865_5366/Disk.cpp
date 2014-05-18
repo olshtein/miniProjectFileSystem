@@ -318,31 +318,32 @@ void Disk::allocextend(DATtype & fat, unsigned int numSector, FitType typeFit)
 {
 	try
 	{
-		if (howmuchempty() < numSector)
-			throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , FitType))");
+	if (howmuchempty() < numSector)
+		throw  exception("ERROR:There is not enough free space  (in Disk::allocextend(DATtype & , unsigned int , FitType))");
+	diskmap * mapDisk = DiskMapping(fat);
+	unsigned int locationStart;
+	for (it_diskmap it=mapDisk->begin();it!= mapDisk->end(); ++it)
+			locationStart=it->first;
+	alloc( fat, numSector, typeFit ,locationStart);
+	
 	}
 	catch(exception ex)
 	{
 		throw ex;
 	}
-	int locationStart=0;
-	for (int i =0;i<fat.size();i++)// Allocation only after the current allocation
-		if (fat[i]==1)
-			locationStart=i;
-	alloc( fat, numSector, typeFit ,locationStart);
+	
 }
 
 void Disk::alloc(DATtype & fat, unsigned int numSector, FitType typeFit, unsigned int locationStart)
 {
 	diskmap * mapDisk = DiskMapping(dat.DAT);
 	it_diskmap it=mapDisk->begin();
-	advance( it,locationStart );
 	int locationSector=-1;
 	switch (typeFit)
 	{
 	case firstFit://first fit 
 		for (;it!= mapDisk->end(); ++it)
-			if ( it->second >= numSector)
+			if ( it->second >= numSector && it->first >= locationStart)
 			{
 				locationSector=it->first;
 				break;
@@ -350,14 +351,14 @@ void Disk::alloc(DATtype & fat, unsigned int numSector, FitType typeFit, unsigne
 			break;
 	case bestFit:// best fit 
 		for (;it!= mapDisk->end(); ++it)
-			if ( it->second >= numSector && locationSector == -1 || it->second < (*mapDisk)[locationSector]) 
+			if ( it->second >= numSector && it->first >= locationStart && locationSector == -1 || it->second < (*mapDisk)[locationSector]) 
 			{
 				locationSector=it->first;
 			}
 			break;
 	case worstFit://worst fit
 		for (;it!= mapDisk->end(); ++it)
-			if (it->second >= numSector && locationSector == -1 || it->second > (*mapDisk)[locationSector])
+			if (it->second >= numSector && it->first >= locationStart && locationSector == -1 || it->second > (*mapDisk)[locationSector])
 			{
 				locationSector=it->first;
 			}
