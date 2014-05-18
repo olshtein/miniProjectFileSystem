@@ -17,10 +17,10 @@ class Disk;
 enum IOState
 {
 
-	I, // Input
-	O, // Output
-	IO, // Input and Output
-	E // Edition.
+	I = 'I', // Input
+	O = 'O', // Output
+	IO = 0, // Input and Output
+	E = 'E' // Edition.
 
 
 };
@@ -135,11 +135,20 @@ public:
 	**************************************************/
 	void flushfile();
 
-
-	 bool isClose()
-	 {
-		 return d != NULL ?  true : throw exception("File closed! You can not access the file.");
-	 }
+	/*************************************************
+	* FUNCTION
+	*	isClose
+	* RETURN VALUE	
+	*	bool
+	* MEANING
+	*	is the FCB closed, i.e. not corolated to a disk.
+	* SEE ALSO
+	*
+	**************************************************/
+	bool isClose()
+	{
+		return d != NULL ?  true : throw exception("File closed! You can not access the file.");
+	}
 
 	/*************************************************
 	* FUNCTION
@@ -208,7 +217,7 @@ public:
 
 	/*************************************************
 	* FUNCTION
-	*	updateeRec
+	*	updateRec
 	* PARAMETERS
 	*	char * - data to update sector with
 	* MEANING
@@ -250,9 +259,30 @@ public:
 	**************************************************/
 	void readNewSectorToBuffer(unsigned int );
 
+	/*************************************************
+	* FUNCTION
+	*	writeUpdateRec
+	* PARAMETERS
+	*	char * - data to update/write sector with
+	* MEANING
+	*	changes data in buffer in update/write processes. and seek to the next record.
+	* SEE ALSO
+	*	writeRec(char*)
+	*	updateRec(char*)
+	**************************************************/
 	void writeUpdateRec(char *);
 
-	bool isEmpty();
+	/*************************************************
+	* FUNCTION
+	*	isKeyNull
+	* RETURN VALUE
+	*	bool
+	* MEANING
+	*	check if current record's key is all 0's
+	* SEE ALSO
+	*
+	**************************************************/
+	bool isKeyNull();
 
 	unsigned int locationSector(unsigned int);
 

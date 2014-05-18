@@ -411,6 +411,7 @@ public:
 	*	void allocextend(DATtype &, unsigned int, unsigned int)
 	**************************************************/
 	void extendfile(string &, string &, unsigned int);
+<<<<<<< HEAD
 
 	/*************************************************
 	* FUNCTION
@@ -425,6 +426,8 @@ public:
 	**************************************************/
 	void saveFileChanges(unsigned int  , FileHeader &);
 
+=======
+>>>>>>> bb0a1b00630a3a88fa478beca64cea1089085d80
 	
 	/*************************************************
 	* FUNCTION
@@ -529,5 +532,18 @@ private:
 	*	void dealloc(DATtype &)
 	**************************************************/
 	void alloc(DATtype &, unsigned int, FitType, unsigned int);
+
+	/*************************************************
+	* FUNCTION
+	*	saveFileChanges
+	* PARAMETERS
+	*	unsigned int - sector number to save
+	*	FileHeader & - file header sector data to save
+	* MEANING
+	*	updates a fileheader and commits changes
+	* SEE ALSO
+	*	
+	**************************************************/
+	void saveFileChanges(unsigned int  , FileHeader &);
 };
 

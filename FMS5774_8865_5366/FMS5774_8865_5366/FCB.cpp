@@ -81,7 +81,7 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 {
 	try
 	{
-		//if (!isEmpty())//בודק אם הרשומה לא ריקה צריך לבדוק רך ניתן לעשות את זה כי ברשומה חדשה לגמרי  היא לא תהיה שווה ל0
+		//if (!isKeyNull())//בודק אם הרשומה לא ריקה צריך לבדוק רך ניתן לעשות את זה כי ברשומה חדשה לגמרי  היא לא תהיה שווה ל0
 		//	throw exception("ERROR: There is no record at this location. (at void  FCB::readRec(char * , unsigned int ))");
 
 		isClose();
@@ -267,7 +267,7 @@ void  FCB::writeRec(char * data)
 	{
 		unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize + fileDesc.keyOffset;//המיקום של המפתח בכל רשומה
 
-		if (isEmpty())
+		if (isKeyNull())
 				throw exception("ERROR:can not write, another record is writen here. (at void  FCB::writeRec(char * data))");
 		writeUpdateRec(data);
 
@@ -284,7 +284,7 @@ void  FCB::writeRec(char * data)
 	}
 }
 
-bool FCB::isEmpty()
+bool FCB::isKeyNull()
 {
 	unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize  + fileDesc.keyOffset;
 	
