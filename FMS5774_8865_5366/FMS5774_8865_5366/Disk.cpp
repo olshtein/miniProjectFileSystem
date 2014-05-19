@@ -252,7 +252,7 @@ void Disk::resetDat()
 
 void Disk::format(string & nameOwner)
 {
-	if (!this->getdskfl()->is_open() || nameOwner!=vhd.diskOwner)
+	if (this->getdskfl()!=NULL || nameOwner!=vhd.diskOwner)
 	{
 		throw exception("ERROR: unable to open file, or file owner does not match data in vhd (at Disk::format(string&))");
 	}

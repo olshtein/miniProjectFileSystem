@@ -40,6 +40,7 @@ public:
 		
 		d1.createdisk(diskName1, ownerName1);
 		d1.mountdisk(diskName1);
+		
 		d1.createfile(diskName1,ownerName1,string("F"),sizeof(Record),2,string("I"),0);
 		d1.createfile(Name,ownerName1,string("F"),sizeof(Record),6,string("I"),0);
 		Record R1 [100];
@@ -64,7 +65,8 @@ public:
 			string diskName2 = "disk 2";  
 			string ownerName2= "sara";  
 			Disk d2;
-
+			d1.unmountdisk();
+			d1.format(ownerName1);
 		d2.createdisk(diskName2,ownerName2);
 		d2.mountdisk(diskName2);
 		d2.createfile(diskName2,ownerName2,string("F"),100,9,string("I"),0);
