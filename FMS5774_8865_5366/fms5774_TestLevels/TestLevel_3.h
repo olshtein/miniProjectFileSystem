@@ -49,7 +49,7 @@ public:
 
 		for (int i=0;i<36;i++)
 		{
-			R1[i] =Record(i+1000,ownerName1,string("olshtein"),string("12345678901234567890..."));
+			R1[i] =Record(i+1000,ownerName1,string("goldstine"),string("12345678901234567890..."));
 			fcb1->writeRec((char *)&R1[i]);
 			
 		}

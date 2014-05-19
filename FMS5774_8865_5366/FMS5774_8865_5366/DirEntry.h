@@ -53,10 +53,13 @@ enum KeyType
 
 struct DirEntry
 {
-	char Filename[12]; //entry name
-	char fileOwner[12];  //entry owner name
+	unsigned int const NAME_STRING_SIZE = 12;
+	unsigned int const DATE_STRING_SIZE = 10;  
+
+	char Filename[NAME_STRING_SIZE]; //entry name
+	char fileOwner[NAME_STRING_SIZE];  //entry owner name
 	unsigned int fileAddr;  //address of the first sector in the entry
-	char crDate[11];  //creation date
+	char crDate[DATE_STRING_SIZE];  //creation date
 	unsigned int fileSize;  //size of file
 	unsigned int eofRecNr;  //location of the EOF(End of File) entry, relative to the start location of this entry
 	unsigned int maxRecSize;  //entry max length

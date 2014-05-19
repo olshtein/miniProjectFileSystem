@@ -16,18 +16,12 @@
     <Filter Include="Header Files\BasicDiskDataTypes">
       <UniqueIdentifier>{bd975d68-8447-4fee-ae02-7527868b7eaf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Tests">
-      <UniqueIdentifier>{4d4b9432-8f5b-4ca3-bc68-536dca2a0cb1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Disk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FCB.cpp">
@@ -65,17 +59,8 @@
     <ClInclude Include="RD_Sector.h">
       <Filter>Header Files\BasicDiskDataTypes</Filter>
     </ClInclude>
-    <ClInclude Include="TestLevel_0.h">
-      <Filter>Header Files\Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="TestLevel_1_2.h">
-      <Filter>Header Files\Tests</Filter>
-    </ClInclude>
     <ClInclude Include="FCB.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestLevel_3.h">
-      <Filter>Header Files\Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

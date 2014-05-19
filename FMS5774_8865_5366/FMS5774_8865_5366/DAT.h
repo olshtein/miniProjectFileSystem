@@ -5,8 +5,10 @@
 
 using namespace std;
 
+unsigned int const BIT_SET_SIZE = 1600;
+
 //a set of 1600 bits representing a DAT like structure.
-typedef bitset<1600> DATtype; 
+typedef bitset<BIT_SET_SIZE> DATtype; 
 
 /*************************************************
 * STRUCT

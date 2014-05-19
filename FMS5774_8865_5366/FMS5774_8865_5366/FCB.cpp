@@ -320,3 +320,17 @@ void FCB::addMemory(unsigned int num)
 		throw exception(ex);
 	}
 }
+
+// Stage 4-5
+
+// Stage 4-5
+
+string& FCB::GetLastErrorMessage() 
+{ 
+ return this->lastErrorMessage; 
+} 
+ 
+void FCB::SetLastErrorMessage(string lastErrorMessage) 
+{ 
+ this->lastErrorMessage = lastErrorMessage; 
+} 

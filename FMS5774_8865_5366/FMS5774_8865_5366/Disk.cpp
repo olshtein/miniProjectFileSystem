@@ -656,4 +656,14 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 //	}
 //}
 
+// Stage 4-5
 
+string& Disk::GetLastErrorMessage() 
+{ 
+ return this->lastErrorMessage; 
+} 
+ 
+void Disk::SetLastErrorMessage(string lastErrorMessage) 
+{ 
+ this->lastErrorMessage = lastErrorMessage; 
+} 

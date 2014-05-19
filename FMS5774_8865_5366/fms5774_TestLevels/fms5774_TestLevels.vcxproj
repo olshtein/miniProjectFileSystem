@@ -10,15 +10,27 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestLevel_0.h" />
+    <ClInclude Include="TestLevel_1_2.h" />
+    <ClInclude Include="TestLevel_3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FMS5774_8865_5366\FMS5774_8865_5366.vcxproj">
+      <Project>{508b6a2c-54a0-4825-95b5-7a94a63e0d91}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{508B6A2C-54A0-4825-95B5-7A94A63E0D91}</ProjectGuid>
+    <ProjectGuid>{AD999816-A478-48AE-8BA1-362922317E36}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>miniProjectFileSystem</RootNamespace>
-    <ProjectName>FMS5774_8865_5366</ProjectName>
+    <RootNamespace>fms5774_TestLevels</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -54,14 +66,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../FMS5774_8865_5366</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "$(LocalDebuggerCommand)" "$(SolutionDir)\FMS5774_Cpp_CSharp_Adapter\bin\Debug"  </Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -81,27 +91,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="BaseSector.h" />
-    <ClInclude Include="DAT.h" />
-    <ClInclude Include="DirEntry.h" />
-    <ClInclude Include="Disk.h" />
-    <ClInclude Include="FCB.h" />
-    <ClInclude Include="FileHeader.h" />
-    <ClInclude Include="Functions.h" />
-    <ClInclude Include="RD_Sector.h" />
-    <ClInclude Include="RootDirectory.h" />
-    <ClInclude Include="Sector.h" />
-    <ClInclude Include="VolumeHeader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Disk.cpp" />
-    <ClCompile Include="FCB.cpp" />
-    <ClCompile Include="Functions.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
