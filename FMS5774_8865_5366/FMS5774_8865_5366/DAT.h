@@ -28,4 +28,12 @@ struct Dat : BaseSector
 {
 	DATtype DAT; // the DAT
 	char emptyArea[812];  ///שמור לשימוש עתידי
+
+	// operator <<
+	friend void operator<< (std::stringstream ss, const Dat dat)
+	{
+		ss << dat.sectorNr;
+		ss << dat.DAT;
+		ss << dat.emptyArea;
+	}
 };

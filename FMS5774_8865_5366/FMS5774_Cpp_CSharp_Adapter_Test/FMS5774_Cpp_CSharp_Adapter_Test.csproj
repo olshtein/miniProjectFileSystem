@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{46BC4635-025E-458D-A887-B39BAC2C138E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{1F2B56B6-ED99-4AE4-B2D3-B7A03248BF61}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FMS5774_Cpp_CSharp_Adapter</RootNamespace>
-    <AssemblyName>FMS5774_Cpp_CSharp_Adapter</AssemblyName>
+    <RootNamespace>FMS5774_Cpp_CSharp_Adapter_Test</RootNamespace>
+    <AssemblyName>FMS5774_Cpp_CSharp_Adapter_Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -39,10 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="cppToCsharpAdapter.cs" />
-    <Compile Include="Disk.cs" />
-    <Compile Include="FCB.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FMS5774_Cpp_CSharp_Adapter\FMS5774_Cpp_CSharp_Adapter.csproj">
+      <Project>{46bc4635-025e-458d-a887-b39bac2c138e}</Project>
+      <Name>FMS5774_Cpp_CSharp_Adapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

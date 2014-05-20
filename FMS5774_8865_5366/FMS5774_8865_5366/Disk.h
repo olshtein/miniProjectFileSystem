@@ -132,7 +132,7 @@ enum FitType
 		*   createdisk(string&)
 		*	mountdisk(string&)
 		**************************************************/
-		 createdisk(string &, string &);
+		void createdisk(string &, string &);
 
 		/*************************************************
 		* FUNCTION
@@ -145,7 +145,7 @@ enum FitType
 		*   createdisk(string&, string&)
 		*	mountdisk(string&)
 		**************************************************/
-		 createdisk( string &);
+		void createdisk( string &);
 
 		/*************************************************
 		* FUNCTION
@@ -160,7 +160,7 @@ enum FitType
 		*	unmountdisk()
 		*	savechanges()
 		**************************************************/
-		 mountdisk(string &);
+		void mountdisk(string &);
 
 		/*************************************************
 		* FUNCTION
@@ -172,7 +172,7 @@ enum FitType
 		*	createdisk(string&)
 		*	mountdisk(string&)
 		**************************************************/
-		 unmountdisk();
+		void unmountdisk();
 
 		/*************************************************
 		* FUNCTION
@@ -186,7 +186,7 @@ enum FitType
 		*	createdisk(string&)
 		*	savechanges()
 		**************************************************/
-		 recreatedisk(string &);
+		void recreatedisk(string &);
 
 		/*************************************************
 		* FUNCTION
@@ -209,7 +209,7 @@ enum FitType
 		*	readSector(int, Sector*)
 		*	readSector(Sector*)
 		**************************************************/
-		 seekToSector(unsigned int);
+		void seekToSector(unsigned int);
 
 		/*************************************************
 		* FUNCTION
@@ -225,7 +225,7 @@ enum FitType
 		*	readSector(int, Sector*)
 		*	readSector(Sector*)
 		**************************************************/
-		 writeSector(unsigned int, Sector*);
+		void writeSector(unsigned int, Sector*);
 
 		/*************************************************
 		* FUNCTION
@@ -240,7 +240,7 @@ enum FitType
 		*	readSector(int, Sector*)
 		*	readSector(Sector*)
 		**************************************************/
-		 writeSector(Sector*);
+		void writeSector(Sector*);
 
 		/*************************************************
 		* FUNCTION
@@ -256,7 +256,7 @@ enum FitType
 		*	writeSector(unsigned int, Sector*)
 		*	readSector(Sector*)
 		**************************************************/
-		 readSector(int, Sector*);
+		void readSector(int, Sector*);
 
 		/*************************************************
 		* FUNCTION
@@ -271,7 +271,7 @@ enum FitType
 		*	writeSector(unsigned int, Sector*)
 		*	readSector(int, Sector*)
 		**************************************************/
-		 readSector(Sector*);
+		void readSector(Sector*);
 
 		/*************************************************
 		* FUNCTION
@@ -283,7 +283,7 @@ enum FitType
 		* SEE ALSO
 		*
 		**************************************************/
-		 format(string &);
+		void format(string &);
 
 		/*************************************************
 		* FUNCTION
@@ -318,7 +318,7 @@ enum FitType
 		*	void allocextend(DATtype &, unsigned int, unsigned int)
 		*	void dealloc(DATtype &)
 		**************************************************/
-		 alloc(DATtype &, unsigned int, FitType);
+		void alloc(DATtype &, unsigned int, FitType);
 
 		/*************************************************
 		* FUNCTION
@@ -338,7 +338,7 @@ enum FitType
 		*	void alloc(DATtype &, unsigned int , unsigned int , unsigned int)
 		*	void dealloc(DATtype &)
 		**************************************************/
-		 allocextend(DATtype &, unsigned int, FitType);
+		void allocextend(DATtype &, unsigned int, FitType);
 
 		/*************************************************
 		* FUNCTION
@@ -353,7 +353,7 @@ enum FitType
 		*	void alloc(DATtype &, unsigned int , unsigned int , unsigned int)
 		*	void allocextend(DATtype &, unsigned int, unsigned int)
 		**************************************************/
-		 dealloc(DATtype &);
+		void dealloc(DATtype &);
 
 		/*************************************************
 		* FUNCTION
@@ -381,7 +381,7 @@ enum FitType
 		*	void delfile(string &, string &)
 		*	void extendfile(string &, string &, unsigned int)
 		**************************************************/
-		 createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH, FitType=firstFit);
+		void createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH, FitType=firstFit);
 
 		/*************************************************
 		* FUNCTION
@@ -396,7 +396,7 @@ enum FitType
 		*	void extendfile(string &, string &, unsigned int)
 		*	void createfile(string &, string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int, FitType)
 		**************************************************/
-		 delfile(string &, string &);
+		void delfile(string &, string &);
 
 		/*************************************************
 		* FUNCTION
@@ -412,7 +412,7 @@ enum FitType
 		*	void delfile(string &, string &)
 		*	void allocextend(DATtype &, unsigned int, unsigned int)
 		**************************************************/
-		 extendfile(string &, string &, unsigned int);
+		void extendfile(string &, string &, unsigned int);
 
 		/*************************************************
 		* FUNCTION
@@ -451,6 +451,31 @@ enum FitType
 		string& Disk::GetLastErrorMessage();
 
 		void Disk::SetLastErrorMessage(string lastErrorMessage);
+
+		
+		/*************************************************
+		* FUNCTION
+		*	getVolumeHeader
+		* MEANING
+		*	returns vhd
+		* RETURN VALUE
+		*	returns the vhd.
+		* SEE ALSO
+		*
+		**************************************************/
+		 VolumeHeader getVolumeHeader();
+
+		/*************************************************
+		* FUNCTION
+		*	getDAT
+		* MEANING
+		*	returns DAT
+		* RETURN VALUE
+		*	returns the DAT.
+		* SEE ALSO
+		*
+		**************************************************/
+		 Dat getDAT();
 
 	private:
 		/*************************************************

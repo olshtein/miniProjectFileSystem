@@ -660,10 +660,20 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 
 string& Disk::GetLastErrorMessage() 
 { 
- return this->lastErrorMessage; 
+	return this->lastErrorMessage; 
 } 
  
 void Disk::SetLastErrorMessage(string lastErrorMessage) 
 { 
- this->lastErrorMessage = lastErrorMessage; 
+	this->lastErrorMessage = lastErrorMessage; 
 } 
+
+VolumeHeader Disk::getVolumeHeader() 
+{ 
+	return this->vhd; 
+}
+
+Dat Disk::getDAT() 
+{ 
+	return this->dat; 
+}  

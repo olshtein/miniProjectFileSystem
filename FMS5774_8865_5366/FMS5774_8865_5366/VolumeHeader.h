@@ -18,8 +18,8 @@
 **************************************************/
 struct VolumeHeader : BaseSector
 {
-	unsigned int const NAME_STRING_SIZE = 12;
-	unsigned int const DATE_STRING_SIZE = 10;  
+	unsigned int static const NAME_STRING_SIZE = 12;
+	unsigned int static const DATE_STRING_SIZE = 10;  
 
 	char diskName[NAME_STRING_SIZE]; //disk name
 	char diskOwner[NAME_STRING_SIZE]; //disk owner name   

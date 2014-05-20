@@ -233,9 +233,9 @@ extern "C"
 		
 		void addMemory(unsigned int num); // needed? wanted?
 
-		string& Disk::GetLastErrorMessage();
+		string& GetLastErrorMessage();
 
-		void Disk::SetLastErrorMessage(string lastErrorMessage);
+		void SetLastErrorMessage(string lastErrorMessage);
 
 
 	private:
