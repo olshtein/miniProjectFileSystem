@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="FMS5774_8856_5366_WPF.DiskUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <ProgressBar HorizontalAlignment="Left" x:Name="sizeBar" Height="32" Margin="10,258,0,0" VerticalAlignment="Top" Width="280" RenderTransformOrigin="0.467,1.069" Cursor="" Maximum="3200" Minimum="4"/>
+        <Image HorizontalAlignment="Left" Height="208" Margin="46,10,0,0" Source="hard_disk_256.png" VerticalAlignment="Top" Width="244"/>
+        <Label Content="name" x:Name="nameLabl" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+    </Grid>
+</UserControl> 

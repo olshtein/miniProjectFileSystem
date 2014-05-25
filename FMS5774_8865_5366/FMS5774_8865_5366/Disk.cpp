@@ -677,3 +677,12 @@ Dat Disk::getDAT()
 { 
 	return this->dat; 
 }  
+int Disk:: getUseDisk()
+{
+	int sum=0;
+	for (int i = 0; i<MAX_DIR_IN_SECTOR;i++)
+		if (rootdir[i]->entryStatus==active)
+			sum+=rootdir[i]->fileSize;
+	return sum;
+}
+}

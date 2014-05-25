@@ -448,7 +448,19 @@ enum FitType
 		**************************************************/
 		FCB* openfile(string &, string &, string &);
 
-		string& Disk::GetLastErrorMessage();
+		string& GetLastErrorMessage();
+
+			/*************************************************
+		* FUNCTION
+		*	getUseDisk
+		* MEANING
+		*	returns int
+		* RETURN VALUE
+		*	Returns the actual use of the disk (multiple sectors occupied).
+		* SEE ALSO
+		*
+		**************************************************/
+		int getUseDisk();
 
 		void Disk::SetLastErrorMessage(string lastErrorMessage);
 
