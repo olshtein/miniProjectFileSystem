@@ -270,8 +270,10 @@ extern "C"
 	string str;
 	__declspec(dllexport) const char*  getDat(Disk* THIS)
 	{
-		std::stringstream ss;
-		ss << THIS->getDAT();
+		stringstream ss;
+		ss << THIS->getDAT().sectorNr;
+		ss << THIS->getDAT().DAT;
+		ss << THIS->getDAT().emptyArea;
 		str = ss.str();
 		return str.c_str();
 	}
