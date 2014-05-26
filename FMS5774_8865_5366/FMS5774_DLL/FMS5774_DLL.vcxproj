@@ -16,7 +16,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -49,6 +49,12 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(LocalDebuggerCommand)" "$(SolutionDir)\FMS5774_Cpp_CSharp_Adapter\bin\Debug"
+copy "$(LocalDebuggerCommand)" "$(SolutionDir)\FMS5774_8856_5366_WPF\bin\Debug"
+copy "$(LocalDebuggerCommand)" "$(SolutionDir)\basic_WPF\bin\Debug"
+copy "$(LocalDebuggerCommand)" "$(SolutionDir)\FMS5774_Cpp_CSharp_Adapter_Test\bin\Debug"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

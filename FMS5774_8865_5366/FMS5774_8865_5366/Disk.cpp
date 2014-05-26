@@ -676,7 +676,8 @@ VolumeHeader Disk::getVolumeHeader()
 Dat Disk::getDAT() 
 { 
 	return this->dat; 
-}  
+} 
+
 int Disk:: getUseDisk()
 {
 	int sum=0;
@@ -685,4 +686,4 @@ int Disk:: getUseDisk()
 			sum+=rootdir[i]->fileSize;
 	return sum;
 }
-}
+

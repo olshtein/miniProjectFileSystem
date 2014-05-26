@@ -12,7 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO;
+using FMS5774_Cpp_CSharp_Adapter_Test;
+using System.Windows.Forms;
 
 namespace FMS5774_8856_5366_WPF
 {
@@ -21,22 +22,18 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
+            FMS5774_Cpp_CSharp_Adapter_Test.cppToCsharpAdapter my;
+
             InitializeComponent();
-            string[] filePaths = Directory.GetFiles(System.Reflection.Assembly.GetExecutingAssembly().Location, "*.disk");
         }
 
-        private string GetDirectoryName()
+        private void New_disk_click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-        }
-
-        private void DiskUserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
+            var dialog = new FolderBrowserDialog();
+            DialogResult result = dialog.ShowDialog();
         }
     }
-
-
 }

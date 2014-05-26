@@ -12,31 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO;
 
 namespace FMS5774_8856_5366_WPF
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for DiskUserControl.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class DiskUserControl : UserControl
     {
-        public MainWindow()
+        public DiskUserControl()
         {
             InitializeComponent();
-            string[] filePaths = Directory.GetFiles(System.Reflection.Assembly.GetExecutingAssembly().Location, "*.disk");
-        }
-
-        private string GetDirectoryName()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void DiskUserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
-
-
 }

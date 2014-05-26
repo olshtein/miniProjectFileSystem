@@ -1,0 +1,20 @@
+﻿<Window x:Class="FMS5774_8856_5366_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    
+    
+    <Grid>
+        <Menu>
+            <MenuItem Header="_File">
+                <MenuItem Header="[N]ew Disk" InputGestureText="Ctrl+N" Click="New_disk_click"/>
+                <MenuItem Header="[M]ount Disk" InputGestureText="Ctrl+M"  Click="Mount_Disk_click"/>
+                <MenuItem Header="[U]nmount Disk" InputGestureText="Ctrl+M" />
+                <Separator />
+                <MenuItem Header="[S]ave Disk" InputGestureText="Ctrl+S"/>
+                <Separator />
+                <MenuItem Header="Exit" InputGestureText="Alt+F4"  Click="Exit_click"/>
+            </MenuItem>
+        </Menu>
+    </Grid>
+</Window>
