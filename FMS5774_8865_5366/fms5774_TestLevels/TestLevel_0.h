@@ -35,6 +35,7 @@ class TestLevel_0
 		cout << " addrRootDir:      " << vh->addrRootDir << endl;  
 		cout << " addrDATcpy:       " << vh->addrDATcpy << endl;   
 		cout << " addrRootDirCpy:   " << vh->addrRootDirCpy << endl << endl;
+		cout << vh->formatDate<<"   isFormated"<<vh->isFormated<<endl<<endl;
 	}  
 
 	static void test_create(string diskName, string ownerName)  
@@ -47,12 +48,13 @@ class TestLevel_0
 		printDiskInfo(d); 
 	}
 
-	static void test_mount(string diskName)  
+	static void test_mount(string diskName, string owner)  
 	{
 		Disk d;  
 		cout << "\npre mountdisk: " << endl;  
 		printDiskInfo(d);   
 		d.mountdisk(diskName); 
+		d.format(owner);
 		cout << "post mountdisk: " << endl;  
 		printDiskInfo(d);   d.unmountdisk(); 
 	}   
@@ -101,7 +103,8 @@ public:
 			string ownerName = "meir";  
 			printStructSize();  
 			test_create(diskName, ownerName); 
-			test_mount(diskName); 
+
+			test_mount(diskName,ownerName); 
 			diskName = "disk 2";
 			test_read_write(diskName, ownerName);
 

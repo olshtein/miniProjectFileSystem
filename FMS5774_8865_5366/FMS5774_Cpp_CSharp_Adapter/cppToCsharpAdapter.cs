@@ -65,7 +65,7 @@ public class VolumeHeader
    
 public class cppToCsharpAdapter
 {
-    const string dllPath  = "FMS5774_8865_5366_DLL.dll";
+    const string dllPath  = "FMS5774_DLL.dll";
 
     [DllImport(dllPath , CallingConvention=CallingConvention.Cdecl )]
     public static extern int sum(int a, int b);

@@ -38,7 +38,7 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 	}
 
 	mounted=false;
-
+	
 	if (nameFile!="")
 	{
 		dskfl.open(nameFile+".disk",ios::out  | ios::binary);
@@ -48,6 +48,7 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 		createdisk(nameOwner);
 		dskfl.close();
 	}
+	this->vhd.isFormated=false;
 
 }
 
@@ -252,7 +253,7 @@ void Disk::resetDat()
 
 void Disk::format(string & nameOwner)
 {
-	if (this->getdskfl()!=NULL || nameOwner!=vhd.diskOwner)
+	if ( nameOwner!=vhd.diskOwner)
 	{
 		throw exception("ERROR: unable to open file, or file owner does not match data in vhd (at Disk::format(string&))");
 	}
@@ -261,6 +262,9 @@ void Disk::format(string & nameOwner)
 
 	for (int i=0; i < MAX_DIR_IN_SECTOR; i++)
 		*rootdir[i] = DirEntry();
+
+	Functions::dateNow( vhd.formatDate);
+	vhd.isFormated=true;
 
 }
 
