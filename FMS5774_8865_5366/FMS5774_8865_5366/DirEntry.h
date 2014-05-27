@@ -54,7 +54,7 @@ enum KeyType
 struct DirEntry
 {
 	unsigned int static const NAME_STRING_SIZE = 12;
-	unsigned int static const DATE_STRING_SIZE = 10;  
+	unsigned int static const DATE_STRING_SIZE = 11;  
 
 	char Filename[NAME_STRING_SIZE]; //entry name
 	char fileOwner[NAME_STRING_SIZE];  //entry owner name
