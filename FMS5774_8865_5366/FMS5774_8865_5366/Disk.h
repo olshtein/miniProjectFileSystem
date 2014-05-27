@@ -1,17 +1,13 @@
 ﻿#pragma once
 
-#include "DAT.h"
-#include "DirEntry.h"
+#include <iostream>
+#include <map>
+
 #include "FileHeader.h"
 #include "RootDirectory.h"
 #include "Sector.h"
 #include "VolumeHeader.h"
-#include <fstream>
-#include <iostream>
 #include "Functions.h"
-#include <Tuple>
-#include <vector>
-#include <map>
 #include "FCB.h"
 
 using namespace std;

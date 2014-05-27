@@ -1,6 +1,5 @@
 #pragma once
 
-#include "BaseSector.h"
 #include "DirEntry.h"
 
 // max number of directories in a sector.

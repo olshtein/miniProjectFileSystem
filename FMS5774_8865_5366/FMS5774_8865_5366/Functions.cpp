@@ -1,6 +1,5 @@
 #include "Functions.h"
 
-
 void Functions::dateNow(char* date)
 {
 	time_t t = time(0); 

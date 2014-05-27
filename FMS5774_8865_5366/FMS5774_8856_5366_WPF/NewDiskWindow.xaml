@@ -1,0 +1,17 @@
+﻿<Window x:Class="basic_WPF.NewDiskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NewDiskWindow" Height="300" Width="300">
+    <StackPanel Margin="3">
+        <StackPanel Orientation="Horizontal">
+            <Label Margin="3" Content="Disk Name:"/>
+            <TextBox Margin="3" MinWidth="100" />
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal">
+            <Label Margin="3" Content="Disk Name:"/>
+            <TextBox Margin="3" MinWidth="100" />
+        </StackPanel>
+
+    </StackPanel>
+</Window>

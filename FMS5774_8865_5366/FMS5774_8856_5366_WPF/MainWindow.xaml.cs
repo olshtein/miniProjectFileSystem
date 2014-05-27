@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
 
 namespace FMS5774_8856_5366_WPF
 {
@@ -23,20 +10,41 @@ namespace FMS5774_8856_5366_WPF
     {
         public MainWindow()
         {
+            FMS5774_Cpp_CSharp_Adapter_Test.cppToCsharpAdapter adapter;
+
             InitializeComponent();
-            string[] filePaths = Directory.GetFiles(System.Reflection.Assembly.GetExecutingAssembly().Location, "*.disk");
+            InitializeUsersList();
         }
 
-        private string GetDirectoryName()
+        private void InitializeUsersList()
         {
-            throw new NotImplementedException();
+            //get user names from file
+            string filePath = System.IO.Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\Users.txt";
+            string[] usersArr = System.IO.File.ReadAllLines(filePath);
+
+            //make radio buttons for each user
+            RadioButton[] radioButtons = new RadioButton[usersArr.Length];
+            for (int i = 0; i < usersArr.Length; i++)
+                radioButtons[i] = new RadioButton { Content = usersArr[i], IsChecked = false, GroupName="users"};
+
+            // make first radio button default if exist.
+            if (radioButtons.Length > 0)
+                radioButtons[0].IsChecked = true;
+
+            //bind the radio buttons as the items for the 'chage user' menu.
+            this.changeUserMenuItem.ItemsSource = radioButtons;
         }
 
-        private void DiskUserControl_Loaded(object sender, RoutedEventArgs e)
+        private void New_Disk_Click(object sender, RoutedEventArgs e)
         {
+        }
 
+        private void Mount_Disk_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
-
-
 }

@@ -1,23 +1,22 @@
-﻿<Window x:Class="FMS5774_8856_5366_WPF.MainWindow" 
-           
-           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
-           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-          xmlns:local="clr-namespace:FMS5774_8856_5366_WPF;assembly=FMS5774_8856_5366_WPF"
-           Title="Window1" Height="367" Width="308"  WindowStyle="None" AllowsTransparency="True" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Auto" IsTabStop="True" IsHitTestVisible="True" AllowDrop="True">
-    <WrapPanel HorizontalAlignment="Left" Height="377" VerticalAlignment="Top" Width="302" Margin="0,0,0,-106">
-        <local:DiskUserControl x:Name="disk1"/>
-        <local:DiskUserControl x:Name="disk2"/>
-        <local:DiskUserControl x:Name="disk3"/>
-        <local:DiskUserControl x:Name="disk4"/>
-        <local:DiskUserControl x:Name="disk5"/>
-        <local:DiskUserControl x:Name="disk6"/>
-        <local:DiskUserControl x:Name="disk7"/>
-        <local:DiskUserControl x:Name="disk8"/>
-        <local:DiskUserControl x:Name="disk9"/>
-
-
-
-    </WrapPanel>
-
-
+﻿<Window x:Class="FMS5774_8856_5366_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <StackPanel>
+        <Menu VerticalAlignment="Top" Height="21">
+            <MenuItem Header="File">
+                <MenuItem Header="[N]ew Disk" InputGestureText="Ctrl+N" Click="New_Disk_Click"/>
+                <MenuItem Header="[M]ount Disk" InputGestureText="Ctrl+M"  Click="Mount_Disk_Click"/>
+                <MenuItem Header="[U]nmount Disk" InputGestureText="Ctrl+M" />
+                <Separator />
+                <MenuItem Header="[S]ave Disk" InputGestureText="Ctrl+S"/>
+                <Separator />
+                <MenuItem Header="Exit" InputGestureText="Alt+F4"  Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Name="changeUserMenuItem" Header="Change user" />
+        </Menu>
+        <WrapPanel Margin="3">
+            <Button Name="newDiskButton" Content="Add Disk" MinHeight="99" MaxWidth="120" Margin="3" Click="New_Disk_Click"/>
+        </WrapPanel>
+    </StackPanel>
 </Window>

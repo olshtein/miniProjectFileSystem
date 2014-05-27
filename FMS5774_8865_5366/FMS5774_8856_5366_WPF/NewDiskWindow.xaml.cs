@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FMS5774_8856_5366_WPF
+namespace basic_WPF
 {
     /// <summary>
-    /// Interaction logic for DiskUserControl.xaml
+    /// Interaction logic for NewDiskWindow.xaml
     /// </summary>
-    public partial class DiskUserControl : UserControl
+    public partial class NewDiskWindow : Window
     {
-        public DiskUserControl()
+        public NewDiskWindow()
         {
             InitializeComponent();
         }

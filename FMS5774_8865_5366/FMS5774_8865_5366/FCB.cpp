@@ -1,6 +1,5 @@
 #include "FCB.h"
 
-
 FCB::FCB()
 {
 	d=NULL;
