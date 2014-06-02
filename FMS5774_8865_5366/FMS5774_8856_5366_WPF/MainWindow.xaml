@@ -15,8 +15,9 @@
             </MenuItem>
             <MenuItem Name="changeUserMenuItem" Header="Change user" />
         </Menu>
-        <WrapPanel Margin="3">
-            <Button Name="newDiskButton" Content="Add Disk" MinHeight="99" MaxWidth="120" Margin="3" Click="New_Disk_Click"/>
+
+        <WrapPanel Name="DisksWrapPanel" Margin="3">
+            <Button Name="newDiskButton" Content="Create Disk" MinHeight="99" MaxWidth="120" Margin="3" Click="New_Disk_Click"/>
         </WrapPanel>
     </StackPanel>
 </Window>

@@ -15,6 +15,10 @@ using namespace std;
 // a map containing sets of indecies and sizes of empty DAT clusters, and an iterator for it. (<location in disk,num of clasters>
 typedef  map<unsigned int,unsigned int> diskmap;
 typedef  map<unsigned int,unsigned int>::iterator it_diskmap;
+
+//disks path
+string const DISK_PATH = "../../../Disks/";
+
 class FCB;
 
 /*************************************************
