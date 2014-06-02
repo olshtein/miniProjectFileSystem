@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace FMS5774_Cpp_CSharp_Adapter_Test
+namespace FMS5774_Cpp_CSharp_Adapter
 {
     public class Disk
     {
-        IntPtr myDiskPointer;
+        public IntPtr myDiskPointer;
 
         public Disk()
         {

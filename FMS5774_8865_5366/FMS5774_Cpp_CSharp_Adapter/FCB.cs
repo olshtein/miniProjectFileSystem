@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace FMS5774_Cpp_CSharp_Adapter_Test
+namespace FMS5774_Cpp_CSharp_Adapter
 {
     public class FCB
     {

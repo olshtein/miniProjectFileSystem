@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using FMS5774_Cpp_CSharp_Adapter;
 
 namespace FMS5774_Cpp_CSharp_Adapter_Test
 {

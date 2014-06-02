@@ -73,6 +73,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CreateDisk\CreateDiskDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DiskUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,6 +89,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CreateDisk\CreateDiskDialog.xaml.cs">
+      <DependentUpon>CreateDiskDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DiskUserControl.xaml.cs">
       <DependentUpon>DiskUserControl.xaml</DependentUpon>
     </Compile>
@@ -92,15 +99,8 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NewDiskWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NewDiskWindow.xaml.cs">
-      <DependentUpon>NewDiskWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -131,10 +131,6 @@
     <ProjectReference Include="..\FMS5774_Cpp_CSharp_Adapter\FMS5774_Cpp_CSharp_Adapter.csproj">
       <Project>{46bc4635-025e-458d-a887-b39bac2c138e}</Project>
       <Name>FMS5774_Cpp_CSharp_Adapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FMS5774_Cpp_CSharp_Adapter_Test\FMS5774_Cpp_CSharp_Adapter_Test.csproj">
-      <Project>{1f2b56b6-ed99-4ae4-b2d3-b7a03248bf61}</Project>
-      <Name>FMS5774_Cpp_CSharp_Adapter_Test</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

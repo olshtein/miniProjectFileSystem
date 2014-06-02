@@ -11,7 +11,7 @@ Disk::Disk (string & nameFile, string & nameOwner, DiskConstractType createOrMou
 {
 	if (createOrMountDisk == create)
 	{
-		createdisk(nameFile,nameOwner);
+		createdisk(nameFile, nameOwner);
 		mountdisk (nameFile);
 	}
 	else if (createOrMountDisk == mount)
@@ -29,8 +29,9 @@ Disk::~Disk(void)
 
 void Disk::createdisk(string & nameFile, string & nameOwner)
 {
+
 	//vhd
-	dskfl.open(nameFile+".disk",ios::out  | ios::_Nocreate);
+	dskfl.open(nameFile + ".disk",ios::out  | ios::_Nocreate);
 	if (dskfl.is_open())
 	{	
 		dskfl.close();
@@ -41,9 +42,16 @@ void Disk::createdisk(string & nameFile, string & nameOwner)
 	
 	if (nameFile!="")
 	{
-		dskfl.open(nameFile+".disk",ios::out  | ios::binary);
+		dskfl.open(nameFile + ".disk",ios::out  | ios::binary);
 		vhd.sectorNr=0;
+		try
+		{
 		strncpy_s(vhd.diskName, nameFile.c_str(), sizeof(vhd.diskName));
+		}
+		catch (...)
+		{
+			throw exception("ERROR: file name too long (in Disk::createdisk(string&, string&))");
+		}
 		vhd.diskName[sizeof(vhd.diskName) - 1] = NULL; 
 		createdisk(nameOwner);
 		dskfl.close();
