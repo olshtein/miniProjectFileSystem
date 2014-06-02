@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-﻿using FMS5774_Cpp_CSharp_Adapter_Test;
 using System.Windows;
-=======
-﻿using System.Windows;
 using System.Collections.Generic;
->>>>>>> 0c3539e4d2ceee33fade202fdc3af1460031c24f
 using System.Windows.Controls;
 using Microsoft.Win32;
 using FMS5774_Cpp_CSharp_Adapter;
@@ -22,11 +17,6 @@ namespace FMS5774_8856_5366_WPF
 
         public MainWindow()
         {
-<<<<<<< HEAD
-            FMS5774_Cpp_CSharp_Adapter_Test.cppToCsharpAdapter adapter;
-            
-=======
->>>>>>> 0c3539e4d2ceee33fade202fdc3af1460031c24f
             InitializeComponent();
             InitializeDiskList();
             InitializeUsersList();
@@ -79,9 +69,6 @@ namespace FMS5774_8856_5366_WPF
 
         private void New_Disk_Click(object sender, RoutedEventArgs e)
         {
-<<<<<<< HEAD
-            
-=======
             // Instantiate the dialog box
             CreateDiskDialog dlg = new CreateDiskDialog();
 
@@ -98,7 +85,6 @@ namespace FMS5774_8856_5366_WPF
                 DiskUserControl duc = new DiskUserControl(dsk);
                 DisksWrapPanel.Children.Insert(0, duc);
             }
->>>>>>> 0c3539e4d2ceee33fade202fdc3af1460031c24f
         }
 
         private void Mount_Disk_Click(object sender, RoutedEventArgs e)
