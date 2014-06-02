@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Citizen.cs" />
     <Compile Include="cppToCsharpAdapter.cs" />
     <Compile Include="Disk.cs" />
     <Compile Include="FCB.cs" />

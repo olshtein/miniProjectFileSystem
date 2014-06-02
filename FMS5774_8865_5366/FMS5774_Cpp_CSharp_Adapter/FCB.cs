@@ -160,5 +160,24 @@ namespace FMS5774_Cpp_CSharp_Adapter_Test
                 throw;
             }
         }
+        public bool IorO()
+        {
+            try
+            {
+                
+                return cppToCsharpAdapter.IorO(this.myFCBpointer);
+            }
+            catch (SEHException)
+            {
+                IntPtr cString = cppToCsharpAdapter.getLastFcbErrorMessage(this.myFCBpointer);
+                string message = Marshal.PtrToStringAnsi(cString);
+                throw new Exception(message);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 }

@@ -5,7 +5,7 @@ namespace FMS5774_Cpp_CSharp_Adapter_Test
 {
     public class Disk
     {
-        IntPtr myDiskPointer;
+        public IntPtr myDiskPointer;
 
         public Disk()
         {

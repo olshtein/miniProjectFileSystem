@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using FMS5774_Cpp_CSharp_Adapter_Test;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace FMS5774_8856_5366_WPF
@@ -11,7 +12,7 @@ namespace FMS5774_8856_5366_WPF
         public MainWindow()
         {
             FMS5774_Cpp_CSharp_Adapter_Test.cppToCsharpAdapter adapter;
-
+            
             InitializeComponent();
             InitializeUsersList();
         }
@@ -37,10 +38,22 @@ namespace FMS5774_8856_5366_WPF
 
         private void New_Disk_Click(object sender, RoutedEventArgs e)
         {
+            
         }
 
         private void Mount_Disk_Click(object sender, RoutedEventArgs e)
         {
+            //Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
+            //ofd.Filter = "disk Files (*.disk)|*.disk|All Files (*.*)|*.*";
+            //ofd.ShowDialog();
+            //if (ofd.FileName!="")
+            //{
+            //    Disk add = new Disk();
+            //    string fileNamePart;
+            //    ofd.FileName.CopyTo(0,fileNamePart,0,ofd.FileName.c
+            //    add.Mountdisk(ofd.FileName);
+            //}
+
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

@@ -155,6 +155,9 @@ public class cppToCsharpAdapter
 
     [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
     public static extern void getVolumeHeader(IntPtr THIS, IntPtr buffer);
- 
+
+    [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
+    [return:MarshalAs(UnmanagedType.U1)]
+    public static extern bool IorO(IntPtr THIS);
 }
 }

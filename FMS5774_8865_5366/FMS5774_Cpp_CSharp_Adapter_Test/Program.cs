@@ -33,7 +33,6 @@ namespace FMS5774_Cpp_CSharp_Adapter_Test
                 d.Createdisk("disk1", "oshri");
                 Console.WriteLine("\nCreate Disk:");
                 Console.WriteLine(ToStringProperty(d.GetVolumeHeader()));
-
                 d.Mountdisk("disk1");
                 d.Format("oshri");
                 Console.WriteLine("\nFormat Disk:");

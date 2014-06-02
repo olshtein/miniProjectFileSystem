@@ -76,8 +76,8 @@ extern "C"
 
 		bool lock; // is the file ready for update action
 		bool changeBuf; // has the buffer changed value from the value on disk
-		bool changeDir; //  ?
-		unsigned int placeDir; // ?
+		bool changeDir; //  has the DirEntry changed value from the value on disk
+		unsigned int placeDir; // plase DirEntry in rootdir
 		unsigned int currRecNr;// Current record's serial number in file
 		unsigned int currSecNr;// Current sector's serial number in file
 		unsigned int currRecNrInBuff;//Current record's serial number in sector
@@ -292,6 +292,14 @@ extern "C"
 		bool isKeyNull();
 
 		unsigned int locationSector(unsigned int);
+
+		bool IorO()
+		{
+			if (iostate != I)
+				return true;
+			return false;
+		}
+
 
 
 	};

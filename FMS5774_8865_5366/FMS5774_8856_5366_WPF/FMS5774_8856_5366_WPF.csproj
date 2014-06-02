@@ -55,6 +55,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -77,6 +78,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="FileUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,6 +92,9 @@
     </Compile>
     <Compile Include="DiskUserControl.xaml.cs">
       <DependentUpon>DiskUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileUserControl.xaml.cs">
+      <DependentUpon>FileUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -132,10 +140,6 @@
       <Project>{46bc4635-025e-458d-a887-b39bac2c138e}</Project>
       <Name>FMS5774_Cpp_CSharp_Adapter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FMS5774_Cpp_CSharp_Adapter_Test\FMS5774_Cpp_CSharp_Adapter_Test.csproj">
-      <Project>{1f2b56b6-ed99-4ae4-b2d3-b7a03248bf61}</Project>
-      <Name>FMS5774_Cpp_CSharp_Adapter_Test</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resorces\Users.txt" />
@@ -159,6 +163,10 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resorces\edit-not-validated.png" />
+    <Resource Include="Resorces\edit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
