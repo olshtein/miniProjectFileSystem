@@ -1,7 +1,7 @@
 ﻿<Window x:Class="FMS5774_8856_5366_WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="369" Width="525">
     <StackPanel>
         <Menu VerticalAlignment="Top" Height="21">
             <MenuItem Header="File">
@@ -17,7 +17,18 @@
         </Menu>
 
         <WrapPanel Name="DisksWrapPanel" Margin="3">
-            <Button Name="newDiskButton" Content="Create Disk" MinHeight="99" MaxWidth="120" Margin="3" Click="New_Disk_Click"/>
+            <Button Name="newDiskButton" Content="Create Disk" Height="145" Width="100" Margin="3" BorderBrush="White"
+                BorderThickness="1,1,1,1" Click="New_Disk_Click">
+                <Button.Effect>
+                    <DropShadowEffect Color="Gray" Opacity="0.5" />
+                </Button.Effect>
+                <Button.Background>
+                    <RadialGradientBrush RadiusY="2.5" RadiusX="2.5">
+                        <GradientStop Color="Cyan"/>
+                        <GradientStop Color="Blue" Offset="0.5"/>
+                    </RadialGradientBrush>
+                </Button.Background>
+            </Button>
         </WrapPanel>
     </StackPanel>
 </Window>

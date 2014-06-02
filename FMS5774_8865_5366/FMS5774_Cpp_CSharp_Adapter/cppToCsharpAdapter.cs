@@ -66,9 +66,9 @@ namespace FMS5774_Cpp_CSharp_Adapter
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         string fileOwner;  
 
-        uint fileAddr;
-
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 11)]
+        uint fileAddr;  
+
         string crDate;
 
         uint fileSize;  

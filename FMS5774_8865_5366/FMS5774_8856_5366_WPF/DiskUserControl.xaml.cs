@@ -16,7 +16,7 @@ namespace FMS5774_8856_5366_WPF
         public DiskUserControl(Disk my)
         {
             InitializeComponent();
-            sizeBar.Value = Convert.ToDouble(my.Howmuchempty(my.myDiskPointer));
+            sizeBar.Value = 1600 - Convert.ToDouble(my.Howmuchempty(my.myDiskPointer));
             nameLabl.Content = my.GetVolumeHeader().DiskName;
             this.MouseDoubleClick += new System.Windows.Input.MouseButtonEventHandler(doubleClickEvent);
         }
