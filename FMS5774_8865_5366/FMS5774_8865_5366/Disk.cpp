@@ -699,3 +699,12 @@ int Disk:: getUseDisk()
 	return sum;
 }
 
+ DirEntry *Disk:: getDirEntry()
+ {
+	 DirEntry*  allDir = new DirEntry[ROOT_DIR_LENGTH];
+	 for (int i = 0 ; i< ROOT_DIR_LENGTH ; i++)
+		 allDir[i] = *rootdir[i];
+	 return allDir;
+ }
+
+

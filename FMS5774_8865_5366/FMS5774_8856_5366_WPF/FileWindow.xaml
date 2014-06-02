@@ -1,0 +1,21 @@
+﻿<Window x:Class="FMS5774_8856_5366_WPF.FileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="FileWindow"  Height="350" Width="525">
+
+    <StackPanel>
+        <Menu VerticalAlignment="Top" Height="21">
+            <MenuItem Header="File">
+                <MenuItem Header="[N]ew File" InputGestureText="Ctrl+N" Click="New_File_Click"/>
+                <MenuItem Header="[O]pen File" InputGestureText="Ctrl+O"  Click="open_File_Click"/>
+                <MenuItem Header="[D]elete file" InputGestureText="Ctrl+D" Click="delete_File" />
+
+                <MenuItem Header="Exit" InputGestureText="Alt+F4"  Click="Exit_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <WrapPanel Name="FilesWrapPanel" Margin="3">
+            <Button Name="FilesDiskButton" Content="Create file" MinHeight="99" MaxWidth="120" Margin="3" Click="New_Files_Click"/>
+        </WrapPanel>
+    </StackPanel>
+</Window>

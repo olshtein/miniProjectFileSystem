@@ -295,13 +295,17 @@ bool FCB::isKeyNull()
 
 unsigned int  FCB::locationSector(unsigned int num)
 {
-	diskmap *mymap = d->DiskMapping(FAT);//del??
+	diskmap *mymap = d->DiskMapping(FAT);
 	int sum = 0;
 	for (it_diskmap it= mymap->begin(); it!=mymap->end(); ++it)
 	{
 		sum += it->second;
 		if (sum*2>num)
-			return it->first*2+num-(sum - it->second-1);
+		{
+			int location= it->first*2+num-(sum - it->second-1);
+			delete mymap;
+			return location;
+		}
 	}
 	throw exception("ERROR: Unusual surface data on file. (at  unsigned int  FCB::locationSector(unsigned int )");
 }
