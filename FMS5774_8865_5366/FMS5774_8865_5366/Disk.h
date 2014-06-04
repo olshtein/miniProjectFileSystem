@@ -489,7 +489,7 @@ enum FitType
 		**************************************************/
 		 Dat getDAT();
 
-		 DirEntry * getDirEntry();
+		 DirEntry  getDirEntry(unsigned int);
 
 	private:
 		/*************************************************

@@ -22,11 +22,11 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class FileUserControl : UserControl
     {
-        public FileUserControl(FCB myFile)
+        public FileUserControl(DirEntry myFile)
         {
             ImageSource imageSource;
-            if (myFile.IorO()) 
-                imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() +"\\..\\..\\Resorces\\edit.png"));
+            if (MainWindow.User==myFile.FileOwner)
+                imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit.png"));
             else
                 imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit-not-validated.png"));
 

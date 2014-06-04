@@ -11,8 +11,8 @@ void main()
 {
 	try
 	{
-		TestLevel_0 myTest_0;
-		 myTest_0.test_0();
+	//	TestLevel_0 myTest_0;
+		// myTest_0.test_0();
 		Test_3 myTest_3;
 		myTest_3.test_3();
 		system("pause");

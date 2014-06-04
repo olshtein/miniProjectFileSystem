@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace FMS5774_Cpp_CSharp_Adapter
@@ -50,6 +52,47 @@ namespace FMS5774_Cpp_CSharp_Adapter
             }
         }
 
+        public DirEntry GetDirEntry( uint dirIndex)
+        {
+            try
+            {
+                DirEntry d = new DirEntry();
+                IntPtr buffer = Marshal.AllocHGlobal(Marshal.SizeOf(d.GetType()));
+                // ... send buffer to dll        
+                cppToCsharpAdapter.getDirEntry(this.myDiskPointer, buffer, dirIndex);
+                Marshal.PtrToStructure(buffer, d);
+                // free allocate        
+                Marshal.FreeHGlobal(buffer);
+                return d;
+            }
+            catch (SEHException)
+            {
+                IntPtr cString = cppToCsharpAdapter.getLastDiskErrorMessage(this.myDiskPointer);
+                throw new Exception(Marshal.PtrToStringAnsi(cString));
+            }
+        }
+
+        public List<DirEntry> GetDirRoot()
+        {
+
+            try
+            {
+                List<DirEntry> list = new List<DirEntry>();
+                for (uint i = 0; i < 28; i++)
+                {
+                  
+                        list.Add(this.GetDirEntry(i));
+
+                }
+                return list;
+            }
+            catch (SEHException)
+            {
+                IntPtr cString = cppToCsharpAdapter.getLastDiskErrorMessage(this.myDiskPointer);
+                throw new Exception(Marshal.PtrToStringAnsi(cString));
+            }
+        }
+
 
         public void Createdisk(string diskName, string diskOwner)
         {
@@ -68,7 +111,6 @@ namespace FMS5774_Cpp_CSharp_Adapter
                 throw;
             }
         }
-
 
         public void Mountdisk(string diskName)
         {
@@ -105,7 +147,6 @@ namespace FMS5774_Cpp_CSharp_Adapter
                 throw;
             }
         }
-
 
         public void Recreatedisk(string diskOwner)
         {
@@ -146,7 +187,6 @@ namespace FMS5774_Cpp_CSharp_Adapter
                 throw;
             }
         }
-
 
         public int Howmuchempty(IntPtr THIS)
         {

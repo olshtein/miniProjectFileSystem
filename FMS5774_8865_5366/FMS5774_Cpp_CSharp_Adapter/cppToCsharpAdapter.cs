@@ -57,41 +57,139 @@ namespace FMS5774_Cpp_CSharp_Adapter
     }
 
 
+    //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi),Serializable]
+    //public class DirEntry
+    //{
+    //    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
+    //    string Filename;
+
+    //    public string fileName
+    //    {
+    //        get { return Filename; }
+    //    } 
+       
+    //    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
+    //    string fileOwner;
+
+    //    public string FileOwner
+    //    {
+    //        get { return fileOwner; }
+    //    }  
+
+    //    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 11)]
+    //    uint fileAddr;
+
+    //    public uint FileAddr
+    //    {
+    //        get { return fileAddr; }
+    //    }
+
+    //    string crDate;
+
+    //    public string CrDate
+    //    {
+    //        get { return crDate; }
+    //    }
+
+    //    uint fileSize;
+
+    //    public uint FileSize
+    //    {
+    //        get { return fileSize; }
+    //    }
+
+    //    uint eofRecNr;
+
+    //    public uint EofRecNr
+    //    {
+    //        get { return eofRecNr; }
+    //    }
+
+    //    uint maxRecSize;
+
+    //    public uint MaxRecSize
+    //    {
+    //        get { return maxRecSize; }
+    //    }
+
+    //    uint actualRecSize;
+
+    //    public uint ActualRecSize
+    //    {
+    //        get { return actualRecSize; }
+    //    }  
+
+    //    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
+    //    string recFormat;
+
+    //    public string RecFormat
+    //    {
+    //        get { return recFormat; }
+    //    }
+
+    //    uint keyOffset;
+
+    //    public uint KeyOffset
+    //    {
+    //        get { return keyOffset; }
+    //    }
+
+    //    uint keySize;
+
+    //    public uint KeySize
+    //    {
+    //        get { return keySize; }
+    //    } 
+
+    //    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
+    //    string keyType;
+
+    //    public string KeyType
+    //    {
+    //        get { return keyType; }
+    //    }
+    //    char entryStatus;
+
+    //    public char EntryStatus
+    //    {
+    //        get { return entryStatus; }
+    //    }
+    //}
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public class DirEntry
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        string Filename; 
-
+        string fileName;
+        public string FileName { get { return fileName; } }
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-        string fileOwner;  
-
+        string fileOwner;
+        public string FileOwner { get { return fileOwner; } }
+        uint fileAddr;
+        public uint FileAddr { get { return fileAddr; } }
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 11)]
-        uint fileAddr;  
-
         string crDate;
-
-        uint fileSize;  
-
-        uint eofRecNr;  
-
-        uint maxRecSize;  
-
-        uint actualRecSize;  
-
+        public string CrDate { get { return crDate; } }
+        uint fileSize;
+        public uint FileSize { get { return fileSize; } }
+        uint eofRecNr;
+        public uint EofRecNr { get { return eofRecNr; } }
+        uint maxRecSize;
+        public uint MaxRecSize { get { return maxRecSize; } }
+        uint actualRecSize;
+        public uint ActualRecSize { get { return actualRecSize; } }
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
-        string recFormat;	
-
+        string recFormat;
+        public string RecFormat { get { return recFormat; } }
         uint keyOffset;
-
-        uint keySize; 
-
+        public uint KeyOffset { get { return keyOffset; } }
+        uint keySize;
+        public uint KeySize { get { return keySize; } }
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 2)]
         string keyType;
-
+        public string KeyType { get { return keyType; } }
         char entryStatus;
+        public char EntryStatus { get { return entryStatus; } }
     }
-
 
 
 
@@ -193,7 +291,7 @@ namespace FMS5774_Cpp_CSharp_Adapter
         public static extern void getVolumeHeader(IntPtr THIS, IntPtr buffer);
 
         [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void getDirEntry(IntPtr THIS, IntPtr buffer);
+        public static extern void getDirEntry(IntPtr THIS, IntPtr buffer, uint index);
 
         [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.U1)]

@@ -3,7 +3,7 @@
 #include "BaseSector.h"
 
 // represent key length for non string keys.
-const unsigned int KEY_DEFAULT_LENGTH = 4;
+const unsigned int KEY_DEFAULT_LENGTH = 4; //int
 
 /*************************************************
 * ENUM
