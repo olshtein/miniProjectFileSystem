@@ -8,6 +8,7 @@
 	Title="fileProperties">
 
     <Grid>
-        
+        <DataGrid HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="280" Width="280"/>
+
     </Grid>
 </Page>
