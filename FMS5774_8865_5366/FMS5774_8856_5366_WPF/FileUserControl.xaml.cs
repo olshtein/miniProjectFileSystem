@@ -25,13 +25,15 @@ namespace FMS5774_8856_5366_WPF
         public FileUserControl(DirEntry myFile)
         {
             ImageSource imageSource;
-            if (MainWindow.User==myFile.FileOwner)
+            InitializeComponent();
+            if (MainWindow.User == myFile.FileOwner)
                 imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit.png"));
             else
                 imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit-not-validated.png"));
-            InitializeComponent();
 
             imageIO.Source = imageSource;
+            nameLabl.Content = myFile.FileName;
+            TextBlockFileUse.Text = "size file: "+myFile.FileSize.ToString()+ " KB";
         }
     }
 }

@@ -82,6 +82,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="fileProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FileUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -103,6 +107,9 @@
     </Compile>
     <Compile Include="DiskUserControl.xaml.cs">
       <DependentUpon>DiskUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="fileProperties.xaml.cs">
+      <DependentUpon>fileProperties.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileUserControl.xaml.cs">
       <DependentUpon>FileUserControl.xaml</DependentUpon>
