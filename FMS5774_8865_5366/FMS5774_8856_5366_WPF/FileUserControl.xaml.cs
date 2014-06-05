@@ -29,9 +29,9 @@ namespace FMS5774_8856_5366_WPF
                 imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit.png"));
             else
                 imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit-not-validated.png"));
+            InitializeComponent();
 
             imageIO.Source = imageSource;
-            InitializeComponent();
         }
     }
 }
