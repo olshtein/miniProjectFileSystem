@@ -53,9 +53,14 @@
     <StartupObject>FMS5774_8856_5366_WPF.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +70,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -140,6 +147,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Properties\DataSources\FMS5774_Cpp_CSharp_Adapter.cppToCsharpAdapter.datasource" />
+    <None Include="Properties\DataSources\FMS5774_Cpp_CSharp_Adapter.DirEntry.datasource" />
+    <None Include="Properties\DataSources\FMS5774_Cpp_CSharp_Adapter.Disk.datasource" />
+    <None Include="Properties\DataSources\FMS5774_Cpp_CSharp_Adapter.FCB.datasource" />
+    <None Include="Properties\DataSources\FMS5774_Cpp_CSharp_Adapter.VolumeHeader.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
