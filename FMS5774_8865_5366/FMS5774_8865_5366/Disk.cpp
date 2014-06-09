@@ -129,6 +129,11 @@ void Disk::unmountdisk()
 	mounted=false;
 }
 
+bool Disk::ismounted()
+{
+	return mounted;
+}
+
 void Disk::recreatedisk(string & nameOwner)
 {	
 	if (dskfl.is_open())

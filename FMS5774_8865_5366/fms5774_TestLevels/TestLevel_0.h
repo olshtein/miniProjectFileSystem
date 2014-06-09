@@ -53,10 +53,15 @@ class TestLevel_0
 		Disk d;  
 		cout << "\npre mountdisk: " << endl;  
 		printDiskInfo(d);   
-		d.mountdisk(diskName); 
+		d.mountdisk(diskName);
+		if (d.ismounted())
+			cout << "Mounted!";
 		d.format(owner);
 		cout << "post mountdisk: " << endl;  
-		printDiskInfo(d);   d.unmountdisk(); 
+		printDiskInfo(d);
+		d.unmountdisk(); 
+		if (d.ismounted())
+			cout << "Mounted!";
 	}   
 
 	static void test_rwSector(string diskName) 
