@@ -26,6 +26,7 @@ namespace FMS5774_8856_5366_WPF
         {
             ImageSource imageSource;
             InitializeComponent();
+
             if (MainWindow.User == myFile.FileOwner)
                 imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit.png"));
             else
