@@ -6,8 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="120" d:DesignWidth="99">
     <Grid>
-        <Grid />
-        <Border Margin="4,0,4,4"
+        <Border Margin="4"
                 BorderBrush="White"
                 BorderThickness="1,1,1,1"
                 CornerRadius="10">
@@ -29,17 +28,8 @@
                     </ToolTip>
                 </StackPanel.ToolTip>
 
-        <Rectangle  RadiusX="10" RadiusY ="10" Name="RectangleSidesCurved" RenderTransformOrigin="0.5,0.5">
-            <Rectangle.Fill>
-                <RadialGradientBrush RadiusY="0.8" RadiusX="0.6" SpreadMethod="Repeat">
-                    <GradientStop Color="Black" Offset="0"/>
-                    <GradientStop Color="#FFC7C1C1" Offset="1"/>
-                </RadialGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-
         <Image  x:Name="imageIO" MaxHeight="80" MaxWidth="80" HorizontalAlignment="Center" Margin="3"/>
-        <Label  x:Name="nameLabl" HorizontalAlignment="Center" Margin="3" HorizontalContentAlignment="Center" Height="24"/>
+        <Label  x:Name="nameLabel" HorizontalAlignment="Center" Margin="3" HorizontalContentAlignment="Center" Height="24"/>
     </StackPanel>
     </Border>
     </Grid>

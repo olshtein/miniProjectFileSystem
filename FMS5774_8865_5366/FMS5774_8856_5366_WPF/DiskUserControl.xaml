@@ -4,7 +4,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+<<<<<<< HEAD
              mc:Ignorable="d" d:DesignWidth="100" Height="153" MouseDoubleClick="DiskUserControl_MouseDoubleClick">
+=======
+             mc:Ignorable="d" d:DesignWidth="100" Height="150" MouseDoubleClick="DiskUserControl_MouseDoubleClick">
+>>>>>>> 2b63cf078c8ce318c6ed1ace758139d36c54f2be
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem Name="OpenMenuItem" Header="Open" Click="OpenMenuItem_Click" />
@@ -16,7 +20,6 @@
         </ContextMenu>
     </UserControl.ContextMenu>
     <Grid>
-        <Grid />
         <Border Margin="4"
                 BorderBrush="White"
                 BorderThickness="1,1,1,1"
@@ -37,7 +40,7 @@
                         <StackPanel>
                             <TextBlock x:Name="TextBlockDiskUse"/>
                             <TextBlock x:Name="TextBlockDiskFree"/>
-
+                            <TextBlock x:Name="TextBlockOwner"/>
                         </StackPanel>
                     </ToolTip>
                 </StackPanel.ToolTip>

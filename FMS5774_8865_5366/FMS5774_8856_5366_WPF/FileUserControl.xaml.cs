@@ -32,7 +32,7 @@ namespace FMS5774_8856_5366_WPF
                 imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit-not-validated.png"));
 
             imageIO.Source = imageSource;
-            nameLabl.Content = myFile.FileName;
+            nameLabel.Content = myFile.FileName;
             TextBlockFileUse.Text = "size file: "+myFile.FileSize.ToString()+ " KB";
         }
     }

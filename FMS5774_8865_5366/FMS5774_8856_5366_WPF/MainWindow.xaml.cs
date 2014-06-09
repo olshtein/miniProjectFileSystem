@@ -95,23 +95,9 @@ namespace FMS5774_8856_5366_WPF
             }
         }
 
-        private void Mount_Disk_Click(object sender, RoutedEventArgs e)
-        {
-            //Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
-            //ofd.Filter = "disk Files (*.disk)|*.disk|All Files (*.*)|*.*";
-            //ofd.ShowDialog();
-            //if (ofd.FileName!="")
-            //{
-            //    Disk add = new Disk();
-            //    string fileNamePart;
-            //    ofd.FileName.CopyTo(0,fileNamePart,0,ofd.FileName.c
-            //    add.Mountdisk(ofd.FileName);
-            //}
-
-        }
-
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            this.Close();
         }
     }
 }

@@ -25,7 +25,12 @@ namespace FMS5774_8856_5366_WPF
             int Used = 1600 - my.Howmuchempty(my.myDiskPointer);
             sizeBar.Value = Convert.ToDouble(Used);
             TextBlockDiskUse.Text = "Used: " +(2* Used).ToString()+" KB";
+<<<<<<< HEAD
             TextBlockDiskFree.Text = "free: " + (2*(1600 - Used)).ToString()+" KB";
+=======
+            TextBlockDiskFree.Text = "Free: " + (2*(1600 - Used)).ToString()+" KB";
+            TextBlockOwner.Text = "Owner: " + Dsk.GetVolumeHeader().DiskOwner;
+>>>>>>> 2b63cf078c8ce318c6ed1ace758139d36c54f2be
             nameLabel.Content = my.GetVolumeHeader().DiskName;
         }
 
