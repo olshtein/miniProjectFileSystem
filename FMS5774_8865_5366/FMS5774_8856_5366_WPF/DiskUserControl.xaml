@@ -17,11 +17,21 @@
                     <GradientStop Color="Blue" Offset="1"/>
                 </RadialGradientBrush>
             </Border.Background>
-            <Border.Effect>
+        <Border.Effect>
                 <DropShadowEffect Color="Gray" Opacity="0.5" />
             </Border.Effect>
 
             <StackPanel Margin="3">
+                <StackPanel.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock x:Name="TextBlockDiskUse"/>
+                            <TextBlock x:Name="TextBlockDiskFree"/>
+
+                        </StackPanel>
+                    </ToolTip>
+                </StackPanel.ToolTip>
+
                 <Image MaxHeight="80" MaxWidth="80" HorizontalAlignment="Center" Source="Resorces/hard_disk_256.png" Margin="3"/>
                 <Grid Margin="3">
                     <ProgressBar x:Name="sizeBar" Height="15"  Maximum="1600" Minimum="4" HorizontalAlignment="Center" Width="92"/>
@@ -29,6 +39,7 @@
                 </Grid>
                 
                 <Label x:Name="nameLabl" HorizontalAlignment="Center" Margin="3" HorizontalContentAlignment="Center" Height="24"/>
+
             </StackPanel>
         </Border>
     </Grid>

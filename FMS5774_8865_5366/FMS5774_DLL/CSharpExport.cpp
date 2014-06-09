@@ -289,10 +289,9 @@ extern "C"
 			throw ex;
 		}
 	}
-	__declspec(dllexport)   void  getDirEntry(Disk* THIS, DirEntry* buffer)
+	__declspec(dllexport)   void  getDirEntry(Disk* THIS, DirEntry* buffer, unsigned int index)
 	{
-		DirEntry * mydir=THIS->getDirEntry();
-		memcpy_s(buffer, sizeof(DirEntry),mydir, sizeof(DirEntry)*ROOT_DIR_LENGTH);
-		delete [] mydir;
+		DirEntry  mydir=THIS->getDirEntry(index);
+		memcpy_s(buffer, sizeof(DirEntry), &mydir, sizeof(DirEntry));
 	}
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows;  
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -20,12 +20,27 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class FileWindow : Window
     {
+         List<DirEntry> allFile; 
+
         public FileWindow(Disk myDisk)
         {
-            //for (int i = 0 ; i>;
-            InitializeComponent();
-        }
 
+            allFile = myDisk.GetDirRoot();
+
+            InitializeComponent();
+            InitializeFileList();
+        }
+        private void InitializeFileList()
+        {
+            foreach (DirEntry file in allFile)
+            {
+                if (file.FileName != "")
+                {
+                    FileUserControl fuc = new FileUserControl(file);
+                    FilesWrapPanel.Children.Insert(0, fuc);
+                }
+            }
+        }
         private void New_File_Click(object sender, RoutedEventArgs e)
         {
 

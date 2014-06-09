@@ -2,6 +2,10 @@
 using System.Windows;
 using FMS5774_Cpp_CSharp_Adapter;
 using System;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2c7c4b70d731416c8b8bdcfcc8d378434b33d4e4
 
 
 namespace FMS5774_8856_5366_WPF
@@ -11,6 +15,7 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class DiskUserControl : UserControl
     {
+<<<<<<< HEAD
         public Disk Dsk { get; set; }
         private Window container;
 
@@ -18,8 +23,17 @@ namespace FMS5774_8856_5366_WPF
         {
             Dsk = my;
             this.container = container;
+=======
+        Disk myDisk;
+        public DiskUserControl(Disk my)
+        {
+            myDisk = my;
+>>>>>>> 2c7c4b70d731416c8b8bdcfcc8d378434b33d4e4
             InitializeComponent();
-            sizeBar.Value = 1600 - Convert.ToDouble(my.Howmuchempty(my.myDiskPointer));
+            int Used = 1600 - my.Howmuchempty(my.myDiskPointer);
+            sizeBar.Value = Convert.ToDouble(Used);
+            TextBlockDiskUse.Text = "Used: " +(2* Used).ToString()+" KB";
+            TextBlockDiskFree.Text = "free: " + (2*(1600 - Used)).ToString()+" KB";
             nameLabl.Content = my.GetVolumeHeader().DiskName;
         }
 
@@ -33,7 +47,13 @@ namespace FMS5774_8856_5366_WPF
 
         void fw_Closed(object sender, EventArgs e)
         {
+<<<<<<< HEAD
             container.Visibility = Visibility.Visible;
+=======
+            FileWindow myFile = new FileWindow(myDisk);
+            myFile.Show();
+
+>>>>>>> 2c7c4b70d731416c8b8bdcfcc8d378434b33d4e4
         }
     }
 }
