@@ -41,11 +41,11 @@
   <ItemGroup>
     <Compile Include="cppToCsharpAdapter.cs" />
     <Compile Include="Disk.cs" />
-    <Compile Include="Employee.cs" />
+    <Compile Include="Record Types\Employee.cs" />
     <Compile Include="FCB.cs" />
-    <Compile Include="Product.cs" />
+    <Compile Include="Record Types\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="store.cs" />
+    <Compile Include="Record Types\store.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
