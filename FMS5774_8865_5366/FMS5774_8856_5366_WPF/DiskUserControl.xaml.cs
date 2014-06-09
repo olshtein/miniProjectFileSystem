@@ -2,8 +2,6 @@
 using System.Windows;
 using FMS5774_Cpp_CSharp_Adapter;
 using System;
-using FMS5774_Cpp_CSharp_Adapter;
-
 
 
 namespace FMS5774_8856_5366_WPF
@@ -13,17 +11,29 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class DiskUserControl : UserControl
     {
-        public DiskUserControl(Disk my)
+        public Disk Dsk { get; set; }
+        private Window container;
+
+        public DiskUserControl(Window container, Disk my)
         {
+            Dsk = my;
+            this.container = container;
             InitializeComponent();
             sizeBar.Value = 1600 - Convert.ToDouble(my.Howmuchempty(my.myDiskPointer));
             nameLabl.Content = my.GetVolumeHeader().DiskName;
-            this.MouseDoubleClick += new System.Windows.Input.MouseButtonEventHandler(doubleClickEvent);
         }
 
-        private void doubleClickEvent(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void DiskUserControl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            FileWindow fw = new FileWindow(Dsk);
+            container.Visibility = Visibility.Hidden;
+            fw.Show();
+            fw.Closed += fw_Closed;
+        }
+
+        void fw_Closed(object sender, EventArgs e)
+        {
+            container.Visibility = Visibility.Visible;
         }
     }
 }

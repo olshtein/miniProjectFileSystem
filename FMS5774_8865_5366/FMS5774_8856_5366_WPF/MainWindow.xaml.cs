@@ -30,7 +30,7 @@ namespace FMS5774_8856_5366_WPF
             {
                 Disk dsk = new Disk();
                 dsk.Mountdisk(Path.GetFileNameWithoutExtension(diskPath));
-                DiskUserControl duc = new DiskUserControl(dsk);
+                DiskUserControl duc = new DiskUserControl(this, dsk);
                 DisksWrapPanel.Children.Insert(0, duc);
             }
         }
@@ -82,7 +82,7 @@ namespace FMS5774_8856_5366_WPF
             {
                 Disk dsk = new Disk();
                 dsk.Createdisk(dlg.DiskName, user);
-                DiskUserControl duc = new DiskUserControl(dsk);
+                DiskUserControl duc = new DiskUserControl(this, dsk);
                 DisksWrapPanel.Children.Insert(0, duc);
             }
         }
