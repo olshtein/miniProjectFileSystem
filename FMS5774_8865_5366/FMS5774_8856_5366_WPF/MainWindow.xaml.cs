@@ -36,8 +36,13 @@ namespace FMS5774_8856_5366_WPF
             foreach (string diskPath in diskPaths)
             {
                 Disk dsk = new Disk();
+<<<<<<< HEAD
+                dsk.Mountdisk(Path.GetFileNameWithoutExtension(diskPath));
+                DiskUserControl duc = new DiskUserControl(this, dsk);
+=======
                 dsk.Mountdisk(Path.GetFileNameWithoutExtension(diskPath));//אולי רק בדאבל קליק
                 DiskUserControl duc = new DiskUserControl(dsk);
+>>>>>>> 2c7c4b70d731416c8b8bdcfcc8d378434b33d4e4
                 DisksWrapPanel.Children.Insert(0, duc);
             }
         }
@@ -88,8 +93,13 @@ namespace FMS5774_8856_5366_WPF
             if (dlg.DialogResult == true)
             {
                 Disk dsk = new Disk();
+<<<<<<< HEAD
+                dsk.Createdisk(dlg.DiskName, user);
+                DiskUserControl duc = new DiskUserControl(this, dsk);
+=======
                 dsk.Createdisk(dlg.DiskName, User);
                 DiskUserControl duc = new DiskUserControl(dsk);
+>>>>>>> 2c7c4b70d731416c8b8bdcfcc8d378434b33d4e4
                 DisksWrapPanel.Children.Insert(0, duc);
             }
         }
