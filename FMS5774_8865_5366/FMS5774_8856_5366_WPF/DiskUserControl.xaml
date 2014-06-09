@@ -4,7 +4,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" d:DesignWidth="100" Height="145" MouseDoubleClick="DiskUserControl_MouseDoubleClick">
+             mc:Ignorable="d" d:DesignWidth="100" Height="153" MouseDoubleClick="DiskUserControl_MouseDoubleClick">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Name="OpenMenuItem" Header="Open" Click="OpenMenuItem_Click" />
+            <Separator/>
+            <MenuItem Name="MountMenuItem" Header="Mount" Visibility="Collapsed" Click="MountMenuItem_Click" />
+            <MenuItem Name="UnmountMenuItem" Header="Unmount" Click="UnmountMenuItem_Click" />
+            <Separator/>
+            <MenuItem Name="FormatMenuItem" Header="Format" IsEnabled="False" Click="FormatMenuItem_Click" />
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <Grid>
         <Grid />
         <Border Margin="4"
@@ -13,8 +23,8 @@
                 CornerRadius="10">
             <Border.Background>
                 <RadialGradientBrush RadiusY="1.5" RadiusX="1.5">
-                    <GradientStop Color="Cyan" Offset="0"/>
-                    <GradientStop Color="Blue" Offset="1"/>
+                    <GradientStop x:Name="innerGStop" Color="Cyan" Offset="0"/>
+                    <GradientStop x:Name="outerGStop" Color="Blue" Offset="1"/>
                 </RadialGradientBrush>
             </Border.Background>
         <Border.Effect>
@@ -34,11 +44,11 @@
 
                 <Image MaxHeight="80" MaxWidth="80" HorizontalAlignment="Center" Source="Resorces/hard_disk_256.png" Margin="3"/>
                 <Grid Margin="3">
-                    <ProgressBar x:Name="sizeBar" Height="15"  Maximum="1600" Minimum="4" HorizontalAlignment="Center" Width="92"/>
-                    <TextBlock Text="{Binding ElementName=sizeBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <ProgressBar x:Name="sizeBar" Margin="3" Height="15"  Maximum="1600" Minimum="4" HorizontalAlignment="Center" Width="70"/>
+                    <TextBlock x:Name="sizeText" Text="{Binding ElementName=sizeBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
                 
-                <Label x:Name="nameLabl" HorizontalAlignment="Center" Margin="3" HorizontalContentAlignment="Center" Height="24"/>
+                <Label x:Name="nameLabel" HorizontalAlignment="Center" Margin="37,3" HorizontalContentAlignment="Center" Height="24"/>
 
             </StackPanel>
         </Border>

@@ -73,6 +73,19 @@ extern "C"
 			throw ex;
 		}
 	}
+
+		__declspec(dllexport) void  ismounted(Disk* THIS)
+	{
+		try
+		{
+			THIS->ismounted();
+		}
+		catch (exception ex)
+		{
+			THIS->SetLastErrorMessage(ex.what());
+			throw ex;
+		}
+	}
 	__declspec(dllexport) void  recreatedisk(Disk* THIS, char* diskOwner)
 	{
 		try

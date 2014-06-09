@@ -148,6 +148,24 @@ namespace FMS5774_Cpp_CSharp_Adapter
             }
         }
 
+        public bool Ismounted(IntPtr THIS)
+        {
+            try
+            {
+                return cppToCsharpAdapter.ismounted(this.myDiskPointer);
+            }
+            catch (SEHException)
+            {
+                IntPtr cString = cppToCsharpAdapter.getLastDiskErrorMessage(this.myDiskPointer);
+                string message = Marshal.PtrToStringAnsi(cString);
+                throw new Exception(message);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void Recreatedisk(string diskOwner)
         {
             try

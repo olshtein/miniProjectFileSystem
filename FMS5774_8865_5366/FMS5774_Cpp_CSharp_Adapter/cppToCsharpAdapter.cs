@@ -229,6 +229,10 @@ namespace FMS5774_Cpp_CSharp_Adapter
         public static extern void unmountdisk(IntPtr THIS);
 
         [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool ismounted(IntPtr THIS);
+
+        [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
         public static extern void recreatedisk(IntPtr THIS, string diskOwner);
 
 

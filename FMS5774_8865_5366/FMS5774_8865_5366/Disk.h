@@ -176,6 +176,19 @@ enum FitType
 
 		/*************************************************
 		* FUNCTION
+		*	ismounted
+		* MEANING
+		*	checks if disk is mounted
+		* RETURN VALUE
+		*	bool
+		* SEE ALSO
+		*	mountdisk(string&)
+		*	unmountdisk()
+		**************************************************/
+		bool ismounted();
+
+		/*************************************************
+		* FUNCTION
 		*	recreatedisk
 		* PARAMETERS
 		*	string&- Disk file path

@@ -35,11 +35,16 @@ namespace FMS5774_Cpp_CSharp_Adapter_Test
                 Console.WriteLine("\nCreate Disk:");
                 Console.WriteLine(ToStringProperty(d.GetVolumeHeader()));
                 d.Mountdisk("disk1");
+                if (d.Ismounted(d.myDiskPointer))
+                    Console.WriteLine("Mounted!");
                 d.Createfile("disk1", "meir", "F", 50, 2, "I", 0);
                 DirEntry newdir = d.GetDirEntry(0);
                 d.Format("oshri");
                 Console.WriteLine("\nFormat Disk:");
                 Console.WriteLine(ToStringProperty(d.GetVolumeHeader()));
+                d.Unmountdisk(d.myDiskPointer);
+                if (d.Ismounted(d.myDiskPointer))
+                    Console.WriteLine("Mounted!");
             }
             catch (Exception e)
             {

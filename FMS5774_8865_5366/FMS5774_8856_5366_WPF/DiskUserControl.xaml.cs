@@ -1,12 +1,9 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows;
+using System.Windows.Media;
 using FMS5774_Cpp_CSharp_Adapter;
 using System;
-<<<<<<< HEAD
-=======
-
->>>>>>> 2c7c4b70d731416c8b8bdcfcc8d378434b33d4e4
-
 
 namespace FMS5774_8856_5366_WPF
 {
@@ -15,45 +12,107 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class DiskUserControl : UserControl
     {
-<<<<<<< HEAD
+
         public Disk Dsk { get; set; }
+
         private Window container;
 
         public DiskUserControl(Window container, Disk my)
         {
             Dsk = my;
             this.container = container;
-=======
-        Disk myDisk;
-        public DiskUserControl(Disk my)
-        {
-            myDisk = my;
->>>>>>> 2c7c4b70d731416c8b8bdcfcc8d378434b33d4e4
             InitializeComponent();
             int Used = 1600 - my.Howmuchempty(my.myDiskPointer);
             sizeBar.Value = Convert.ToDouble(Used);
             TextBlockDiskUse.Text = "Used: " +(2* Used).ToString()+" KB";
             TextBlockDiskFree.Text = "free: " + (2*(1600 - Used)).ToString()+" KB";
-            nameLabl.Content = my.GetVolumeHeader().DiskName;
+            nameLabel.Content = my.GetVolumeHeader().DiskName;
         }
 
-        private void DiskUserControl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void DiskUserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            FileWindow fw = new FileWindow(Dsk);
-            container.Visibility = Visibility.Hidden;
-            fw.Show();
-            fw.Closed += fw_Closed;
+            OpenDisk();
+        }
+
+        private void OpenDisk()
+        {
+            if (Dsk.Ismounted(Dsk.myDiskPointer))
+            {
+                FileWindow fw = new FileWindow(Dsk);
+                container.Visibility = Visibility.Hidden;
+                fw.Show();
+
+                fw.Closed += fw_Closed;
+            }
+            else
+            {
+                MessageBox.Show("Error: Disk is not mounted", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         void fw_Closed(object sender, EventArgs e)
         {
-<<<<<<< HEAD
             container.Visibility = Visibility.Visible;
-=======
-            FileWindow myFile = new FileWindow(myDisk);
-            myFile.Show();
+        }
 
->>>>>>> 2c7c4b70d731416c8b8bdcfcc8d378434b33d4e4
+        private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            OpenDisk();
+        }
+
+        private void UnmountMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Dsk.Unmountdisk(Dsk.myDiskPointer);
+
+            //visual representation
+            sizeBar.Visibility = Visibility.Hidden;
+            sizeText.Visibility = Visibility.Hidden;
+            innerGStop.Color = Colors.LightGray;
+            outerGStop.Color = Colors.Gray;
+
+            //functional changes
+            UnmountMenuItem.Visibility = Visibility.Collapsed;
+            MountMenuItem.Visibility = Visibility.Visible;
+            OpenMenuItem.IsEnabled = false;
+            FormatMenuItem.IsEnabled = true;
+        }
+
+        private void MountMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Dsk.Mountdisk(nameLabel.Content.ToString());
+
+            //visual representation
+            sizeBar.Visibility = Visibility.Visible;
+            sizeText.Visibility = Visibility.Visible;
+            innerGStop.Color = Colors.Cyan;
+            outerGStop.Color = Colors.Blue;
+
+            //functional changes
+            UnmountMenuItem.Visibility = Visibility.Visible;
+            MountMenuItem.Visibility = Visibility.Collapsed;
+            OpenMenuItem.IsEnabled = true;
+            FormatMenuItem.IsEnabled = false;
+        }
+
+        private void FormatMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Dsk.Ismounted(Dsk.myDiskPointer))
+            {
+                MessageBoxResult mbr = MessageBox.Show("This operation can't be undone. are you sure you want to continue?", "Warning!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (mbr == MessageBoxResult.Cancel)
+                    return;
+
+                try
+                {
+                    Dsk.Format(MainWindow.User);
+                    MessageBox.Show("Success! Disk was formated", "Success", MessageBoxButton.OK);
+                }
+                catch (Exception exp)
+                {
+                    MessageBox.Show(exp.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+            }
         }
     }
 }
