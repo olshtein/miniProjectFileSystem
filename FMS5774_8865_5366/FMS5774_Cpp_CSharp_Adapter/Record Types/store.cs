@@ -26,6 +26,11 @@ namespace FMS5774_Cpp_CSharp_Adapter
             address = Address;
             city = City;
         }
+
+        public static uint sizeKey()
+        {
+            return 12; //phone is the key
+        }
         public static uint size()
         {
             return 12 * 4;

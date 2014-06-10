@@ -28,7 +28,10 @@ namespace FMS5774_Cpp_CSharp_Adapter
             salary = Salary;
             seniority = Seniority;
         }
-
+        public static uint sizeKey()
+        {
+            return 12;
+        }
         public static uint size()
         {
             return 12 * 3 + 4 + 4; //3 * string + int + float
