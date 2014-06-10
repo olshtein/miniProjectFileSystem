@@ -7,9 +7,7 @@
         <Menu VerticalAlignment="Top" Height="21">
             <MenuItem Header="File">
                 <MenuItem Header="[N]ew File" InputGestureText="Ctrl+N" Click="New_File_Click"/>
-                <MenuItem Header="[O]pen File" InputGestureText="Ctrl+O"  Click="open_File_Click"/>
-                <MenuItem Header="[D]elete file" InputGestureText="Ctrl+D" Click="delete_File" />
-
+                <Separator/>
                 <MenuItem Header="Exit" InputGestureText="Alt+F4"  Click="Exit_Click"/>
             </MenuItem>
         </Menu>
