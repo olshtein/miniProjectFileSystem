@@ -76,7 +76,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\Extended WPF Toolkit\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\..\Visual Studio 2012\Projects\dotNet5774_Project01_5366_6903\ExtendedWPFToolkit_Binaries\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -89,8 +89,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CreateFile.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DiskUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
