@@ -76,7 +76,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\..\Visual Studio 2012\Projects\dotNet5774_Project01_5366_6903\ExtendedWPFToolkit_Binaries\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\Extended WPF Toolkit\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +85,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="CreateDisk\CreateDiskDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateFile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -115,6 +119,9 @@
     <Compile Include="Converters\ValuePercentageConverter.cs" />
     <Compile Include="CreateDisk\CreateDiskDialog.xaml.cs">
       <DependentUpon>CreateDiskDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreateFile.xaml.cs">
+      <DependentUpon>CreateFile.xaml</DependentUpon>
     </Compile>
     <Compile Include="DiskUserControl.xaml.cs">
       <DependentUpon>DiskUserControl.xaml</DependentUpon>

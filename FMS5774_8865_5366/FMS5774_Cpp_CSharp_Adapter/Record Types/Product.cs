@@ -27,6 +27,10 @@ namespace FMS5774_Cpp_CSharp_Adapter
             supplier = Supplier;
             price = Price;
         }
+        public static uint sizeKey()
+        {
+            return sizeof(int);
+        }
 
         public static uint size()
         {
