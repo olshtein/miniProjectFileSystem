@@ -28,9 +28,8 @@ FCB::FCB(Disk * disk)
 	changeDir = false;
 }
 
-FCB::~FCB(void)
+FCB::~FCB()
 {
-	delete this;
 }
 
 void FCB::closefile()

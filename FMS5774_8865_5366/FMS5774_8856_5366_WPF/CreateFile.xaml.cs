@@ -56,7 +56,6 @@ namespace FMS5774_8856_5366_WPF
            }
 
            myDisk.Createfile(this.nameRec.Text, MainWindow.User, "F", sizeClass, Convert.ToUInt32(Math.Ceiling((Double)(numRec.Value * sizeClass) / 1020)), "I", 0, sizeOffset);
-            //                d.Createfile("disk1", "meir", "F", 50, 2, "I", 0);
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)

@@ -23,10 +23,13 @@ namespace FMS5774_8856_5366_WPF
          List<DirEntry> allFile;
          private Disk dsk;
 
+         public List<FCB> FCBList { get; set; }
+
         public FileWindow(Disk dsk)
         {
             this.dsk = dsk;
             allFile = dsk.GetDirRoot();
+            FCBList = new List<FCB>();
 
             InitializeComponent();
             InitializeFileList();
@@ -49,7 +52,7 @@ namespace FMS5774_8856_5366_WPF
         {
             FileUserControl fuc = (FileUserControl)sender;
 
-            dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO");
+            FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO"));
         }
         private void New_File_Click(object sender, RoutedEventArgs e)
         {
