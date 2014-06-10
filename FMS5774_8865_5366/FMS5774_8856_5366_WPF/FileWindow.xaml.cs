@@ -20,12 +20,14 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class FileWindow : Window
     {
-         List<DirEntry> allFile; 
+         List<DirEntry> allFile;
 
-        public FileWindow(Disk myDisk)
+         private Disk dsk;
+
+        public FileWindow(Disk dsk)
         {
-
-            allFile = myDisk.GetDirRoot();
+            this.dsk = dsk;
+            allFile = dsk.GetDirRoot();
 
             InitializeComponent();
             InitializeFileList();
@@ -38,11 +40,20 @@ namespace FMS5774_8856_5366_WPF
                 {
                     FileUserControl fuc = new FileUserControl(file);
                     FilesWrapPanel.Children.Insert(0, fuc);
+                    fuc.MouseDoubleClick += fuc_MouseDoubleClick;
                 }
             }
         }
+
+        void fuc_MouseDoubleClick(object sender, EventArgs e)
+        {
+            FileUserControl fuc = (FileUserControl)sender;
+
+            dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO");
+        }
         private void New_File_Click(object sender, RoutedEventArgs e)
         {
+
 
         }
 
@@ -58,7 +69,7 @@ namespace FMS5774_8856_5366_WPF
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
         }
 
         private void New_Files_Click(object sender, RoutedEventArgs e)
