@@ -76,7 +76,14 @@ namespace FMS5774_8856_5366_WPF
         {
             CreateFile my = new CreateFile(dsk);
             my.Show();
+            this.Visibility = Visibility.Hidden;
+            my.Closed += my_Closed;
 
+        }
+
+        void my_Closed(object sender, EventArgs e)
+        {
+            this.Visibility = Visibility.Visible;
         }
     }
 }

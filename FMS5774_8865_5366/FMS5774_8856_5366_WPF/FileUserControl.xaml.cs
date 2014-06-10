@@ -22,10 +22,14 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class FileUserControl : UserControl
     {
+        public DirEntry DirEntry { get; set; }
+
         public FileUserControl(DirEntry myFile)
         {
             ImageSource imageSource;
             InitializeComponent();
+
+            DirEntry = myFile;
 
             if (MainWindow.User == myFile.FileOwner)
                 imageSource = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "\\..\\..\\Resorces\\edit.png"));
