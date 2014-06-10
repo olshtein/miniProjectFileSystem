@@ -21,29 +21,19 @@ namespace FMS5774_8856_5366_WPF
     public partial class FileWindow : Window
     {
          List<DirEntry> allFile;
-<<<<<<< HEAD
-
          private Disk dsk;
 
         public FileWindow(Disk dsk)
         {
             this.dsk = dsk;
             allFile = dsk.GetDirRoot();
-=======
-         private Disk myDisk;
-
-        public FileWindow(Disk my)
-        {
-            myDisk = my;
-           
->>>>>>> origin/master
 
             InitializeComponent();
             InitializeFileList();
         }
         private void InitializeFileList()
         {
-            allFile = myDisk.GetDirRoot();
+            allFile = dsk.GetDirRoot();
             foreach (DirEntry file in allFile)
             {
                 if (file.FileName != "")
@@ -84,9 +74,8 @@ namespace FMS5774_8856_5366_WPF
 
         private void New_Files_Click(object sender, RoutedEventArgs e)
         {
-            CreateFile my = new CreateFile(myDisk);
+            CreateFile my = new CreateFile(dsk);
             my.Show();
-
 
         }
     }
