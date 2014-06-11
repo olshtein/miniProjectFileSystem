@@ -24,6 +24,8 @@ namespace FMS5774_8856_5366_WPF
         public RecordsWindow(FCB fcb)
         {
             InitializeComponent();
+            fcb.seekRec(0, 0);
+            //InitRecordFields();
         }
     }
 }

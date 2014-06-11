@@ -5,6 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="120" d:DesignWidth="99">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Name="OpenMenuItem" Header="Open" Click="OpenMenuItem_Click" />
+            <MenuItem Name="OpenReadOnlyMenuItem" Header="Open in Read Only mode" Click="OpenReadOnlyMenuItem_Click" />
+            <MenuItem Name="OpenAddOnlyMenuItem" Header="Open in Add Only mode" Click="OpenAddOnlyMenuItem_Click" />
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <Grid>
         <Border Margin="4"
                 BorderBrush="White"

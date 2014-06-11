@@ -24,6 +24,10 @@ namespace FMS5774_8856_5366_WPF
     {
         public DirEntry DirEntry { get; set; }
 
+        public event EventHandler OpenMenuItemClicked;
+        public event EventHandler OpenReadOnlyMenuItemClicked;
+        public event EventHandler OpenAddOnlyMenuItemClicked;
+
         public FileUserControl(DirEntry myFile)
         {
             ImageSource imageSource;
@@ -39,6 +43,36 @@ namespace FMS5774_8856_5366_WPF
             imageIO.Source = imageSource;
             nameLabel.Content = myFile.FileName;
             TextBlockFileUse.Text = "size file: "+myFile.FileSize.ToString()+ " KB";
+
+            if (myFile.FileOwner != MainWindow.User)
+            {
+                OpenAddOnlyMenuItem.Visibility = Visibility.Collapsed;
+                OpenMenuItem.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void OpenMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (OpenMenuItemClicked != null)
+            {
+                OpenMenuItemClicked(this, EventArgs.Empty);
+            }
+        }
+
+        private void OpenReadOnlyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (OpenReadOnlyMenuItemClicked != null)
+            {
+                OpenReadOnlyMenuItemClicked(this, EventArgs.Empty);
+            }
+        }
+
+        private void OpenAddOnlyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (OpenAddOnlyMenuItemClicked != null)
+            {
+                OpenAddOnlyMenuItemClicked(this, EventArgs.Empty);
+            }
         }
     }
 }

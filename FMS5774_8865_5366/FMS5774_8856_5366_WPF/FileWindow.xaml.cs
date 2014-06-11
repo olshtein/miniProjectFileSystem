@@ -46,9 +46,61 @@ namespace FMS5774_8856_5366_WPF
                 {
                     FileUserControl fuc = new FileUserControl(file);
                     FilesWrapPanel.Children.Insert(0, fuc);
+
                     fuc.MouseDoubleClick += fuc_MouseDoubleClick;
+                    fuc.OpenMenuItemClicked += fuc_OpenMenuItemClicked;
+                    fuc.OpenReadOnlyMenuItemClicked += fuc_OpenReadOnlyMenuItemClicked;
+                    fuc.OpenAddOnlyMenuItemClicked += fuc_OpenAddOnlyMenuItemClicked;
                 }
             }
+        }
+
+        void fuc_OpenAddOnlyMenuItemClicked(object sender, EventArgs e)
+        {
+            FileUserControl fuc = (FileUserControl)sender;
+
+            OpenFileAddOnly(fuc);
+        }
+
+        void fuc_OpenReadOnlyMenuItemClicked(object sender, EventArgs e)
+        {
+            FileUserControl fuc = (FileUserControl)sender;
+
+            OpenFileReadOnly(fuc);
+        }
+
+        private void OpenFileReadOnly(FileUserControl fuc)
+        {
+
+            if ((from i in FCBList
+                 where i.GetFileDescription().FileName == fuc.DirEntry.FileName
+                 select i).AsParallel().FirstOrDefault() != null)
+                return;// create only one FCB.
+            FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "O"));
+
+            RecordsWindow rw = new RecordsWindow(FCBList[0]);
+            subwindows.Add(rw);
+            rw.Show();
+        }
+
+        void fuc_OpenMenuItemClicked(object sender, EventArgs e)
+        {
+            FileUserControl fuc = (FileUserControl)sender;
+
+            OpenFileAddOnly(fuc);
+        }
+
+        private void OpenFileAddOnly(FileUserControl fuc)
+        {
+            if ((from i in FCBList
+                 where i.GetFileDescription().FileName == fuc.DirEntry.FileName
+                 select i).AsParallel().FirstOrDefault() != null)
+                return;// create only one FCB.
+            FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "E"));
+
+            RecordsWindow rw = new RecordsWindow(FCBList[0]);
+            subwindows.Add(rw);
+            rw.Show();
         }
 
         private void ClearFileList()
@@ -60,6 +112,14 @@ namespace FMS5774_8856_5366_WPF
         {
             FileUserControl fuc = (FileUserControl)sender;
 
+            if (fuc.DirEntry.FileOwner == MainWindow.User)
+                OpenFile(fuc);
+            else
+                OpenFileReadOnly(fuc);
+        }
+
+        private void OpenFile(FileUserControl fuc)
+        {
             if ((from i in FCBList
                  where i.GetFileDescription().FileName == fuc.DirEntry.FileName
                  select i).AsParallel().FirstOrDefault() != null)
@@ -69,7 +129,6 @@ namespace FMS5774_8856_5366_WPF
             RecordsWindow rw = new RecordsWindow(FCBList[0]);
             subwindows.Add(rw);
             rw.Show();
-
         }
         private void New_File_Click(object sender, RoutedEventArgs e)
         {
