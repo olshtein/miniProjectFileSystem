@@ -118,6 +118,8 @@ extern "C"
 		**************************************************/
 		~FCB(void);
 
+		DirEntry getFileDesctription();
+
 		/*************************************************
 		* FUNCTION
 		*	closefile

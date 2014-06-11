@@ -32,6 +32,11 @@ FCB::~FCB()
 {
 }
 
+DirEntry FCB::getFileDesctription()
+{
+	return fileDesc;
+}
+
 void FCB::closefile()
 {
 	if (iostate!=I && changeBuf)

@@ -18,6 +18,31 @@ namespace FMS5774_Cpp_CSharp_Adapter
                 cppToCsharpAdapter.deleteFcbObject(ref myFCBpointer);
         }
 
+        public DirEntry GetFileDescription()
+        {
+            try
+            {
+                DirEntry d = new DirEntry();
+                IntPtr buffer = Marshal.AllocHGlobal(Marshal.SizeOf(d.GetType()));
+                // ... send buffer to dll        
+                cppToCsharpAdapter.getFileDesctription(this.myFCBpointer, buffer);
+                Marshal.PtrToStructure(buffer, d);
+                // free allocate        
+                Marshal.FreeHGlobal(buffer);
+                return d;
+            }
+            catch (SEHException)
+            {
+                IntPtr cString = cppToCsharpAdapter.getLastFcbErrorMessage(this.myFCBpointer);
+                string message = Marshal.PtrToStringAnsi(cString);
+                throw new Exception(message);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public void Closefile()
         {
             try

@@ -1,0 +1,10 @@
+﻿<Window x:Class="FMS5774_8856_5366_WPF.RecordsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RecordsWindow" Height="300" Width="300">
+    <StackPanel>
+        <ComboBox Text="Choose Record...">
+            
+        </ComboBox>
+    </StackPanel>
+</Window>

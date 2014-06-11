@@ -185,6 +185,19 @@ extern "C"
 
 
 	// FCB
+	__declspec(dllexport) void getFileDesctription(FCB* THIS, DirEntry* buffer)
+	{
+		try
+		{
+			memcpy_s(buffer, sizeof(DirEntry), &THIS->getFileDesctription(), sizeof(DirEntry));
+		}
+		catch (exception ex)
+		{
+			THIS->SetLastErrorMessage(ex.what());
+			throw ex;
+		}
+	}
+
 	__declspec(dllexport) void  closefile(FCB* THIS)
 	{
 		try

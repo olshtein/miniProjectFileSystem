@@ -6,7 +6,7 @@
     <Grid>
         <xctk:IntegerUpDown Margin="162,60,10,180" x:Name="numRec"></xctk:IntegerUpDown>
         <ComboBox HorizontalAlignment="Left" x:Name="typeRec" Margin="162,14,0,0" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Height="23" x:Name="nameRec" Margin="162,112,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" MaxLength="10" Height="23" x:Name="nameRec" Margin="162,112,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <Label Content="record type" HorizontalAlignment="Left" Margin="22,14,0,0" VerticalAlignment="Top" Width="72"/>
         <Label Content="record amount" HorizontalAlignment="Left" Margin="22,60,0,0" VerticalAlignment="Top"/>
         <Button Content="OK" HorizontalAlignment="Left" Margin="56,239,0,0" VerticalAlignment="Top" Width="75" Click="OK_Click"/>

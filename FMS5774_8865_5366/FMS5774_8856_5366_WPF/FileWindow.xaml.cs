@@ -22,6 +22,7 @@ namespace FMS5774_8856_5366_WPF
     {
          List<DirEntry> allFile;
          private Disk dsk;
+         private List<Window> subwindows;
 
          public List<FCB> FCBList { get; set; }
 
@@ -30,12 +31,14 @@ namespace FMS5774_8856_5366_WPF
             this.dsk = dsk;
             allFile = dsk.GetDirRoot();
             FCBList = new List<FCB>();
+            subwindows = new List<Window>();
 
             InitializeComponent();
             InitializeFileList();
         }
         private void InitializeFileList()
         {
+            ClearFileList();
             allFile = dsk.GetDirRoot();
             foreach (DirEntry file in allFile)
             {
@@ -48,26 +51,29 @@ namespace FMS5774_8856_5366_WPF
             }
         }
 
+        private void ClearFileList()
+        {
+            FilesWrapPanel.Children.RemoveRange(0, FilesWrapPanel.Children.Count - 1); // delete all fuc, leave button.
+        }
+
         void fuc_MouseDoubleClick(object sender, EventArgs e)
         {
             FileUserControl fuc = (FileUserControl)sender;
 
+            if ((from i in FCBList
+                 where i.GetFileDescription().FileName == fuc.DirEntry.FileName
+                 select i).AsParallel().FirstOrDefault() != null)
+                return;// create only one FCB.
             FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO"));
+
+            RecordsWindow rw = new RecordsWindow(FCBList[0]);
+            subwindows.Add(rw);
+            rw.Show();
+
         }
         private void New_File_Click(object sender, RoutedEventArgs e)
         {
-
-
-        }
-
-        private void open_File_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void delete_File(object sender, RoutedEventArgs e)
-        {
-
+            CreateFile();
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -75,18 +81,28 @@ namespace FMS5774_8856_5366_WPF
             this.Close();
         }
 
-        private void New_Files_Click(object sender, RoutedEventArgs e)
+        private void CreateFileButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateFile my = new CreateFile(dsk);
-            my.Show();
-            this.Visibility = Visibility.Hidden;
-            my.Closed += my_Closed;
-
+            CreateFile();
         }
 
-        void my_Closed(object sender, EventArgs e)
+        private void CreateFile()
         {
-            this.Visibility = Visibility.Visible;
+            CreateFile cf = new CreateFile(dsk);
+            subwindows.Add(cf);
+            cf.Show();
+            cf.Closed += cf_Closed;
+        }
+
+        void cf_Closed(object sender, EventArgs e)
+        {
+            InitializeFileList();
+        }
+
+        void Window_Closed(object sender, EventArgs e)
+        {
+            foreach (Window win in subwindows)
+                win.Close();
         }
     }
 }

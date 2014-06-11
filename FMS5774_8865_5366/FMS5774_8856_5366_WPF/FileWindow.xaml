@@ -1,7 +1,7 @@
 ﻿<Window x:Class="FMS5774_8856_5366_WPF.FileWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="FileWindow"  Height="350" Width="525">
+        Title="FileWindow"  Height="350" Width="525" Closed="Window_Closed">
 
     <StackPanel>
         <Menu VerticalAlignment="Top" Height="21">
@@ -13,7 +13,7 @@
         </Menu>
 
         <WrapPanel Name="FilesWrapPanel" Margin="3">
-            <Button Name="FilesDiskButton" Content="Create file" MinHeight="99" MaxWidth="120" Margin="3" Click="New_Files_Click"/>
+            <Button Name="CreateFileButton" Content="Create file" MinHeight="99" MaxWidth="120" Margin="3" Click="CreateFileButton_Click"/>
         </WrapPanel>
     </StackPanel>
 </Window>

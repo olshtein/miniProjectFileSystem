@@ -264,6 +264,10 @@ namespace FMS5774_Cpp_CSharp_Adapter
 
 
         // FCB
+
+        [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void getFileDesctription(IntPtr THIS, IntPtr buffer);
+
         [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
         public static extern void closefile(IntPtr THIS);
 
