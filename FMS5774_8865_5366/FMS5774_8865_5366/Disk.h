@@ -75,7 +75,7 @@ enum FitType
 		RootDirectory rootdir; // the disk's Root Directory
 		Dat dat;  // the disk's DAT
 
-		string lastErrorMessage;
+		string lastErrorMessage;//Stores message exception in case of error
 
 		/*************************************************
 		* FUNCTION
@@ -460,21 +460,39 @@ enum FitType
 		*	FCB
 		**************************************************/
 		FCB* openfile(string &, string &, string &);
-
-		string& GetLastErrorMessage();
-
-			/*************************************************
+		/*************************************************
 		* FUNCTION
-		*	getUseDisk
+		*	GetLastErrorMessage
 		* MEANING
-		*	returns int
+		*	Returns the error message 
 		* RETURN VALUE
-		*	Returns the actual use of the disk (multiple sectors occupied).
+		*	returns the string.
 		* SEE ALSO
 		*
 		**************************************************/
-		int getUseDisk();
+		string& GetLastErrorMessage();
 
+		//	/*************************************************
+		//* FUNCTION
+		//*	getUseDisk
+		//* MEANING
+		//*	returns int
+		//* RETURN VALUE
+		//*	Returns the actual use of the disk (multiple sectors occupied).
+		//* SEE ALSO
+		//*
+		//**************************************************/
+		//int getUseDisk();
+
+		/*************************************************
+		* FUNCTION
+		*	SetLastErrorMessage
+		* PARAMETERS
+		*	string & - Error message
+		* MEANING
+		*	Saves the error messages
+		*
+		**************************************************/
 		void Disk::SetLastErrorMessage(string lastErrorMessage);
 
 		
@@ -501,6 +519,19 @@ enum FitType
 		*
 		**************************************************/
 		 Dat getDAT();
+
+		 /*************************************************
+		* FUNCTION
+		*	getDirEntry
+		* PARAMETERS
+		* int - index of dirEntry
+		* MEANING
+		*	Returns  dirEntry by index
+		* RETURN VALUE
+		*	returns the dirEntry.
+		* SEE ALSO
+		*
+		**************************************************/
 
 		 DirEntry  getDirEntry(unsigned int);
 

@@ -290,18 +290,18 @@ extern "C"
 		str = ss.str();
 		return str.c_str();
 	}
-	__declspec(dllexport) int getUseDisk(Disk* THIS)
-		{
-		try
-		{
-			return THIS->getUseDisk();
-		}
-		catch (exception ex)
-		{
-			THIS->SetLastErrorMessage(ex.what());
-			throw ex;
-		}
-	}
+	//__declspec(dllexport) int getUseDisk(Disk* THIS)
+	//	{
+	//	try
+	//	{
+	//		return THIS->getUseDisk();
+	//	}
+	//	catch (exception ex)
+	//	{
+	//		THIS->SetLastErrorMessage(ex.what());
+	//		throw ex;
+	//	}
+	//}
 	__declspec(dllexport)   void  getDirEntry(Disk* THIS, DirEntry* buffer, unsigned int index)
 	{
 		DirEntry  mydir=THIS->getDirEntry(index);
