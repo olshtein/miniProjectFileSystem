@@ -327,6 +327,11 @@ void FCB::addMemory(unsigned int num)
 		throw exception(ex);
 	}
 }
+string FCB::IorO()
+		{
+			
+			return converIOEnumToString(iostate);
+		}
 
 // Stage 4-5
 

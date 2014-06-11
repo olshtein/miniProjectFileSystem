@@ -303,6 +303,6 @@ namespace FMS5774_Cpp_CSharp_Adapter
 
         [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool IorO(IntPtr THIS);
+        public static extern string IorO(IntPtr THIS);
     }
 }

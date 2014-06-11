@@ -186,7 +186,7 @@ namespace FMS5774_Cpp_CSharp_Adapter
             }
         }
 
-        public bool IorO()
+        public string IorO()
         {
             try
             {

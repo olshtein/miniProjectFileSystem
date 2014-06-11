@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Disk.h"
+#include <string>
 
 using namespace std;
 
@@ -37,7 +38,7 @@ enum IOState
 * SEE ALSO
 *   IOState
 **************************************************/
-IOState static conver(const string & io)
+IOState static converToIOEnum(const string & io)
 {
 	if (io=="I")
 		return I;
@@ -47,6 +48,18 @@ IOState static conver(const string & io)
 		return IO;
 	if (io=="E")
 		return E;
+	throw exception("ERROR: Bad I/O value");
+};
+string static converIOEnumToString(const IOState & io)
+{
+	if (io==I)
+		return "I";
+	if (io==O)
+		return "O";
+	if (io==IO)
+		return "IO";
+	if (io==E)
+		return "E";
 	throw exception("ERROR: Bad I/O value");
 };
 
@@ -232,6 +245,9 @@ extern "C"
 		*	updateCancel()
 		**************************************************/
 		void updateCancel();
+
+
+		string IorO();
 		
 		void addMemory(unsigned int num); // needed? wanted?
 
@@ -295,12 +311,7 @@ extern "C"
 
 		unsigned int locationSector(unsigned int);
 
-		bool IorO()
-		{
-			if (iostate != I)
-				return true;
-			return false;
-		}
+	
 
 
 

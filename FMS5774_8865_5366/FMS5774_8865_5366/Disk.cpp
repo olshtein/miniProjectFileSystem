@@ -591,7 +591,7 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 				memcpy(&my,&newFcb->Buffer,sizeof(Sector));
 				newFcb->fileDesc = my.fileDesc;
 				newFcb->FAT = my.FAT;
-				newFcb->iostate=conver(io);
+				newFcb->iostate=converToIOEnum(io);
 				newFcb->placeDir=i;
 				if (newFcb->iostate != I)
 					newFcb->lock = true;
