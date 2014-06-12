@@ -131,7 +131,6 @@ extern "C"
 		**************************************************/
 		~FCB(void);
 
-		DirEntry getFileDesctription();
 
 		/*************************************************
 		* FUNCTION
@@ -245,14 +244,56 @@ extern "C"
 		*	updateCancel()
 		**************************************************/
 		void updateCancel();
-
-
+		/*************************************************
+		* FUNCTION
+		*	getFileDesctription
+		* RETURN VALUE
+		*	DirEntry
+		* MEANING
+		*	return  DirEntry to file
+		**************************************************/
+		DirEntry getFileDesctription();
+		/*************************************************
+		* FUNCTION
+		*	IorO
+		* RETURN VALUE
+		*	sring - the status of the iostate
+		* MEANING
+		*	return iostate after convert to string
+		**************************************************/
 		string IorO();
-		
-		void addMemory(unsigned int num); // needed? wanted?
-
+		/*************************************************
+		* FUNCTION
+		*	addMemory
+		* PARAMETERS
+		*	unsigned int - number of sectors needed
+		* MEANING
+		*	to done allocextend number of sectors needed
+		* SEE ALSO
+		*	disk::allocextend()
+		**************************************************/
+		void addMemory(unsigned int num); 
+		/*************************************************
+		* FUNCTION
+		*	GetLastErrorMessage
+		* RETURN VALUE
+		*	string -error nessage.
+		* MEANING
+		*	Is designed to send messages in case of error
+		* SEE ALSO
+		*	 SetLastErrorMessage(string)
+		**************************************************/
 		string& GetLastErrorMessage();
-
+		/*************************************************
+		* FUNCTION
+		*	 SetLastErrorMessage
+		* PARAMETERS
+		*	string - error nessage.
+		* MEANING
+		*	Is designed to keep messages in case of error
+		* SEE ALSO
+		*	GetLastErrorMessage()
+		**************************************************/
 		void SetLastErrorMessage(string lastErrorMessage);
 
 
@@ -308,7 +349,18 @@ extern "C"
 		*
 		**************************************************/
 		bool isKeyNull();
-
+		/*************************************************
+		* FUNCTION
+		*	checkchanges
+		* PARAMETERS
+		*	unsigned int- num of sector in file
+		* RETURN VALUE
+		*	unsigned int -location sector in disk.
+		* MEANING
+		*	Looking for the location of the sector  in the disc with mapdisk
+		* SEE ALSO
+		*	disk::mapDisk()
+		**************************************************/
 		unsigned int locationSector(unsigned int);
 
 	
