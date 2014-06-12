@@ -22,6 +22,9 @@ namespace FMS5774_8856_5366_WPF
     public partial class CreateFile : Window
     {
         Disk myDisk;
+        uint sizeClass = 0;
+        uint sizeOffset = 4;
+        uint maxRec = 0;
         public CreateFile(Disk my)
         {
             try
@@ -88,6 +91,33 @@ namespace FMS5774_8856_5366_WPF
             {
                 ErrorHandling.ShowError(exp.Message);
             }
+        }
+        private void sizeRec()
+        {
+            switch (typeRec.SelectedItem.ToString())
+            {
+                case "employee":
+                    sizeClass = Employee.size();
+                    sizeOffset = Employee.sizeKey();
+                    break;
+                case "store":
+                    sizeClass = store.size();
+                    sizeOffset = store.sizeKey();
+                    break;
+                case "Product":
+                    sizeClass = Product.size();
+                    sizeOffset = Product.sizeKey();
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        private void TypeRec_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            sizeRec();
+            maxRec = (uint)(myDisk.Howmuchempty(myDisk.myDiskPointer) * (1020 / sizeClass));
         }
 
     }
