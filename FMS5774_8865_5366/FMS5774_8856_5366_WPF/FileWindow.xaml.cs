@@ -28,140 +28,253 @@ namespace FMS5774_8856_5366_WPF
 
         public FileWindow(Disk dsk)
         {
-            this.dsk = dsk;
-            allFile = dsk.GetDirRoot();
-            FCBList = new List<FCB>();
-            subwindows = new List<Window>();
+            try
+            {
+                this.dsk = dsk;
+                allFile = dsk.GetDirRoot();
+                FCBList = new List<FCB>();
+                subwindows = new List<Window>();
 
-            InitializeComponent();
-            InitializeFileList();
+                InitializeComponent();
+                InitializeFileList();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
         private void InitializeFileList()
         {
-            ClearFileList();
-            allFile = dsk.GetDirRoot();
-            foreach (DirEntry file in allFile)
+            try
             {
-                if (file.FileName != "")
+                ClearFileList();
+                allFile = dsk.GetDirRoot();
+                foreach (DirEntry file in allFile)
                 {
-                    FileUserControl fuc = new FileUserControl(file);
-                    FilesWrapPanel.Children.Insert(0, fuc);
+                    if (file.FileName != "")
+                    {
+                        FileUserControl fuc = new FileUserControl(file);
+                        FilesWrapPanel.Children.Insert(0, fuc);
 
-                    fuc.MouseDoubleClick += fuc_MouseDoubleClick;
-                    fuc.OpenMenuItemClicked += fuc_OpenMenuItemClicked;
-                    fuc.OpenReadOnlyMenuItemClicked += fuc_OpenReadOnlyMenuItemClicked;
-                    fuc.OpenAddOnlyMenuItemClicked += fuc_OpenAddOnlyMenuItemClicked;
+                        fuc.MouseDoubleClick += fuc_MouseDoubleClick;
+                        fuc.OpenMenuItemClicked += fuc_OpenMenuItemClicked;
+                        fuc.OpenReadOnlyMenuItemClicked += fuc_OpenReadOnlyMenuItemClicked;
+                        fuc.OpenAddOnlyMenuItemClicked += fuc_OpenAddOnlyMenuItemClicked;
+                    }
                 }
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
             }
         }
 
         void fuc_OpenAddOnlyMenuItemClicked(object sender, EventArgs e)
         {
-            FileUserControl fuc = (FileUserControl)sender;
+            try
+            {
+                FileUserControl fuc = (FileUserControl)sender;
 
-            OpenFileAddOnly(fuc);
+                OpenFileAddOnly(fuc);
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         void fuc_OpenReadOnlyMenuItemClicked(object sender, EventArgs e)
         {
-            FileUserControl fuc = (FileUserControl)sender;
+            try
+            {
+                FileUserControl fuc = (FileUserControl)sender;
 
-            OpenFileReadOnly(fuc);
+                OpenFileReadOnly(fuc);
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         private void OpenFileReadOnly(FileUserControl fuc)
         {
 
-            if ((from i in FCBList
-                 where i.GetFileDescription().FileName == fuc.DirEntry.FileName
-                 select i).AsParallel().FirstOrDefault() != null)
-                return;// create only one FCB.
-            FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "O"));
+            try
+            {
+                if ((from i in FCBList
+                     where i.GetFileDescription().FileName == fuc.DirEntry.FileName
+                     select i).AsParallel().FirstOrDefault() != null)
+                    return;// create only one FCB.
+                FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "O"));
 
-            RecordsWindow rw = new RecordsWindow(FCBList[0]);
-            subwindows.Add(rw);
-            rw.Show();
+                RecordsWindow rw = new RecordsWindow(FCBList[0]);
+                subwindows.Add(rw);
+                rw.Show();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         void fuc_OpenMenuItemClicked(object sender, EventArgs e)
         {
-            FileUserControl fuc = (FileUserControl)sender;
+            try
+            {
+                FileUserControl fuc = (FileUserControl)sender;
 
-            OpenFileAddOnly(fuc);
+                OpenFileAddOnly(fuc);
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         private void OpenFileAddOnly(FileUserControl fuc)
         {
-            if ((from i in FCBList
-                 where i.GetFileDescription().FileName == fuc.DirEntry.FileName
-                 select i).AsParallel().FirstOrDefault() != null)
-                return;// create only one FCB.
-            FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "E"));
+            try
+            {
+                if ((from i in FCBList
+                     where i.GetFileDescription().FileName == fuc.DirEntry.FileName
+                     select i).AsParallel().FirstOrDefault() != null)
+                    return;// create only one FCB.
+                FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "E"));
 
-            RecordsWindow rw = new RecordsWindow(FCBList[0]);
-            subwindows.Add(rw);
-            rw.Show();
+                RecordsWindow rw = new RecordsWindow(FCBList[0]);
+                subwindows.Add(rw);
+                rw.Show();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         private void ClearFileList()
         {
-            FilesWrapPanel.Children.RemoveRange(0, FilesWrapPanel.Children.Count - 1); // delete all fuc, leave button.
+            try
+            {
+                FilesWrapPanel.Children.RemoveRange(0, FilesWrapPanel.Children.Count - 1); // delete all fuc, leave button.
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         void fuc_MouseDoubleClick(object sender, EventArgs e)
         {
-            FileUserControl fuc = (FileUserControl)sender;
+            try
+            {
+                FileUserControl fuc = (FileUserControl)sender;
 
-            if (fuc.DirEntry.FileOwner == MainWindow.User)
-                OpenFile(fuc);
-            else
-                OpenFileReadOnly(fuc);
+                if (fuc.DirEntry.FileOwner == MainWindow.User)
+                    OpenFile(fuc);
+                else
+                    OpenFileReadOnly(fuc);
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         private void OpenFile(FileUserControl fuc)
         {
-            if ((from i in FCBList
-                 where i.GetFileDescription().FileName == fuc.DirEntry.FileName
-                 select i).AsParallel().FirstOrDefault() != null)
-                return;// create only one FCB.
-            FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO"));
+            try
+            {
+                if ((from i in FCBList
+                     where i.GetFileDescription().FileName == fuc.DirEntry.FileName
+                     select i).AsParallel().FirstOrDefault() != null)
+                    return;// create only one FCB.
+                FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO"));
 
-            RecordsWindow rw = new RecordsWindow(FCBList[0]);
-            subwindows.Add(rw);
-            rw.Show();
+                RecordsWindow rw = new RecordsWindow(FCBList[0]);
+                subwindows.Add(rw);
+                rw.Show();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
         private void New_File_Click(object sender, RoutedEventArgs e)
         {
-            CreateFile();
+            try
+            {
+                CreateFile();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            try
+            {
+                this.Close();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         private void CreateFileButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateFile();
+            try
+            {
+                CreateFile();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         private void CreateFile()
         {
-            CreateFile cf = new CreateFile(dsk);
-            subwindows.Add(cf);
-            cf.Show();
-            cf.Closed += cf_Closed;
+            try
+            {
+                CreateFile cf = new CreateFile(dsk);
+                subwindows.Add(cf);
+                cf.Show();
+                cf.Closed += cf_Closed;
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         void cf_Closed(object sender, EventArgs e)
         {
-            InitializeFileList();
+            try
+            {
+
+                InitializeFileList();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         void Window_Closed(object sender, EventArgs e)
         {
-            foreach (Window win in subwindows)
-                win.Close();
+            try
+            {
+                foreach (Window win in subwindows)
+                    win.Close();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
     }
 }

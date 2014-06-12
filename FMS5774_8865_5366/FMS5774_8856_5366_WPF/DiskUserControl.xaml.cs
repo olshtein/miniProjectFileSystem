@@ -104,7 +104,7 @@ namespace FMS5774_8856_5366_WPF
 
                 //visual representation
                 sizeBar.Visibility = Visibility.Hidden;
-                sizeText.Visibility = Visibility.Hidden;
+                //sizeText.Visibility = Visibility.Hidden;
                 innerGStop.Color = Colors.LightGray;
                 outerGStop.Color = Colors.Gray;
 
@@ -128,7 +128,7 @@ namespace FMS5774_8856_5366_WPF
 
                 //visual representation
                 sizeBar.Visibility = Visibility.Visible;
-                sizeText.Visibility = Visibility.Visible;
+                //sizeText.Visibility = Visibility.Visible;
                 innerGStop.Color = Colors.Cyan;
                 outerGStop.Color = Colors.Blue;
 
