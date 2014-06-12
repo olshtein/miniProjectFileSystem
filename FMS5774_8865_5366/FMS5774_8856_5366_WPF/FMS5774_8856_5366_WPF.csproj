@@ -85,15 +85,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ErrorHandling.cs" />
-    <Compile Include="RecordsUserControls\EployeeUserControl.xaml.cs">
+    <Compile Include="static classes\ErrorHandling.cs" />
+    <Compile Include="UserControls\RecordsUserControls\EployeeUserControl.xaml.cs">
       <DependentUpon>EployeeUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RecordsUserControls\IRecordUserControl.cs" />
-    <Compile Include="RecordsUserControls\ProductUserControl.xaml.cs">
+    <Compile Include="UserControls\RecordsUserControls\IRecordUserControl.cs" />
+    <Compile Include="UserControls\RecordsUserControls\ProductUserControl.xaml.cs">
       <DependentUpon>ProductUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RecordsUserControls\StoreUserControl.xaml.cs">
+    <Compile Include="UserControls\RecordsUserControls\StoreUserControl.xaml.cs">
       <DependentUpon>StoreUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="RecordsWindow.xaml.cs">
@@ -107,7 +107,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DiskUserControl.xaml">
+    <Page Include="UserControls\DiskUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -115,7 +115,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FileUserControl.xaml">
+    <Page Include="UserControls\FileUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,13 +138,13 @@
     <Compile Include="Create_Forms\CreateFile.xaml.cs">
       <DependentUpon>CreateFile.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DiskUserControl.xaml.cs">
+    <Compile Include="UserControls\DiskUserControl.xaml.cs">
       <DependentUpon>DiskUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="fileProperties.xaml.cs">
       <DependentUpon>fileProperties.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FileUserControl.xaml.cs">
+    <Compile Include="UserControls\FileUserControl.xaml.cs">
       <DependentUpon>FileUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileWindow.xaml.cs">
@@ -154,15 +154,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="RecordsUserControls\EployeeUserControl.xaml">
+    <Page Include="UserControls\RecordsUserControls\EployeeUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RecordsUserControls\ProductUserControl.xaml">
+    <Page Include="UserControls\RecordsUserControls\ProductUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RecordsUserControls\StoreUserControl.xaml">
+    <Page Include="UserControls\RecordsUserControls\StoreUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
