@@ -446,6 +446,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	rootdir[i]->keyOffset = offset;
 	rootdir[i]->keySize = keyLen;
 	Functions::dateNow(rootdir[i]->crDate);
+	rootdir[i]->entryStatus = active;
 
 	//create FileHeader
 	FileHeader fh;
@@ -505,7 +506,7 @@ void Disk::delfile(string & fileName, string & fileOwner)
 
 			//delete file
 			dealloc(fh.FAT);
-			rootdir[i]->entryStatus = 2;
+			rootdir[i]->entryStatus = inactive;
 
 			//save???
 			try
@@ -596,7 +597,7 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 				if (newFcb->iostate != I)
 					newFcb->lock = true;
 
-				if (io != "I" && newFcb->fileDesc.fileOwner!=fileOwner)
+				if (io != "O" && newFcb->fileDesc.fileOwner!=fileOwner)
 					throw exception("ERROR: user not allowed to chnge the file (at FCB *Disk::openfile(string & , string & , IO & )");
 				if (io != "E")
 				{

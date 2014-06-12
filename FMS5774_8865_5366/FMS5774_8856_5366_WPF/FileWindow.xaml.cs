@@ -21,16 +21,16 @@ namespace FMS5774_8856_5366_WPF
     public partial class FileWindow : Window
     {
          List<DirEntry> allFile;
-         private Disk dsk;
          private List<Window> subwindows;
 
+         public Disk Dsk { get; set; }
          public List<FCB> FCBList { get; set; }
 
         public FileWindow(Disk dsk)
         {
             try
             {
-                this.dsk = dsk;
+                Dsk = dsk;
                 allFile = dsk.GetDirRoot();
                 FCBList = new List<FCB>();
                 subwindows = new List<Window>();
@@ -48,10 +48,10 @@ namespace FMS5774_8856_5366_WPF
             try
             {
                 ClearFileList();
-                allFile = dsk.GetDirRoot();
+                allFile = Dsk.GetDirRoot();
                 foreach (DirEntry file in allFile)
                 {
-                    if (file.FileName != "")
+                    if (file.FileName != "" && file.EntryStatus == (char)1)
                     {
                         FileUserControl fuc = new FileUserControl(file);
                         FilesWrapPanel.Children.Insert(0, fuc);
@@ -60,8 +60,37 @@ namespace FMS5774_8856_5366_WPF
                         fuc.OpenMenuItemClicked += fuc_OpenMenuItemClicked;
                         fuc.OpenReadOnlyMenuItemClicked += fuc_OpenReadOnlyMenuItemClicked;
                         fuc.OpenAddOnlyMenuItemClicked += fuc_OpenAddOnlyMenuItemClicked;
+                        fuc.DeleteMenuItemClicked += fuc_DeleteMenuItemClicked;
                     }
                 }
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
+        }
+
+        void fuc_DeleteMenuItemClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                FileUserControl fuc = (FileUserControl)sender;
+
+                if ((from i in FCBList
+                     where i.GetFileDescription().FileName == fuc.DirEntry.FileName
+                     select i).AsParallel().FirstOrDefault() == null) //don't delete open files
+                {
+                    MessageBoxResult mbr = MessageBox.Show("This operation can't be undone. are you sure you want to continue?", "Warning!", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                    if (mbr == MessageBoxResult.Cancel)
+                        return;
+
+                    Dsk.Delfile(fuc.DirEntry.FileName, MainWindow.User);
+                    MessageBox.Show("Success! File was deleted.", "Success", MessageBoxButton.OK);
+                    InitializeFileList();
+
+                }
+                else
+                    throw new Exception("File is open, can't delete.");
             }
             catch (Exception exp)
             {
@@ -105,12 +134,13 @@ namespace FMS5774_8856_5366_WPF
                 if ((from i in FCBList
                      where i.GetFileDescription().FileName == fuc.DirEntry.FileName
                      select i).AsParallel().FirstOrDefault() != null)
-                    return;// create only one FCB.
-                FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "O"));
+                    throw new Exception("Can't open file, already open.");// create only one FCB.
+                FCBList.Add(Dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "O"));
 
                 RecordsWindow rw = new RecordsWindow(FCBList[0]);
                 subwindows.Add(rw);
                 rw.Show();
+                rw.Closed += rw_Closed;
             }
             catch (Exception exp)
             {
@@ -139,12 +169,13 @@ namespace FMS5774_8856_5366_WPF
                 if ((from i in FCBList
                      where i.GetFileDescription().FileName == fuc.DirEntry.FileName
                      select i).AsParallel().FirstOrDefault() != null)
-                    return;// create only one FCB.
-                FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "E"));
+                    throw new Exception("Can't open file, already open.");// create only one FCB.
+                FCBList.Add(Dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "E"));
 
                 RecordsWindow rw = new RecordsWindow(FCBList[0]);
                 subwindows.Add(rw);
                 rw.Show();
+                rw.Closed += rw_Closed;
             }
             catch (Exception exp)
             {
@@ -188,18 +219,27 @@ namespace FMS5774_8856_5366_WPF
                 if ((from i in FCBList
                      where i.GetFileDescription().FileName == fuc.DirEntry.FileName
                      select i).AsParallel().FirstOrDefault() != null)
-                    return;// create only one FCB.
-                FCBList.Add(dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO"));
+                    throw new Exception("Can't open file, already open.");// create only one FCB.
+                FCBList.Insert(0, Dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO"));
 
                 RecordsWindow rw = new RecordsWindow(FCBList[0]);
-                subwindows.Add(rw);
+                subwindows.Insert(0, rw);
                 rw.Show();
+                rw.Closed += rw_Closed;
             }
             catch (Exception exp)
             {
                 ErrorHandling.ShowError(exp.Message);
             }
         }
+
+        void rw_Closed(object sender, EventArgs e)
+        {
+            RecordsWindow rw = (RecordsWindow)sender;
+            FCBList.Remove(rw.FCB);
+            rw.FCB.Closefile();
+        }
+
         private void New_File_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -240,7 +280,7 @@ namespace FMS5774_8856_5366_WPF
         {
             try
             {
-                CreateFile cf = new CreateFile(dsk);
+                CreateFile cf = new CreateFile(Dsk);
                 subwindows.Add(cf);
                 cf.Show();
                 cf.Closed += cf_Closed;
@@ -255,7 +295,6 @@ namespace FMS5774_8856_5366_WPF
         {
             try
             {
-
                 InitializeFileList();
             }
             catch (Exception exp)

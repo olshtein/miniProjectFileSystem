@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
 {
     [StructLayout(LayoutKind.Sequential), Serializable]
-    public class Store : Record
+    public class Store : IRecord
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public string phone;
@@ -27,7 +27,7 @@ namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
             city = City;
         }
 
-        public override string Key
+        public string Key
         {
             get { return phone; }
             set { phone = value; }

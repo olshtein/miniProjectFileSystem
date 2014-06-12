@@ -22,7 +22,7 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
     /// </summary>
     public partial class StoreUserControl : UserControl, IRecordUserControl
     {
-        public Record Record
+        public IRecord Record
         {
             get { return new Store(PhoneNumber, Name, Address, City); }
             set

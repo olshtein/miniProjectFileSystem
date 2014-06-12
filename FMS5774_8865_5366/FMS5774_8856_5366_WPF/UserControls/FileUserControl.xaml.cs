@@ -27,6 +27,7 @@ namespace FMS5774_8856_5366_WPF
         public event EventHandler OpenMenuItemClicked;
         public event EventHandler OpenReadOnlyMenuItemClicked;
         public event EventHandler OpenAddOnlyMenuItemClicked;
+        public event EventHandler DeleteMenuItemClicked;
 
         public FileUserControl(DirEntry myFile)
         {
@@ -95,6 +96,21 @@ namespace FMS5774_8856_5366_WPF
                 if (OpenAddOnlyMenuItemClicked != null)
                 {
                     OpenAddOnlyMenuItemClicked(this, EventArgs.Empty);
+                }
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
+        }
+
+        private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (DeleteMenuItemClicked != null)
+                {
+                    DeleteMenuItemClicked(this, EventArgs.Empty);
                 }
             }
             catch (Exception exp)

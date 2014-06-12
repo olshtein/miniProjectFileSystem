@@ -3,12 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="RecordsWindow" Height="300" Width="300">
-    <StackPanel Margin="0,1,0,-1">
-        <StackPanel Name="RecordDetailsStackPanel">
+    <StackPanel Margin="3">
+        <StackPanel Name="RecordDetailsStackPanel" Margin="3">
             
         </StackPanel>
+
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="3">
+            <Button Content="Save" Margin="3"/>
+            <Button Content="Add" Margin="3"/>
+            <Button Content="Cencel" Margin="3" />
+        </StackPanel>
         
-        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="3">
             <Button Content="First" Margin="3"/>
             <Button Content="Back" Margin="3"/>
             <Button Content="Go To:" Margin="3"/>
@@ -17,8 +23,8 @@
             <Button Content="Last" Margin="3"/>
         </StackPanel>
         <DockPanel>
-            <Label Content="Current record:" DockPanel.Dock="Left"/>
-            <TextBlock Name="CurrentSectorTextBlock" DockPanel.Dock="Left"/>
+            <Label Content="Current record:" DockPanel.Dock="Left" Margin="3"/>
+            <TextBlock Name="CurrentSectorTextBlock" DockPanel.Dock="Left" Margin="3"/>
         </DockPanel>
     </StackPanel>
 </Window>

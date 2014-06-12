@@ -9,6 +9,6 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
 {
     interface IRecordUserControl
     {
-        Record Record { get; set; }
+        IRecord Record { get; set; }
     }
 }

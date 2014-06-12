@@ -21,9 +21,11 @@ namespace FMS5774_8856_5366_WPF
     /// </summary>
     public partial class RecordsWindow : Window
     {
+        public FCB FCB { get; set; }
         public RecordsWindow(FCB fcb)
         {
             InitializeComponent();
+            FCB = fcb;
             fcb.seekRec(0, 0);
             //InitRecordFields();
         }

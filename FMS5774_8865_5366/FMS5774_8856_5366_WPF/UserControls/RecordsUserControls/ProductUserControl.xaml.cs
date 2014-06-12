@@ -26,7 +26,7 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
             InitializeComponent();
         }
 
-        public Record Record
+        public IRecord Record
         {
             get { return new Product(Barcode, Manufacturer, Name, Suplier, (float)Price); }
             set

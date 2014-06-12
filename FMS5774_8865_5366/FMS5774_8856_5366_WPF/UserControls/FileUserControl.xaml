@@ -10,6 +10,8 @@
             <MenuItem Name="OpenMenuItem" Header="Open" Click="OpenMenuItem_Click" />
             <MenuItem Name="OpenReadOnlyMenuItem" Header="Open in Read Only mode" Click="OpenReadOnlyMenuItem_Click" />
             <MenuItem Name="OpenAddOnlyMenuItem" Header="Open in Add Only mode" Click="OpenAddOnlyMenuItem_Click" />
+            <Separator/>
+            <MenuItem Name="DeleteMenuItem" Header="Delete" Click="DeleteMenuItem_Click"/>
         </ContextMenu>
     </UserControl.ContextMenu>
     <Grid>

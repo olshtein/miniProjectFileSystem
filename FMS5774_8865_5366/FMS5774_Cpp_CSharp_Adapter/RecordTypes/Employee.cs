@@ -9,7 +9,7 @@ namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
 {
 
     [StructLayout(LayoutKind.Sequential), Serializable]
-    public class Employee : Record
+    public class Employee : IRecord
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public string ID;
@@ -29,7 +29,7 @@ namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
             seniority = Seniority;
         }
 
-        public override string Key
+        public string Key
         {
             get { return ID; }
             set { ID = value; }

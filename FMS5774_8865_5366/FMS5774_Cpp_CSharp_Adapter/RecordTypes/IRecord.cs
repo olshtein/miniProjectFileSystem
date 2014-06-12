@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
 {
-    public abstract class Record
+    public interface IRecord
     {
-        public abstract string Key { get; set; }
+        string Key { get; set; }
     }
 }

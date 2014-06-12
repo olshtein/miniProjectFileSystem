@@ -43,9 +43,9 @@
     <Compile Include="Disk.cs" />
     <Compile Include="RecordTypes\Employee.cs" />
     <Compile Include="FCB.cs" />
+    <Compile Include="RecordTypes\IRecord.cs" />
     <Compile Include="RecordTypes\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecordTypes\Record.cs" />
     <Compile Include="RecordTypes\Store.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

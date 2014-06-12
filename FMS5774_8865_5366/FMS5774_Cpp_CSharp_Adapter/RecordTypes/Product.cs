@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
 {
     [StructLayout(LayoutKind.Sequential), Serializable]
-    public class Product : Record
+    public class Product : IRecord
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public string barcode;
@@ -29,7 +29,7 @@ namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
             price = Price;
         }
 
-        public override string Key
+        public string Key
         {
             get { return barcode; }
             set { barcode = value; }

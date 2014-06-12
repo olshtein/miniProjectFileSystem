@@ -158,6 +158,8 @@ namespace FMS5774_8856_5366_WPF
                     MessageBox.Show("Success! Disk was formated", "Success", MessageBoxButton.OK);
 
                 }
+                else
+                    throw new Exception("Disk is mounded, can't format.");
             }
             catch (Exception exp)
             {

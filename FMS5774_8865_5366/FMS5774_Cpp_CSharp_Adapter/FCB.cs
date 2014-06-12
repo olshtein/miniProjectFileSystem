@@ -190,7 +190,7 @@ namespace FMS5774_Cpp_CSharp_Adapter
         {
             try
             {
-                
+
                 return cppToCsharpAdapter.IorO(this.myFCBpointer);
             }
             catch (SEHException)
@@ -205,5 +205,40 @@ namespace FMS5774_Cpp_CSharp_Adapter
             }
         }
 
+        public override bool Equals(Object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            FCB p = obj as FCB;
+            if ((Object)p == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return (GetFileDescription().FileName == p.GetFileDescription().FileName);
+        }
+
+        public bool Equals(FCB p)
+        {
+            // If parameter is null return false:
+            if ((object)p == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return (GetFileDescription().FileName == p.GetFileDescription().FileName);
+        }
+
+        public override int GetHashCode()
+        {
+            return GetFileDescription().FileName.GetHashCode();
+        }
     }
 }

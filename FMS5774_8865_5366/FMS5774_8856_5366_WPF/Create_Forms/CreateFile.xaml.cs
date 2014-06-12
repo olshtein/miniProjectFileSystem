@@ -95,23 +95,32 @@ namespace FMS5774_8856_5366_WPF
         }
         private void sizeRec()
         {
-            switch (typeRec.SelectedItem.ToString())
+            try
             {
-                case "employee":
-                    sizeClass = Employee.size();
-                    sizeOffset = Employee.sizeKey();
-                    break;
-                case "store":
-                    sizeClass = Store.size();
-                    sizeOffset = Store.sizeKey();
-                    break;
-                case "Product":
-                    sizeClass = Product.size();
-                    sizeOffset = Product.sizeKey();
-                    break;
-                default:
-                    break;
 
+                switch (typeRec.SelectedItem.ToString())
+                {
+                    case "employee":
+                        sizeClass = Employee.size();
+                        sizeOffset = Employee.sizeKey();
+                        break;
+                    case "store":
+                        sizeClass = Store.size();
+                        sizeOffset = Store.sizeKey();
+                        break;
+                    case "Product":
+                        sizeClass = Product.size();
+                        sizeOffset = Product.sizeKey();
+                        break;
+                    default:
+                        break;
+
+                }
+
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
             }
         }
 
