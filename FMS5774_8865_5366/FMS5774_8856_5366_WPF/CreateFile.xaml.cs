@@ -24,7 +24,6 @@ namespace FMS5774_8856_5366_WPF
         Disk myDisk;
         uint sizeClass = 0;
         uint sizeOffset = 4;
-        uint maxRec = 0;
         public CreateFile(Disk my)
         {
             try
@@ -34,6 +33,7 @@ namespace FMS5774_8856_5366_WPF
                 InitializeComponent();
                 typeRec.ItemsSource = new List<string> { "employee", "store", "Product" };
                 typeRec.SelectedIndex = 0;
+                ChangeMaxRecords();
             }
             catch (Exception exp)
             {               
@@ -116,8 +116,13 @@ namespace FMS5774_8856_5366_WPF
 
         private void TypeRec_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ChangeMaxRecords();
+        }
+
+        private void ChangeMaxRecords()
+        {
             sizeRec();
-            maxRec = (uint)(myDisk.Howmuchempty(myDisk.myDiskPointer) * (1020 / sizeClass));
+            numRec.Maximum = (int?)(myDisk.Howmuchempty(myDisk.myDiskPointer) * (1020 / sizeClass));
         }
 
     }
