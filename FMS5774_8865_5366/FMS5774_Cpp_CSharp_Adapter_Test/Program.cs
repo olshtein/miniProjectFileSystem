@@ -8,9 +8,6 @@ namespace FMS5774_Cpp_CSharp_Adapter_Test
 {
     class Program
     {
-
-        List<FCB> fcbList;
-
         public static string ToStringProperty(object t)
         {
             string str = "";

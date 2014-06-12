@@ -1,4 +1,5 @@
 ﻿using FMS5774_Cpp_CSharp_Adapter;
+using FMS5774_Cpp_CSharp_Adapter.RecordTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,8 +61,8 @@ namespace FMS5774_8856_5366_WPF
                         sizeOffset = Employee.sizeKey();
                         break;
                     case "store":
-                        sizeClass = store.size();
-                        sizeOffset = store.sizeKey();
+                        sizeClass = Store.size();
+                        sizeOffset = Store.sizeKey();
                         break;
                     case "Product":
                         sizeClass = Product.size();
@@ -101,8 +102,8 @@ namespace FMS5774_8856_5366_WPF
                     sizeOffset = Employee.sizeKey();
                     break;
                 case "store":
-                    sizeClass = store.size();
-                    sizeOffset = store.sizeKey();
+                    sizeClass = Store.size();
+                    sizeOffset = Store.sizeKey();
                     break;
                 case "Product":
                     sizeClass = Product.size();

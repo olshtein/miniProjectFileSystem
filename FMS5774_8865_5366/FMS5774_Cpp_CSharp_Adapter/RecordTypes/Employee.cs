@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FMS5774_Cpp_CSharp_Adapter
+namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
 {
 
     [StructLayout(LayoutKind.Sequential), Serializable]
-    public class Employee
+    public class Employee : Record
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public string ID;
@@ -28,6 +28,13 @@ namespace FMS5774_Cpp_CSharp_Adapter
             salary = Salary;
             seniority = Seniority;
         }
+
+        public override string Key
+        {
+            get { return ID; }
+            set { ID = value; }
+        }
+
         public static uint sizeKey()
         {
             return 12;

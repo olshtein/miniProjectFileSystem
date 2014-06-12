@@ -5,12 +5,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FMS5774_Cpp_CSharp_Adapter
+namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
 {
     [StructLayout(LayoutKind.Sequential), Serializable]
-    public class Product
+    public class Product : Record
     {
-        public int barcode;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
+        public string barcode;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public string manufacturer;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
@@ -19,7 +20,7 @@ namespace FMS5774_Cpp_CSharp_Adapter
         public string supplier;
         public float price;
 
-        public Product(int Barcode,string Manufacturer,string name ,string Supplier, float Price)
+        public Product(string Barcode,string Manufacturer,string name ,string Supplier, float Price)
         {
             barcode = Barcode;
             manufacturer = Manufacturer;
@@ -27,6 +28,13 @@ namespace FMS5774_Cpp_CSharp_Adapter
             supplier = Supplier;
             price = Price;
         }
+
+        public override string Key
+        {
+            get { return barcode; }
+            set { barcode = value; }
+        }
+
         public static uint sizeKey()
         {
             return sizeof(int);
@@ -34,7 +42,7 @@ namespace FMS5774_Cpp_CSharp_Adapter
 
         public static uint size()
         {
-            return 12 * 3 + 4 + 4; //3 * string + int + float
+            return 12 * 4  + 4; //3 * string + int + float
         }
     }
 }

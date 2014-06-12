@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="FMS5774_8856_5366_WPF.RecordsUserControls.StoreUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="3">
+            <Label Content="Name:" Margin="3"/>
+            <TextBox Name="nameTextBox" Text="{Binding Path=Name,Mode=TwoWay}" Width="100" Margin="3"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Margin="3">
+            <Label Content="Phone Num:" Margin="3"/>
+            <TextBox Name="phoneTextBox" Text="{Binding Path=PhoneNumber,Mode=TwoWay}" Width="100" Margin="3"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Margin="3">
+            <Label Content="Address:" Margin="3"/>
+            <TextBox Name="addressTextBox" Text="{Binding Path=Address,Mode=TwoWay}" Width="100" Margin="3"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Margin="3">
+            <Label Content="City:" Margin="3"/>
+            <TextBox Name="cityTextBox" Text="{Binding Path=City,Mode=TwoWay}" Width="100" Margin="3"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

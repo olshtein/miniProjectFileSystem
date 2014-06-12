@@ -86,14 +86,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ErrorHandling.cs" />
+    <Compile Include="RecordsUserControls\EployeeUserControl.xaml.cs">
+      <DependentUpon>EployeeUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsUserControls\IRecordUserControl.cs" />
+    <Compile Include="RecordsUserControls\ProductUserControl.xaml.cs">
+      <DependentUpon>ProductUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RecordsUserControls\StoreUserControl.xaml.cs">
+      <DependentUpon>StoreUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RecordsWindow.xaml.cs">
       <DependentUpon>RecordsWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="CreateDisk\CreateDiskDialog.xaml">
+    <Page Include="Create_Forms\CreateDiskDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CreateFile.xaml">
+    <Page Include="Create_Forms\CreateFile.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -122,10 +132,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\ValuePercentageConverter.cs" />
-    <Compile Include="CreateDisk\CreateDiskDialog.xaml.cs">
+    <Compile Include="Create_Forms\CreateDiskDialog.xaml.cs">
       <DependentUpon>CreateDiskDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CreateFile.xaml.cs">
+    <Compile Include="Create_Forms\CreateFile.xaml.cs">
       <DependentUpon>CreateFile.xaml</DependentUpon>
     </Compile>
     <Compile Include="DiskUserControl.xaml.cs">
@@ -144,6 +154,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="RecordsUserControls\EployeeUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RecordsUserControls\ProductUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RecordsUserControls\StoreUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RecordsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

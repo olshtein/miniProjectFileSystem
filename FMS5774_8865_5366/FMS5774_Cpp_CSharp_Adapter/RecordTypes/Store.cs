@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FMS5774_Cpp_CSharp_Adapter
+namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
 {
     [StructLayout(LayoutKind.Sequential), Serializable]
-    public class store
+    public class Store : Record
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public string phone;
@@ -19,12 +19,18 @@ namespace FMS5774_Cpp_CSharp_Adapter
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public String city;
 
-        public store(string Phone, string Name, string Address, string City)
+        public Store(string Phone, string Name, string Address, string City)
         {
             phone = Phone;
             name = Name;
             address = Address;
             city = City;
+        }
+
+        public override string Key
+        {
+            get { return phone; }
+            set { phone = value; }
         }
 
         public static uint sizeKey()
