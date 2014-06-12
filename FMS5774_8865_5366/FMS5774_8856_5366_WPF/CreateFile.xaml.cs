@@ -22,9 +22,13 @@ namespace FMS5774_8856_5366_WPF
     public partial class CreateFile : Window
     {
         Disk myDisk;
+        uint sizeClass = 0;
+        uint sizeOffset = 4;
+        uint maxRec = 0;
         public CreateFile(Disk my)
         {
             myDisk = my;
+          
 
             InitializeComponent();
             typeRec.ItemsSource = new List<string> { "employee", "store", "Product" };
@@ -34,27 +38,7 @@ namespace FMS5774_8856_5366_WPF
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
-            uint sizeClass=0;
-            uint sizeOffset=4;
-           switch( typeRec.SelectedItem.ToString())
-           {
-               case "employee":
-                   sizeClass=Employee.size();
-                   sizeOffset =  Employee.sizeKey();
-                   break;
-               case "store":
-                   sizeClass=store.size();
-                   sizeOffset = store.sizeKey();
-                   break;
-               case "Product":
-                   sizeClass=Product.size();
-                   sizeOffset =  Product.sizeKey();
-                    break;
-               default:
-                   break;
-
-           }
-
+            sizeRec();
            myDisk.Createfile(this.nameRec.Text, MainWindow.User, "F", sizeClass, Convert.ToUInt32(Math.Ceiling((Double)(numRec.Value * sizeClass) / 1020)), "I", 0, sizeOffset);
            this.Close();
         }
@@ -62,6 +46,33 @@ namespace FMS5774_8856_5366_WPF
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        private void sizeRec()
+        {
+            switch (typeRec.SelectedItem.ToString())
+            {
+                case "employee":
+                    sizeClass = Employee.size();
+                    sizeOffset = Employee.sizeKey();
+                    break;
+                case "store":
+                    sizeClass = store.size();
+                    sizeOffset = store.sizeKey();
+                    break;
+                case "Product":
+                    sizeClass = Product.size();
+                    sizeOffset = Product.sizeKey();
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        private void TypeRec_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            sizeRec();
+            maxRec = (uint)(myDisk.Howmuchempty(myDisk.myDiskPointer) * (1020 / sizeClass));
         }
 
     }
