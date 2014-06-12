@@ -11,7 +11,7 @@
 
         <StackPanel Orientation="Horizontal">
             <Label Content="record amount" Margin="3"/>
-            <xctk:IntegerUpDown Margin="3" x:Name="numRec"></xctk:IntegerUpDown>
+            <xctk:IntegerUpDown Value="1" Margin="3" x:Name="numRec" Minimum="1"></xctk:IntegerUpDown>
         </StackPanel>
         
         <StackPanel Orientation="Horizontal">
