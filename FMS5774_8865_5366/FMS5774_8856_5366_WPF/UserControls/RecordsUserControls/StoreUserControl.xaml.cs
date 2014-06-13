@@ -38,14 +38,39 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
             }
         }
 
-        public string Name { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Address { get; set; }
-        public string City { get; set; }
+        public string Name
+        {
+            get { return nameTextBox.Text; }
+            set { nameTextBox.Text = value; }
+        }
+        public string PhoneNumber
+        {
+            get { return phoneTextBox.Text; }
+            set { phoneTextBox.Text = value; }
+        }
+        public string Address
+        {
+            get { return addressTextBox.Text; }
+            set { addressTextBox.Text = value; }
+        }
+        public string City
+        {
+            get { return cityTextBox.Text; }
+            set { cityTextBox.Text = value; }
+        }
 
         public StoreUserControl()
         {
             InitializeComponent();
+            ClearFields();
+        }
+
+        public void ClearFields()
+        {
+            Name = "";
+            PhoneNumber = "";
+            Address = "";
+            City = "";
         }
     }
 }

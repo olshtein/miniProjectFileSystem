@@ -19,6 +19,10 @@ namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public String city;
 
+        public Store()
+        {
+        }
+
         public Store(string Phone, string Name, string Address, string City)
         {
             phone = Phone;

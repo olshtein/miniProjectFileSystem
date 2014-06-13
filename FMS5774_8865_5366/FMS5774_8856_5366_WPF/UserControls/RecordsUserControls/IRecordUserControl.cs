@@ -10,5 +10,7 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
     interface IRecordUserControl
     {
         IRecord Record { get; set; }
+
+        void ClearFields();
     }
 }

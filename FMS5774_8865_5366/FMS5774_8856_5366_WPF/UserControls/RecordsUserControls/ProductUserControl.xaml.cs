@@ -24,6 +24,7 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
         public ProductUserControl()
         {
             InitializeComponent();
+            ClearFields();
         }
 
         public IRecord Record
@@ -43,10 +44,39 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
             }
         }
 
-        public string Barcode { get; set; }
-        public string Manufacturer { get; set; }
-        public string Name { get; set; }
-        public string Suplier { get; set; }
-        public double Price { get; set; }
+        public string Barcode
+        {
+            get { return barcodeTextBox.Text; }
+            set { barcodeTextBox.Text = value; }
+        }
+        public string Manufacturer
+        {
+            get { return manufacturerTextBox.Text; }
+            set { manufacturerTextBox.Text = value; }
+        }
+        public string Name
+        {
+            get { return nameTextBox.Text; }
+            set { nameTextBox.Text = value; }
+        }
+        public string Suplier
+        {
+            get { return suplierTextBox.Text; }
+            set { suplierTextBox.Text = value; }
+        }
+        public double Price
+        {
+            get { return (double)priceDoubleUpDown.Value; }
+            set { priceDoubleUpDown.Value = value; }
+        }
+
+        public void ClearFields()
+        {
+            Barcode = "";
+            Manufacturer = "";
+            Name = "";
+            Suplier = "";
+            Price = 0;
+        }
     }
 }

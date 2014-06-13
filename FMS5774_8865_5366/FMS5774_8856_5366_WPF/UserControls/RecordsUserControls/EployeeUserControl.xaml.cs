@@ -24,6 +24,7 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
         public EployeeUserControl()
         {
             InitializeComponent();
+            ClearFields();
         }
 
         public IRecord Record
@@ -43,10 +44,41 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
             }
         }
 
-        public string ID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public double Salary { get; set; }
-        public int Seniority { get; set; }
+        public string ID
+        {
+            get { return idTextBox.Text; }
+            set { idTextBox.Text = value; }
+        }
+
+        public string FirstName
+        {
+            get { return firstNameTextBox.Text; }
+            set { firstNameTextBox.Text = value; }
+        }
+
+        public string LastName
+        {
+            get { return lastNameTextBox.Text; }
+            set { lastNameTextBox.Text = value; }
+        }
+        public double Salary
+        {
+            get { return (double)salaryDoubleUpDown.Value; }
+            set { salaryDoubleUpDown.Value = value; }
+        }
+        public int Seniority
+        {
+            get { return (int)seniorityIntegerUpDown.Value; }
+            set { seniorityIntegerUpDown.Value = value; }
+        }
+
+        public void ClearFields()
+        {
+            ID = "";
+            FirstName = "";
+            LastName = "";
+            Salary = 0;
+            Seniority = 0;
+        }
     }
 }

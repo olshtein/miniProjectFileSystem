@@ -20,6 +20,10 @@ namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
         public string supplier;
         public float price;
 
+        public Product()
+        {
+        }
+
         public Product(string Barcode,string Manufacturer,string name ,string Supplier, float Price)
         {
             barcode = Barcode;

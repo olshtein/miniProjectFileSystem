@@ -20,6 +20,10 @@ namespace FMS5774_Cpp_CSharp_Adapter.RecordTypes
         public float salary;
         public int seniority;
 
+        public Employee()
+        {
+        }
+
         public Employee(string id, string LestName,string FirstName,float Salary,int Seniority)
         {
             ID = id;
