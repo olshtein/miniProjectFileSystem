@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using FMS5774_Cpp_CSharp_Adapter;
+using FMS5774_Cpp_CSharp_Adapter.RecordTypes;
 
 namespace FMS5774_Cpp_CSharp_Adapter_Test
 {
@@ -34,7 +35,19 @@ namespace FMS5774_Cpp_CSharp_Adapter_Test
                 d.Mountdisk("disk1");
                 if (d.Ismounted(d.myDiskPointer))
                     Console.WriteLine("Mounted!");
-                d.Createfile("disk1", "meir", "F", 50, 2, "I", 0);
+                d.Createfile("f1", "meir", "F", Store.size(), 2, "I", 0);
+
+                FCB fcb = d.Openfile("f1", "meir", "IO");
+                fcb.seekRec(fcb.GetFileDescription().FileAddr - 4, 0);
+                Store str = new Store("", "", "", "");
+                Store str2 = new Store("", "", "", "");
+                fcb.readRec(str, 1);
+                str = new Store("123", "aaa", "aaa", "aaa");
+                fcb.updateRec(str);
+                fcb.seekRec(fcb.GetFileDescription().FileAddr - 4, 0);
+                fcb.readRec(str2, 0);
+                fcb.Closefile();
+
                 DirEntry newdir = d.GetDirEntry(0);
                 d.Format("oshri");
                 Console.WriteLine("\nFormat Disk:");

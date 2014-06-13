@@ -257,11 +257,11 @@ extern "C"
 		* FUNCTION
 		*	IorO
 		* RETURN VALUE
-		*	sring - the status of the iostate
+		*	IOState - the status of the iostate
 		* MEANING
 		*	return iostate after convert to string
 		**************************************************/
-		string IorO();
+		IOState IorO();
 		/*************************************************
 		* FUNCTION
 		*	addMemory

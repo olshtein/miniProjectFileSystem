@@ -594,7 +594,7 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 				newFcb->FAT = my.FAT;
 				newFcb->iostate=converToIOEnum(io);
 				newFcb->placeDir=i;
-				if (newFcb->iostate != I)
+				if (newFcb->iostate != I && newFcb->iostate != IO)
 					newFcb->lock = true;
 
 				if (io != "O" && newFcb->fileDesc.fileOwner!=fileOwner)

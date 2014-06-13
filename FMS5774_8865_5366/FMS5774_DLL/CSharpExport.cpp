@@ -284,7 +284,18 @@ extern "C"
 		}
 	}
 
-
+	__declspec(dllexport) IOState IorO(FCB* THIS)
+	{
+		try
+		{
+			return THIS->IorO();
+		}
+		catch (exception ex)
+		{
+			THIS->SetLastErrorMessage(ex.what());
+			throw ex;
+		}
+	}
 
 	// extra
 

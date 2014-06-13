@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+
 namespace FMS5774_Cpp_CSharp_Adapter
 {
-
-
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public class VolumeHeader
     {
@@ -191,6 +190,17 @@ namespace FMS5774_Cpp_CSharp_Adapter
         public char EntryStatus { get { return entryStatus; } }
     }
 
+    public enum IOState
+    {
+
+        I = 'I', // Input
+        O = 'O', // Output
+        IO = 0, // Input and Output
+        E = 'E' // Edition.
+
+
+    };
+
 
 
     public class cppToCsharpAdapter
@@ -302,7 +312,6 @@ namespace FMS5774_Cpp_CSharp_Adapter
         public static extern void getDirEntry(IntPtr THIS, IntPtr buffer, uint index);
 
         [DllImport(dllPath, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        public static extern string IorO(IntPtr THIS);
+        public static extern IOState IorO(IntPtr THIS);
     }
 }

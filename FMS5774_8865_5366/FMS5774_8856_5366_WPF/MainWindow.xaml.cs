@@ -27,7 +27,6 @@ namespace FMS5774_8856_5366_WPF
         {
             try
             {
-
                 InitializeComponent();
                 InitializeDiskList();
                 InitializeUsersList();
@@ -36,6 +35,7 @@ namespace FMS5774_8856_5366_WPF
             catch (Exception exp)
             {
                 ErrorHandling.ShowError(exp.Message);
+                this.Close();
             }
         }
 
@@ -56,6 +56,7 @@ namespace FMS5774_8856_5366_WPF
             catch (Exception exp)
             {
                 ErrorHandling.ShowError(exp.Message);
+                this.Close();
             }
         }
 
@@ -85,6 +86,7 @@ namespace FMS5774_8856_5366_WPF
             catch (Exception exp)
             {
                 ErrorHandling.ShowError(exp.Message);
+                this.Close();
             }
         }
 

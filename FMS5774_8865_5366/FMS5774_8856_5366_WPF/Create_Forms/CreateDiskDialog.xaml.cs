@@ -23,42 +23,72 @@ namespace FMS5774_8856_5366_WPF.CreateDisk
 
         public CreateDiskDialog()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+                this.Close();
+            }
         }
 
         void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            string msg;
-            // Don't accept the dialog box if there is invalid data 
-            if ((msg = IsValid()) != null)
+            try
             {
-                MessageBox.Show(msg, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                string msg;
+                // Don't accept the dialog box if there is invalid data 
+                if ((msg = IsValid()) != null)
+                {
+                    MessageBox.Show(msg, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                DialogResult = true;
             }
-            
-            DialogResult = true;
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
 
         private string IsValid()
         {
-            // Is length in range? 
-            if ((DiskNameTextBox.Text.Length < 1) || (DiskNameTextBox.Text.Length > 10))
+            try
             {
-                return "Length of name must be between 1 and 10.";
-            }
+                // Is length in range? 
+                if ((DiskNameTextBox.Text.Length < 1) || (DiskNameTextBox.Text.Length > 10))
+                {
+                    return "Length of name must be between 1 and 10.";
+                }
 
-            // Is name all letters or numbers (and spaces)?
-            foreach (char l in DiskNameTextBox.Text)
-            {
-                if ((l < 'a' || l > 'z') && (l < 'A' || l > 'Z') && (l < '0' || l > '9') && (l != ' '))
-                    return "name must be of letters 'a-z' or 'A-Z' or space.";
+                // Is name all letters or numbers (and spaces)?
+                foreach (char l in DiskNameTextBox.Text)
+                {
+                    if ((l < 'a' || l > 'z') && (l < 'A' || l > 'Z') && (l < '0' || l > '9') && (l != ' '))
+                        return "name must be of letters 'a-z' or 'A-Z' or space.";
+                }
+                return null;
             }
-            return null;
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+                return null;
+            }
         }
 
         private void DiskNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            DiskName = DiskNameTextBox.Text;
+            try
+            {
+                DiskName = DiskNameTextBox.Text;
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
         }
     }
 }

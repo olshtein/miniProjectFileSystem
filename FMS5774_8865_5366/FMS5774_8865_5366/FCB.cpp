@@ -9,7 +9,7 @@ FCB::FCB()
 	currRecNr=0;
 	currSecNr=0;
 	currRecNrInBuff=0;
-	lock =false;
+	lock = false;
 	changeBuf = false;
 	changeDir = false;
 }
@@ -23,7 +23,7 @@ FCB::FCB(Disk * disk)
 	currRecNr=0;
 	currSecNr=0;
 	currRecNrInBuff=0;
-	lock =false;
+	lock = false;
 	changeBuf = false;
 	changeDir = false;
 }
@@ -53,7 +53,7 @@ void FCB::closefile()
 				fh.sectorNr=fileDesc.fileAddr;
 				d->writeSector(fileDesc.fileAddr, (Sector*)&fh);
 			}
-			lock =false;
+			lock = false;
 			changeBuf = false;
 			changeDir = false;
 			d=NULL;
@@ -135,10 +135,10 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 			throw exception ("ERROR: Starting point is invalid. (at void FCB::seekRec(unsigned int , int )");
 			break;
 		}
-		if ( iostate == E && num != fileDesc.eofRecNr+1)//כתיבה במצב "הוספה" למקום לא מורשה
+		if ( iostate == E && (startingPoint != 1 || startingPoint != 2) && num != fileDesc.eofRecNr+1)//כתיבה במצב "הוספה" למקום לא מורשה
 			throw exception ("ERROR: Open the file for editing only, you can not move to the requested address. (at void FCB::seekRec(unsigned int , int )");
 
-		if (num < 0 || num > (fileDesc.fileSize-1)*(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize) )// כתיבה אל מחוץ לקובץ קדימה או אחורה
+		if (num < 0 || num > (fileDesc.fileSize-1)*(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize) + 1)// כתיבה אל מחוץ לקובץ קדימה או אחורה
 			throw exception ("ERROR: The address is not valid. (at void FCB::seekRec(unsigned int , int )");
 
 		if (num > fileDesc.eofRecNr+1)//כתיבת רשומה תוך דילוג על מקום ריק
@@ -147,7 +147,7 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 		int numSector = (num)/(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize)+1;//מיקום הסקטור הדרוש לרשימה
 
 		cout<<num<<"  "<<numSector <<endl<< currSecNr<<endl;
-		if (numSector != currSecNr)//אם יש צורך לעבור סקטור
+		if (numSector != currSecNr && iostate != E)//אם יש צורך לעבור סקטור
 			readNewSectorToBuffer(numSector);
 
 		currRecNr = num;
@@ -187,11 +187,11 @@ void  FCB::writeUpdateRec(char * data)
 	try
 	{
 		isClose();
-		if (iostate ==I || (iostate == E && currRecNr != fileDesc.eofRecNr))
-			throw exception ("No permission to write to address current. (at void FCB::readNewSectorToBuffer(unsigned int )");
+		if (iostate ==I || (iostate == E && currRecNr != fileDesc.eofRecNr+1))
+			throw exception ("No permission to write to address current. (at void FCB::writeUpdateRec(char *))");
 
 		if (lock == false)
-			throw exception("ERROR: need to lock record before read/update (at void FCB::readUpdateRec(char*))");
+			throw exception("ERROR: need to lock record before read/update (at void FCB::writeUpdateRec(char *))");
 
 		memcpy(&(Buffer.rawData[(currRecNrInBuff*fileDesc.maxRecSize)]),data,fileDesc.maxRecSize);
 		changeBuf = true;
@@ -207,9 +207,6 @@ void FCB::updateCancel()
 {
 	if (iostate == I || iostate == O)
 		throw exception("ERROR: can't update in I, O modes, so can't cancel an update (at void FCB::updateCancel())");
-
-	if (lock == false)
-		throw exception("ERROR: no update to cancel. (at void FCB::updateCancel())");
 
 	lock = false;
 }
@@ -254,9 +251,6 @@ void FCB::updateRec(char * recPtr)
 		writeUpdateRec(recPtr);
 
 		lock = false;
-
-		//move to next record.
-		seekRec(1,1);
 	}
 	catch (exception ex)
 	{
@@ -328,10 +322,10 @@ void FCB::addMemory(unsigned int num)
 	}
 }
 
-string FCB::IorO()
-		{
-			return converIOEnumToString(iostate);
-		}
+IOState FCB::IorO()
+{
+	return iostate;
+}
 
 // Stage 4-5
 

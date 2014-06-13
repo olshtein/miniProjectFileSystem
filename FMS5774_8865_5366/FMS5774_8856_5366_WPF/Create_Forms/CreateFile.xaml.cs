@@ -39,6 +39,7 @@ namespace FMS5774_8856_5366_WPF
             catch (Exception exp)
             {               
                 ErrorHandling.ShowError(exp.Message);
+                this.Close();
             }
 
         }

@@ -186,11 +186,10 @@ namespace FMS5774_Cpp_CSharp_Adapter
             }
         }
 
-        public string IorO()
+        public IOState IorO()
         {
             try
             {
-
                 return cppToCsharpAdapter.IorO(this.myFCBpointer);
             }
             catch (SEHException)
