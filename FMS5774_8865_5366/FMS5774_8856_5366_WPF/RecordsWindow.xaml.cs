@@ -27,6 +27,12 @@ namespace FMS5774_8856_5366_WPF
         public IRecord CurrentRecord { get; set; }
         public int MaxRecord { get; set; }
 
+        public int? CurrentSector
+        {
+            get { return CurrentSectorIntegerUpDown.Value; }
+            set { CurrentSectorIntegerUpDown.Value = value; }
+        }
+
         public RecordsWindow(FCB fcb)
         {
             try
@@ -53,6 +59,7 @@ namespace FMS5774_8856_5366_WPF
                     FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4);
                     BackButton.IsEnabled = false;
                     NextButton.IsEnabled = true;
+                    CurrentSector = 0;
 
                     if (IsStore())
                     {
@@ -74,7 +81,8 @@ namespace FMS5774_8856_5366_WPF
                     }
                     break;
                 case IOState.O:
-                    FCB.seekRec(FCB.GetFileDescription().FileAddr - 4, 0);
+                    FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4);
+                    CurrentSector = 0;
                     BackButton.IsEnabled = false;
                     NextButton.IsEnabled = true;
 
@@ -191,6 +199,62 @@ namespace FMS5774_8856_5366_WPF
                 FCB.updateRec(rec);
                 ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).ClearFields();
                 BackButton.IsEnabled = true;
+                MessageBox.Show("Record Saved", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+
+               CurrentSector++;
+
+               if (CurrentSector > FCB.GetFileDescription().EofRecNr || CurrentSector < 0)
+               {
+                   FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4);
+                   CurrentSector = 0;
+                   ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).ClearFields();
+               }
+
+               switch (FCB.IorO())
+               {
+                   case IOState.IO:
+                       if (IsStore())
+                       {
+                           Store temp = new Store();
+                           FCB.readRec(temp, 1);
+                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                       }
+                       else if (IsProduct())
+                       {
+                           Product temp = new Product();
+                           FCB.readRec(temp, 1);
+                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                       }
+                       else if (IsEmployee())
+                       {
+                           Employee temp = new Employee();
+                           FCB.readRec(temp, 1);
+                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                       }
+                       break;
+                   case IOState.O:
+                       if (IsStore())
+                       {
+                           Store temp = new Store();
+                           FCB.readRec(temp);
+                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                       }
+                       else if (IsProduct())
+                       {
+                           Product temp = new Product();
+                           FCB.readRec(temp);
+                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                       }
+                       else if (IsEmployee())
+                       {
+                           Employee temp = new Employee();
+                           FCB.readRec(temp);
+                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                       }
+                       break;
+                   default:
+                       throw new Exception("Unknown format to read/write from file.");
+               }
             }
             catch (Exception exp)
             {
@@ -231,7 +295,11 @@ namespace FMS5774_8856_5366_WPF
             {
                 FCB.updateRecCancel();
                 FCB.seekRec(1, -1);
+                CurrentSector--;
                 NextButton.IsEnabled = true;
+
+                if (CurrentSector <= 0)
+                    BackButton.IsEnabled = false;
 
                 switch (FCB.IorO())
                 {
@@ -297,6 +365,7 @@ namespace FMS5774_8856_5366_WPF
                 }
                 FCB.updateRecCancel();
                 FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)GoToIntegerUpDown.Value);
+                CurrentSector = GoToIntegerUpDown.Value;
                 BackButton.IsEnabled = true;
                 NextButton.IsEnabled = true;
 
@@ -358,7 +427,11 @@ namespace FMS5774_8856_5366_WPF
             {
                 FCB.updateRecCancel();
                 FCB.seekRec(1, 1);
+                CurrentSector++;
                 BackButton.IsEnabled = true;
+
+                if (CurrentSector >= FCB.GetFileDescription().EofRecNr)
+                    NextButton.IsEnabled = false;
 
                 switch (FCB.IorO())
                 {
@@ -418,7 +491,8 @@ namespace FMS5774_8856_5366_WPF
             try
             {
                 FCB.updateRecCancel();
-                FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)FCB.GetFileDescription().EofRecNr);
+                FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)FCB.GetFileDescription().EofRecNr - 1);
+                CurrentSector = (int)FCB.GetFileDescription().EofRecNr;
                 NextButton.IsEnabled = false;
                 BackButton.IsEnabled = true;
 
@@ -471,6 +545,54 @@ namespace FMS5774_8856_5366_WPF
             catch (Exception exp)
             {
                 ErrorHandling.ShowError(exp.Message);
+            }
+        }
+
+        private void CencelButton_Click(object sender, RoutedEventArgs e)
+        {
+            FCB.updateRecCancel();
+            switch (FCB.IorO())
+            {
+                case IOState.IO:
+                    if (IsStore())
+                    {
+                        Store temp = new Store();
+                        FCB.readRec(temp, 1);
+                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                    }
+                    else if (IsProduct())
+                    {
+                        Product temp = new Product();
+                        FCB.readRec(temp, 1);
+                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                    }
+                    else if (IsEmployee())
+                    {
+                        Employee temp = new Employee();
+                        FCB.readRec(temp, 1);
+                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                    }
+                    break;
+                case IOState.O:
+                    if (IsStore())
+                    {
+                        Store temp = new Store();
+                        FCB.readRec(temp);
+                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                    }
+                    else if (IsProduct())
+                    {
+                        Product temp = new Product();
+                        FCB.readRec(temp);
+                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                    }
+                    else if (IsEmployee())
+                    {
+                        Employee temp = new Employee();
+                        FCB.readRec(temp);
+                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
+                    }
+                    break;
             }
         }
     }

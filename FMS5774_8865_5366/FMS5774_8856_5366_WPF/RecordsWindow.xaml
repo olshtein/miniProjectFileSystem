@@ -11,7 +11,7 @@
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="3">
             <Button Name="SaveButton" IsEnabled="False" Content="Save" Margin="3" Click="SaveButton_Click"/>
             <Button Name="AddButton" IsEnabled="False" Content="Add" Margin="3" Click="AddButton_Click"/>
-            <Button Name="CencelButton" IsEnabled="False" Content="Cencel" Margin="3" />
+            <Button Name="CencelButton" IsEnabled="False" Content="Cencel" Margin="3" Click="CencelButton_Click" />
         </StackPanel>
         
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="3">
@@ -24,7 +24,7 @@
         </StackPanel>
         <DockPanel>
             <Label Content="Current record:" DockPanel.Dock="Left" Margin="3"/>
-            <TextBlock Name="CurrentSectorTextBlock" DockPanel.Dock="Left" Margin="3"/>
+            <xctk:IntegerUpDown Name="CurrentSectorIntegerUpDown" IsEnabled="False" DockPanel.Dock="Left" Margin="3"/>
         </DockPanel>
     </StackPanel>
 </Window>
