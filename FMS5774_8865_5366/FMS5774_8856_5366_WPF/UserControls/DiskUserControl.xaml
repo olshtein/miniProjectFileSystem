@@ -44,8 +44,8 @@
 
                 <Image MaxHeight="80" MaxWidth="80" HorizontalAlignment="Center" Source="../Resorces/hard_disk_256.png" Margin="3"/>
                 <Grid Margin="3">
-                    <ProgressBar x:Name="sizeBar" Margin="3" Height="15"  Maximum="1600" Minimum="4" HorizontalAlignment="Center" Width="70"/>
-                    <!--<TextBlock x:Name="sizeText" Text="{Binding ElementName=sizeBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />-->
+                    <ProgressBar x:Name="sizeBar" Margin="3" Height="15" HorizontalAlignment="Center" Width="70"/>
+                    <TextBlock x:Name="sizeText" Text="{Binding ElementName=sizeBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
                 
                 <Label x:Name="nameLabel" HorizontalAlignment="Center" Margin="37,3" HorizontalContentAlignment="Center" Height="24"/>

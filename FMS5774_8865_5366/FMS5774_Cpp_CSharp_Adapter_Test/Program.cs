@@ -46,6 +46,12 @@ namespace FMS5774_Cpp_CSharp_Adapter_Test
                 fcb.updateRec(str);
                 fcb.seekRec(fcb.GetFileDescription().FileAddr - 4, 0);
                 fcb.readRec(str2, 0);
+                d.Extendfile("f1", "meir", 1);
+                fcb.readRec(str, 1);
+                str = new Store("123", "aaa", "aaa", "aaa");
+                fcb.updateRec(str);
+                fcb.seekRec(fcb.GetFileDescription().FileAddr - 4, 0);
+                fcb.readRec(str2, 0);
                 fcb.Closefile();
 
                 DirEntry newdir = d.GetDirEntry(0);

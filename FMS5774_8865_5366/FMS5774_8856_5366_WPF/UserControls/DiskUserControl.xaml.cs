@@ -25,10 +25,11 @@ namespace FMS5774_8856_5366_WPF
                 this.container = container;
                 InitializeComponent();
                 int Used = 1600 - my.Howmuchempty(my.myDiskPointer);
-                sizeBar.Value = Convert.ToDouble(Used);
+                sizeBar.Value =( (((float)Used) / 16) * 2);
                 TextBlockDiskUse.Text = "Used: " + (2 * Used).ToString() + " KB";
                 TextBlockDiskFree.Text = "Free: " + (2 * (1600 - Used)).ToString() + " KB";
                 TextBlockOwner.Text = "Owner: " + Dsk.GetVolumeHeader().DiskOwner;
+
                 nameLabel.Content = my.GetVolumeHeader().DiskName;
             }
             catch (Exception exp)
@@ -104,7 +105,7 @@ namespace FMS5774_8856_5366_WPF
 
                 //visual representation
                 sizeBar.Visibility = Visibility.Hidden;
-                //sizeText.Visibility = Visibility.Hidden;
+                sizeText.Visibility = Visibility.Hidden;
                 innerGStop.Color = Colors.LightGray;
                 outerGStop.Color = Colors.Gray;
 
@@ -128,7 +129,7 @@ namespace FMS5774_8856_5366_WPF
 
                 //visual representation
                 sizeBar.Visibility = Visibility.Visible;
-                //sizeText.Visibility = Visibility.Visible;
+                sizeText.Visibility = Visibility.Visible;
                 innerGStop.Color = Colors.Cyan;
                 outerGStop.Color = Colors.Blue;
 

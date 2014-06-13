@@ -101,13 +101,6 @@ void Disk::mountdisk(string & nameFile)
 		dskfl.read((char*)(&vhd), sizeof(Sector));
 		dskfl.read((char*)(&dat), sizeof(Sector));
 		dskfl.read((char*)(&rootdir), 2*sizeof(Sector));
-
-		for (unsigned int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // for all data sectors
-		{
-			Sector my;
-			my.sectorNr=i;
-			dskfl.read((char*)(&my),sizeof(Sector));
-		}
 	}
 	else
 		throw exception("ERROR: file does not exist in path: (in Disk::mountdisk(string&))");
@@ -244,9 +237,13 @@ void Disk::savechanges()
 void Disk::resetSector()
 {
 	seekToSector(4);
+	Sector my;
+
+	for (int i=0;i<SIZE_DATA_IN_SECTOR;i++)//איתחול פיזי
+		my.rawData[i]=NULL;
+
 	for (unsigned int i=vhd.addrDataStart; i < vhd.addrRootDirCpy; i++) // לכל סקטורי המידע
 	{
-		Sector my;
 		my.sectorNr=i;
 		dskfl.write((char *)(&my),sizeof(Sector));
 	}

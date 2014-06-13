@@ -135,19 +135,19 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 			throw exception ("ERROR: Starting point is invalid. (at void FCB::seekRec(unsigned int , int )");
 			break;
 		}
-		if ( iostate == E && (startingPoint != 1 || startingPoint != 2) && num != fileDesc.eofRecNr+1)//כתיבה במצב "הוספה" למקום לא מורשה
+		if ( iostate == E && num != fileDesc.eofRecNr+1)
 			throw exception ("ERROR: Open the file for editing only, you can not move to the requested address. (at void FCB::seekRec(unsigned int , int )");
 
-		if (num < 0 || num > (fileDesc.fileSize-1)*(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize) + 1)// כתיבה אל מחוץ לקובץ קדימה או אחורה
+		if (num < 0 || num > (fileDesc.fileSize-1)*(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize) )
 			throw exception ("ERROR: The address is not valid. (at void FCB::seekRec(unsigned int , int )");
 
-		if (num > fileDesc.eofRecNr+1)//כתיבת רשומה תוך דילוג על מקום ריק
+		if (num > fileDesc.eofRecNr+1)
 			throw exception ("ERROR: Unauthorized location. (at void FCB::seekRec(unsigned int , int )");
 
-		int numSector = (num)/(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize)+1;//מיקום הסקטור הדרוש לרשימה
+		int numSector = (num)/(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize)+1;
 
 		cout<<num<<"  "<<numSector <<endl<< currSecNr<<endl;
-		if (numSector != currSecNr && iostate != E)//אם יש צורך לעבור סקטור
+		if (numSector != currSecNr)
 			readNewSectorToBuffer(numSector);
 
 		currRecNr = num;
