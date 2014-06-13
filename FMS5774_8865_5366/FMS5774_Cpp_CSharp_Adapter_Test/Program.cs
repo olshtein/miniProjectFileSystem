@@ -35,22 +35,16 @@ namespace FMS5774_Cpp_CSharp_Adapter_Test
                 d.Mountdisk("disk1");
                 if (d.Ismounted(d.myDiskPointer))
                     Console.WriteLine("Mounted!");
-                d.Createfile("f1", "meir", "F", Store.size(), 2, "I", 0);
+                d.Createfile("f1", "meir", "F", Store.size(), 50, "I", 0);
 
                 FCB fcb = d.Openfile("f1", "meir", "IO");
-                fcb.seekRec(fcb.GetFileDescription().FileAddr - 4, 0);
+                fcb.seekRec(0, (int)fcb.GetFileDescription().FileAddr - 4 + 20);
                 Store str = new Store("", "", "", "");
                 Store str2 = new Store("", "", "", "");
                 fcb.readRec(str, 1);
                 str = new Store("123", "aaa", "aaa", "aaa");
                 fcb.updateRec(str);
-                fcb.seekRec(fcb.GetFileDescription().FileAddr - 4, 0);
-                fcb.readRec(str2, 0);
-                d.Extendfile("f1", "meir", 1);
-                fcb.readRec(str, 1);
-                str = new Store("123", "aaa", "aaa", "aaa");
-                fcb.updateRec(str);
-                fcb.seekRec(fcb.GetFileDescription().FileAddr - 4, 0);
+                fcb.seekRec(1, -1);
                 fcb.readRec(str2, 0);
                 fcb.Closefile();
 

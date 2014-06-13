@@ -226,7 +226,7 @@ void FCB::deleteRec()
 			Buffer.rawData[i] = 0;
 		}
 
-		lock = false;
+		//lock = false;
 
 		//move to next record.
 		seekRec(1,1);
@@ -250,7 +250,7 @@ void FCB::updateRec(char * recPtr)
 		//update
 		writeUpdateRec(recPtr);
 
-		lock = false;
+		//lock = false;
 	}
 	catch (exception ex)
 	{

@@ -225,9 +225,9 @@ namespace FMS5774_8856_5366_WPF
                 FCBList.Insert(0, Dsk.Openfile(fuc.DirEntry.FileName, MainWindow.User, "IO"));
 
                 RecordsWindow rw = new RecordsWindow(FCBList[0]);
-                subwindows.Insert(0, rw);
-                rw.Show();
                 rw.Closed += rw_Closed;
+                subwindows.Insert(0, rw);
+                rw.Show();              
             }
             catch (Exception exp)
             {

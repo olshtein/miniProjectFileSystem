@@ -36,7 +36,7 @@ namespace FMS5774_8856_5366_WPF
                 InitRecordFields();
                 InitAvailableButtons();
                 InitData();
-                MaxRecord = (int)FCB.GetFileDescription().FileSize-2;
+                MaxRecord = (int)FCB.GetFileDescription().EofRecNr;
             }
             catch (Exception exp)
             {
@@ -50,7 +50,7 @@ namespace FMS5774_8856_5366_WPF
             switch (FCB.IorO())
             {
                 case IOState.IO:
-                    FCB.seekRec(FCB.GetFileDescription().FileAddr - 4, 0);
+                    FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4);
                     BackButton.IsEnabled = false;
                     NextButton.IsEnabled = true;
 
@@ -296,7 +296,7 @@ namespace FMS5774_8856_5366_WPF
                     throw new Exception("GoTo value too high");
                 }
                 FCB.updateRecCancel();
-                FCB.seekRec(FCB.GetFileDescription().FileAddr - 4, (int)GoToIntegerUpDown.Value);
+                FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)GoToIntegerUpDown.Value);
                 BackButton.IsEnabled = true;
                 NextButton.IsEnabled = true;
 
@@ -418,7 +418,7 @@ namespace FMS5774_8856_5366_WPF
             try
             {
                 FCB.updateRecCancel();
-                FCB.seekRec(2, 0);
+                FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)FCB.GetFileDescription().EofRecNr);
                 NextButton.IsEnabled = false;
                 BackButton.IsEnabled = true;
 
