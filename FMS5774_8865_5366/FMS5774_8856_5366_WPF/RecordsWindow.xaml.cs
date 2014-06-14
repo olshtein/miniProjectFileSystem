@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
+﻿using FMS5774_8856_5366_WPF.RecordsUserControls;
 using FMS5774_Cpp_CSharp_Adapter;
 using FMS5774_Cpp_CSharp_Adapter.RecordTypes;
-using FMS5774_8856_5366_WPF.RecordsUserControls;
+using System;
+using System.Windows;
+using System.Windows.Input;
 
 namespace FMS5774_8856_5366_WPF
 {
@@ -41,6 +30,8 @@ namespace FMS5774_8856_5366_WPF
                 FCB = fcb;
                 InitRecordFields();
                 InitAvailableButtons();
+
+                CurrentSector = 0;
                 InitData();
                 MaxRecord = (int)FCB.GetFileDescription().EofRecNr;
             }
@@ -53,64 +44,12 @@ namespace FMS5774_8856_5366_WPF
 
         private void InitData()
         {
-            switch (FCB.IorO())
-            {
-                case IOState.IO:
-                    FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4);
-                    BackButton.IsEnabled = false;
-                    NextButton.IsEnabled = true;
-                    CurrentSector = 0;
+            FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4);
+            CurrentSector = 0;
+            BackButton.IsEnabled = false;
+            NextButton.IsEnabled = true;
 
-                    if (IsStore())
-                    {
-                        Store temp = new Store();
-                        FCB.readRec(temp, 1);
-                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                    }
-                    else if (IsProduct())
-                    {
-                        Product temp = new Product();
-                        FCB.readRec(temp, 1);
-                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                    }
-                    else if (IsEmployee())
-                    {
-                        Employee temp = new Employee();
-                        FCB.readRec(temp, 1);
-                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                    }
-                    break;
-                case IOState.O:
-                    FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4);
-                    CurrentSector = 0;
-                    BackButton.IsEnabled = false;
-                    NextButton.IsEnabled = true;
-
-                    if (IsStore())
-                    {
-                        Store temp = new Store();
-                        FCB.readRec(temp);
-                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                    }
-                    else if (IsProduct())
-                    {
-                        Product temp = new Product();
-                        FCB.readRec(temp);
-                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                    }
-                    else if (IsEmployee())
-                    {
-                        Employee temp = new Employee();
-                        FCB.readRec(temp);
-                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                    }
-                    break;
-                //case IOState.E:
-                //    FCB.seekRec(2, 1);
-                //    break;
-                default:
-                    throw new Exception("Unknown format to read/write from file.");
-            }
+            ReadRecord();
         }
 
         private void InitAvailableButtons()
@@ -124,6 +63,7 @@ namespace FMS5774_8856_5366_WPF
                         CencelButton.IsEnabled = true;
                         break;
                     case IOState.O:
+                        ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).DisableControls();
                         break;
                     case IOState.E:
                         AddButton.IsEnabled = true;
@@ -208,53 +148,12 @@ namespace FMS5774_8856_5366_WPF
                    FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4);
                    CurrentSector = 0;
                    ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).ClearFields();
+
+                   BackButton.IsEnabled = false;
+                   NextButton.IsEnabled = true;
                }
 
-               switch (FCB.IorO())
-               {
-                   case IOState.IO:
-                       if (IsStore())
-                       {
-                           Store temp = new Store();
-                           FCB.readRec(temp, 1);
-                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                       }
-                       else if (IsProduct())
-                       {
-                           Product temp = new Product();
-                           FCB.readRec(temp, 1);
-                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                       }
-                       else if (IsEmployee())
-                       {
-                           Employee temp = new Employee();
-                           FCB.readRec(temp, 1);
-                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                       }
-                       break;
-                   case IOState.O:
-                       if (IsStore())
-                       {
-                           Store temp = new Store();
-                           FCB.readRec(temp);
-                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                       }
-                       else if (IsProduct())
-                       {
-                           Product temp = new Product();
-                           FCB.readRec(temp);
-                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                       }
-                       else if (IsEmployee())
-                       {
-                           Employee temp = new Employee();
-                           FCB.readRec(temp);
-                           ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                       }
-                       break;
-                   default:
-                       throw new Exception("Unknown format to read/write from file.");
-               }
+               ReadRecord();
             }
             catch (Exception exp)
             {
@@ -279,8 +178,10 @@ namespace FMS5774_8856_5366_WPF
         {
             try
             {
-                FCB.updateRecCancel();
+                if (FCB.IorO() == IOState.IO)
+                    FCB.updateRecCancel();
                 InitData();
+                CurrentSector = 0;
             }
             catch (Exception exp)
             {
@@ -293,7 +194,8 @@ namespace FMS5774_8856_5366_WPF
         {
             try
             {
-                FCB.updateRecCancel();
+                if (FCB.IorO() == IOState.IO)
+                    FCB.updateRecCancel();
                 FCB.seekRec(1, -1);
                 CurrentSector--;
                 NextButton.IsEnabled = true;
@@ -301,51 +203,7 @@ namespace FMS5774_8856_5366_WPF
                 if (CurrentSector <= 0)
                     BackButton.IsEnabled = false;
 
-                switch (FCB.IorO())
-                {
-                    case IOState.IO:
-                        if (IsStore())
-                        {
-                            Store temp = new Store();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsProduct())
-                        {
-                            Product temp = new Product();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsEmployee())
-                        {
-                            Employee temp = new Employee();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        break;
-                    case IOState.O:
-                        if (IsStore())
-                        {
-                            Store temp = new Store();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsProduct())
-                        {
-                            Product temp = new Product();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsEmployee())
-                        {
-                            Employee temp = new Employee();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        break;
-                    default:
-                        throw new Exception("Unknown format to read/write from file.");
-                }
+                ReadRecord();
             }
             catch (Exception exp)
             {
@@ -354,203 +212,10 @@ namespace FMS5774_8856_5366_WPF
             }
         }
 
-        private void GoToButton_Click(object sender, RoutedEventArgs e)
+        private void ReadRecord()
         {
-            try
-            {
-                if (GoToIntegerUpDown.Value > MaxRecord)
-                {
-                    GoToIntegerUpDown.Value = MaxRecord;
-                    throw new Exception("GoTo value too high");
-                }
-                FCB.updateRecCancel();
-                FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)GoToIntegerUpDown.Value);
-                CurrentSector = GoToIntegerUpDown.Value;
-                BackButton.IsEnabled = true;
-                NextButton.IsEnabled = true;
+            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).ClearFields();
 
-                switch (FCB.IorO())
-                {
-                    case IOState.IO:
-                        if (IsStore())
-                        {
-                            Store temp = new Store();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsProduct())
-                        {
-                            Product temp = new Product();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsEmployee())
-                        {
-                            Employee temp = new Employee();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        break;
-                    case IOState.O:
-                        if (IsStore())
-                        {
-                            Store temp = new Store();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsProduct())
-                        {
-                            Product temp = new Product();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsEmployee())
-                        {
-                            Employee temp = new Employee();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        break;
-                    default:
-                        throw new Exception("Unknown format to read/write from file.");
-                }
-            }
-            catch (Exception exp)
-            {
-                ErrorHandling.ShowError(exp.Message);
-            }
-        }
-
-        private void NextButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                FCB.updateRecCancel();
-                FCB.seekRec(1, 1);
-                CurrentSector++;
-                BackButton.IsEnabled = true;
-
-                if (CurrentSector >= FCB.GetFileDescription().EofRecNr)
-                    NextButton.IsEnabled = false;
-
-                switch (FCB.IorO())
-                {
-                    case IOState.IO:
-                        if (IsStore())
-                        {
-                            Store temp = new Store();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsProduct())
-                        {
-                            Product temp = new Product();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsEmployee())
-                        {
-                            Employee temp = new Employee();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        break;
-                    case IOState.O:
-                        if (IsStore())
-                        {
-                            Store temp = new Store();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsProduct())
-                        {
-                            Product temp = new Product();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsEmployee())
-                        {
-                            Employee temp = new Employee();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        break;
-                    default:
-                        throw new Exception("Unknown format to read/write from file.");
-                }
-            }
-            catch (Exception exp)
-            {
-                ErrorHandling.ShowError(exp.Message);
-                NextButton.IsEnabled = false;
-            }
-        }
-
-        private void LastButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                FCB.updateRecCancel();
-                FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)FCB.GetFileDescription().EofRecNr - 1);
-                CurrentSector = (int)FCB.GetFileDescription().EofRecNr;
-                NextButton.IsEnabled = false;
-                BackButton.IsEnabled = true;
-
-                switch (FCB.IorO())
-                {
-                    case IOState.IO:
-                        if (IsStore())
-                        {
-                            Store temp = new Store();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsProduct())
-                        {
-                            Product temp = new Product();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsEmployee())
-                        {
-                            Employee temp = new Employee();
-                            FCB.readRec(temp, 1);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        break;
-                    case IOState.O:
-                        if (IsStore())
-                        {
-                            Store temp = new Store();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsProduct())
-                        {
-                            Product temp = new Product();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        else if (IsEmployee())
-                        {
-                            Employee temp = new Employee();
-                            FCB.readRec(temp);
-                            ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
-                        }
-                        break;
-                    default:
-                        throw new Exception("Unknown format to read/write from file.");
-                }
-            }
-            catch (Exception exp)
-            {
-                ErrorHandling.ShowError(exp.Message);
-            }
-        }
-
-        private void CencelButton_Click(object sender, RoutedEventArgs e)
-        {
-            FCB.updateRecCancel();
             switch (FCB.IorO())
             {
                 case IOState.IO:
@@ -593,7 +258,102 @@ namespace FMS5774_8856_5366_WPF
                         ((IRecordUserControl)RecordDetailsStackPanel.Children[0]).Record = temp;
                     }
                     break;
+                default:
+                    throw new Exception("Unknown format to read/write from file.");
             }
+        }
+
+        private void GoToButton_Click(object sender, RoutedEventArgs e)
+        {
+            GoTo();
+        }
+
+        private void GoTo()
+        {
+            try
+            {
+                if (GoToIntegerUpDown.Value > MaxRecord)
+                {
+                    GoToIntegerUpDown.Value = MaxRecord;
+                    throw new Exception("GoTo value too high");
+                }
+
+                if (FCB.IorO() == IOState.IO)
+                    FCB.updateRecCancel();
+                FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)GoToIntegerUpDown.Value);
+                CurrentSector = GoToIntegerUpDown.Value;
+
+                if (CurrentSector == FCB.GetFileDescription().EofRecNr)
+                    NextButton.IsEnabled = false;
+                else
+                {
+                    if (CurrentSector == 0)
+                        BackButton.IsEnabled = false;
+                    else
+                        BackButton.IsEnabled = true;
+
+                    NextButton.IsEnabled = true;
+                }
+
+                ReadRecord();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (FCB.IorO() == IOState.IO)
+                    FCB.updateRecCancel();
+                FCB.seekRec(1, 1);
+                CurrentSector++;
+                BackButton.IsEnabled = true;
+
+                if (CurrentSector >= FCB.GetFileDescription().EofRecNr)
+                    NextButton.IsEnabled = false;
+
+                ReadRecord();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+                NextButton.IsEnabled = false;
+            }
+        }
+
+        private void LastButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (FCB.IorO() == IOState.IO)
+                    FCB.updateRecCancel();
+                FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)FCB.GetFileDescription().EofRecNr - 1);
+                CurrentSector = (int)FCB.GetFileDescription().EofRecNr;
+                NextButton.IsEnabled = false;
+                BackButton.IsEnabled = true;
+
+                ReadRecord();
+            }
+            catch (Exception exp)
+            {
+                ErrorHandling.ShowError(exp.Message);
+            }
+        }
+
+        private void CencelButton_Click(object sender, RoutedEventArgs e)
+        {
+            FCB.updateRecCancel();
+            ReadRecord();
+        }
+
+        private void GoToIntegerUpDown_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.GetKeyStates(Key.Enter) == KeyStates.Down)
+                GoTo();
         }
     }
 }

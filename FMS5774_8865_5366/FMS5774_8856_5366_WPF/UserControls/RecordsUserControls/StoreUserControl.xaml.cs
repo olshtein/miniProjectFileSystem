@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using FMS5774_Cpp_CSharp_Adapter.RecordTypes;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using FMS5774_Cpp_CSharp_Adapter;
-using FMS5774_Cpp_CSharp_Adapter.RecordTypes;
 
 namespace FMS5774_8856_5366_WPF.RecordsUserControls
 {
@@ -36,6 +22,14 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
                     City = store.city;
                 }
             }
+        }
+
+        public void DisableControls()
+        {
+            nameTextBox.IsEnabled = false;
+            phoneTextBox.IsEnabled = false;
+            addressTextBox.IsEnabled = false;
+            cityTextBox.IsEnabled = false;
         }
 
         public string Name

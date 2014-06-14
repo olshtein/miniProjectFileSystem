@@ -1,11 +1,9 @@
-using System;
-using System.Windows;
-using System.Collections.Generic;
-using System.Windows.Controls;
-using Microsoft.Win32;
-using FMS5774_Cpp_CSharp_Adapter;
 using FMS5774_8856_5366_WPF.CreateDisk;
+using FMS5774_Cpp_CSharp_Adapter;
+using System;
 using System.IO;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace FMS5774_8856_5366_WPF
 {

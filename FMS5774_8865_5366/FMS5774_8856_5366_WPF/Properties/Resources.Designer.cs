@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FMS5774_8856_5366_WPF.Properties {
-    using System;
-    
-    
+namespace FMS5774_8856_5366_WPF.Properties
+{
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

@@ -89,7 +89,7 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 
 		isClose();
 
-		if (iostate == O)
+		if (iostate == O && updateFlag == 1)
 			throw exception("ERROR: The file open to read-only (at void FCB::readRec(char * , unsigned int )");
 
 		if (lock == true && updateFlag == 1)
@@ -97,9 +97,9 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 
 		memcpy(data,&(Buffer.rawData[ (currRecNrInBuff*fileDesc.maxRecSize)]),fileDesc.maxRecSize);
 
-		if (updateFlag==0 && currRecNr < fileDesc.eofRecNr)
+		/*if (updateFlag==0 && currRecNr < fileDesc.eofRecNr)
 			seekRec(1,1);
-		else if (updateFlag==1)
+		else*/ if (updateFlag==1)
 			lock=true;
 	}
 
@@ -141,7 +141,7 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 		if (num < 0 || num > (fileDesc.fileSize-1)*(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize) )
 			throw exception ("ERROR: The address is not valid. (at void FCB::seekRec(unsigned int , int )");
 
-		if (num > fileDesc.eofRecNr+1)
+		if (num > fileDesc.fileAddr + fileDesc.eofRecNr)
 			throw exception ("ERROR: Unauthorized location. (at void FCB::seekRec(unsigned int , int )");
 
 		int numSector = (num)/(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize)+1;
@@ -226,7 +226,7 @@ void FCB::deleteRec()
 			Buffer.rawData[i] = 0;
 		}
 
-		//lock = false;
+		lock = false;
 
 		//move to next record.
 		seekRec(1,1);
@@ -250,7 +250,7 @@ void FCB::updateRec(char * recPtr)
 		//update
 		writeUpdateRec(recPtr);
 
-		//lock = false;
+		lock = false;
 	}
 	catch (exception ex)
 	{

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FMS5774_Cpp_CSharp_Adapter;
+using FMS5774_Cpp_CSharp_Adapter.RecordTypes;
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using FMS5774_Cpp_CSharp_Adapter;
-using FMS5774_Cpp_CSharp_Adapter.RecordTypes;
 
 namespace FMS5774_Cpp_CSharp_Adapter_Test
 {

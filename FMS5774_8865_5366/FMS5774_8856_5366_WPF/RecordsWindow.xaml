@@ -18,7 +18,7 @@
             <Button Name="FirstButton" Content="First" Margin="3" Click="FirstButton_Click"/>
             <Button Name="BackButton" Content="Back" Margin="3" Click="BackButton_Click"/>
             <Button Name="GoToButton" Content="Go To:" Margin="3" Click="GoToButton_Click"/>
-            <xctk:IntegerUpDown Name="GoToIntegerUpDown" Minimum="0" Maximum="{Binding Path=MaxRecord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="0" Margin="3"/>
+            <xctk:IntegerUpDown Name="GoToIntegerUpDown" Minimum="0" Maximum="{Binding Path=MaxRecord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="0" Margin="3" KeyDown="GoToIntegerUpDown_KeyDown"/>
             <Button Name="NextButton" Content="Next" Margin="3" Click="NextButton_Click" />
             <Button Name="LastButton" Content="Last" Margin="3" Click="LastButton_Click"/>
         </StackPanel>
