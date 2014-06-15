@@ -9,27 +9,27 @@
     <StackPanel>
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Barcode:" Margin="3"/>
-            <TextBox Name="barcodeTextBox" Text="{Binding Path=Barcode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="barcodeTextBox" Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Manufacturer:" Margin="3"/>
-            <TextBox Name="manufacturerTextBox" Text="{Binding Path=Manufacturer,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="manufacturerTextBox" Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Name:" Margin="3"/>
-            <TextBox Name="nameTextBox" Text="{Binding Path=Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="nameTextBox" Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Suplier:" Margin="3"/>
-            <TextBox Name="suplierTextBox" Text="{Binding Path=Suplier,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="suplierTextBox" Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Price:" Margin="3"/>
-            <xctk:DoubleUpDown Name="priceDoubleUpDown" FormatString="C2" Minimum="0" Value="{Binding Path=Suplier,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <xctk:DoubleUpDown Name="priceDoubleUpDown" FormatString="C2" Minimum="0" Width="100" Margin="3"/>
         </StackPanel>
 
     </StackPanel>

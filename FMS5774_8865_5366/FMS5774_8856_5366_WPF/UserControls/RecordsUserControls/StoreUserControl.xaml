@@ -8,22 +8,22 @@
     <StackPanel>
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Name:" Margin="3"/>
-            <TextBox Name="nameTextBox" Text="{Binding Path=Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="nameTextBox" Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Phone Num:" Margin="3"/>
-            <TextBox Name="phoneTextBox" Text="{Binding Path=PhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="phoneTextBox" Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Address:" Margin="3"/>
-            <TextBox Name="addressTextBox" Text="{Binding Path=Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="addressTextBox" Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="City:" Margin="3"/>
-            <TextBox Name="cityTextBox" Text="{Binding Path=City,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="cityTextBox" Width="100" Margin="3"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

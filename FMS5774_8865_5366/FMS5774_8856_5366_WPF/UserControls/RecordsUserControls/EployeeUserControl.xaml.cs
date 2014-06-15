@@ -19,7 +19,7 @@ namespace FMS5774_8856_5366_WPF.RecordsUserControls
             get { return new Employee(ID, LastName, FirstName, (float)Salary, Seniority); }
             set
             {
-                if (value.GetType() == typeof(Product))
+                if (value.GetType() == typeof(Employee))
                 {
                     Employee employee = (Employee)value;
                     ID = employee.ID;
