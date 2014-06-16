@@ -79,7 +79,8 @@ namespace FMS5774_Cpp_CSharp_Adapter
                 List<DirEntry> list = new List<DirEntry>();
                 for (uint i = 0; i < 28; i++)
                 {
-                  
+                    DirEntry idir = this.GetDirEntry(i);
+                    if (idir.EntryStatus == '1')
                         list.Add(this.GetDirEntry(i));
 
                 }

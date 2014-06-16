@@ -43,7 +43,7 @@ namespace FMS5774_8856_5366_WPF
                 allFile = Dsk.GetDirRoot();
                 foreach (DirEntry file in allFile)
                 {
-                    if (file.FileName != "" && file.EntryStatus == (char)1)
+                    if (file.FileName != "" && file.EntryStatus == '1')
                     {
                         FileUserControl fuc = new FileUserControl(file);
                         FilesWrapPanel.Children.Insert(0, fuc);

@@ -37,6 +37,7 @@ namespace FMS5774_8856_5366_WPF
                 imageIO.Source = imageSource;
                 nameLabel.Content = myFile.FileName;
                 TextBlockFileUse.Text = "size file: " + myFile.FileSize.ToString() + " KB";
+                TextBlockFileUseOwner.Text = "Owner:Rabbi " + myFile.FileOwner.ToString() + ".";
 
                 if (myFile.FileOwner != MainWindow.User)
                 {

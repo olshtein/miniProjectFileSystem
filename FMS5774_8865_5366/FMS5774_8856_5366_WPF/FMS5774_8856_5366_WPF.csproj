@@ -189,6 +189,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\DataSources\FMS5774_Cpp_CSharp_Adapter.cppToCsharpAdapter.datasource" />
     <None Include="Properties\DataSources\FMS5774_Cpp_CSharp_Adapter.DirEntry.datasource" />
     <None Include="Properties\DataSources\FMS5774_Cpp_CSharp_Adapter.Disk.datasource" />

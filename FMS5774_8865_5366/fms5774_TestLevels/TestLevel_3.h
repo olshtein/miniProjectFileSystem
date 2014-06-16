@@ -61,7 +61,8 @@ public:
 		{
 			fcb2->readRec((char *)&R2[i]);
 		}
-
+		d1.unmountdisk();
+		d1.format(ownerName1);
 			string diskName2 = "disk 2";  
 			string ownerName2= "sara";  
 			Disk d2;

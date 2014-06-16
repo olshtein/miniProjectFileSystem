@@ -24,7 +24,7 @@
         </StackPanel>
         <DockPanel>
             <Label Content="Current record:" DockPanel.Dock="Left" Margin="3"/>
-            <xctk:IntegerUpDown Name="CurrentSectorIntegerUpDown" IsEnabled="False" DockPanel.Dock="Left" Margin="3"/>
+            <xctk:IntegerUpDown Name="CurrentRecordIntegerUpDown" IsEnabled="False" DockPanel.Dock="Left" Margin="3"/>
         </DockPanel>
     </StackPanel>
 </Window>

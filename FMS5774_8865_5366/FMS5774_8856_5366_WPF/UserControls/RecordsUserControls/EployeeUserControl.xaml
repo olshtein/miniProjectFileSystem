@@ -9,22 +9,22 @@
     <StackPanel>
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="ID:" Margin="3"/>
-            <TextBox Name="idTextBox" Width="100" Margin="3"/>
+            <TextBox Name="idTextBox"  Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="First Name:" Margin="3"/>
-            <TextBox Name="firstNameTextBox" Text="{Binding Path=FirstName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="3"/>
+            <TextBox Name="firstNameTextBox"  Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Last Name:" Margin="3"/>
-            <TextBox Name="lastNameTextBox" Width="100" Margin="3"/>
+            <TextBox Name="lastNameTextBox"  Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">
             <Label Content="Salary:" Margin="3"/>
-            <xctk:DoubleUpDown Name="salaryDoubleUpDown" FormatString="C2" Minimum="0" Width="100" Margin="3"/>
+            <xctk:DoubleUpDown Name="salaryDoubleUpDown" FormatString="C2" Minimum="0"  Width="100" Margin="3"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="3">

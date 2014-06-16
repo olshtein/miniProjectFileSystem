@@ -64,8 +64,8 @@ namespace FMS5774_8856_5366_WPF
                         break;
 
                 }
-
-                myDisk.Createfile(this.nameRec.Text, MainWindow.User, "F", sizeClass, (uint)numRec.Value /*Convert.ToUInt32(Math.Ceiling((Double)(numRec.Value * sizeClass) / 1020))*/, "I", 0, sizeOffset); 
+                uint q = Convert.ToUInt32(Math.Ceiling((Double)(numRec.Value * sizeClass) / 1020));
+                myDisk.Createfile(this.nameRec.Text, MainWindow.User, "F", sizeClass,Convert.ToUInt32(Math.Ceiling((Double)(numRec.Value * sizeClass) / 1020)), "I", 0, sizeOffset); 
                 this.Close();
             }
             catch (Exception exp)

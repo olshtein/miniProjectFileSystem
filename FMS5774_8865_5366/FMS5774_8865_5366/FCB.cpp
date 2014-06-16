@@ -30,6 +30,7 @@ FCB::FCB(Disk * disk)
 
 FCB::~FCB()
 {
+	closefile();
 }
 
 DirEntry FCB::getFileDesctription()
@@ -84,7 +85,7 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 {
 	try
 	{
-		//if (!isKeyNull())//בודק אם הרשומה לא ריקה צריך לבדוק רך ניתן לעשות את זה כי ברשומה חדשה לגמרי  היא לא תהיה שווה ל0
+		//if (isKeyNull())//בודק אם הרשומה לא ריקה צריך לבדוק רך ניתן לעשות את זה כי ברשומה חדשה לגמרי  היא לא תהיה שווה ל0
 		//	throw exception("ERROR: There is no record at this location. (at void  FCB::readRec(char * , unsigned int ))");
 
 		isClose();
@@ -97,9 +98,10 @@ void FCB::readRec(char * data, unsigned int updateFlag)
 
 		memcpy(data,&(Buffer.rawData[ (currRecNrInBuff*fileDesc.maxRecSize)]),fileDesc.maxRecSize);
 
-		/*if (updateFlag==0 && currRecNr < fileDesc.eofRecNr)
+		//if (updateFlag==0 && currRecNr < fileDesc.eofRecNr)
+		if (updateFlag==0 )
 			seekRec(1,1);
-		else*/ if (updateFlag==1)
+		else if (updateFlag==1)
 			lock=true;
 	}
 
@@ -114,6 +116,7 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 	try
 	{
 		isClose();
+
 		if ( fileDesc.recFormat == "v" && (startingPoint == 1 || num != 0))
 			throw exception ("ERROR: Jump is unavailable. (at void FCB::seekRec(unsigned int , int )");
 
@@ -135,18 +138,17 @@ void FCB::seekRec(unsigned int startingPoint, int num)
 			throw exception ("ERROR: Starting point is invalid. (at void FCB::seekRec(unsigned int , int )");
 			break;
 		}
-		if ( iostate == E && num != fileDesc.eofRecNr+1)
+		if ( iostate == E && num != fileDesc.eofRecNr)
 			throw exception ("ERROR: Open the file for editing only, you can not move to the requested address. (at void FCB::seekRec(unsigned int , int )");
 
-		if (num < 0 || num > (fileDesc.fileSize-1)*(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize) )
+		if (num < 0 || num > (fileDesc.fileSize)*(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize) )
 			throw exception ("ERROR: The address is not valid. (at void FCB::seekRec(unsigned int , int )");
 
-		if (num > fileDesc.fileAddr + fileDesc.eofRecNr)
+		if (num >  fileDesc.eofRecNr)
 			throw exception ("ERROR: Unauthorized location. (at void FCB::seekRec(unsigned int , int )");
 
 		int numSector = (num)/(SIZE_DATA_IN_SECTOR/fileDesc.maxRecSize)+1;
 
-		cout<<num<<"  "<<numSector <<endl<< currSecNr<<endl;
 		if (numSector != currSecNr)
 			readNewSectorToBuffer(numSector);
 
@@ -190,8 +192,8 @@ void  FCB::writeUpdateRec(char * data)
 		if (iostate ==I || (iostate == E && currRecNr != fileDesc.eofRecNr+1))
 			throw exception ("No permission to write to address current. (at void FCB::writeUpdateRec(char *))");
 
-		if (lock == false)
-			throw exception("ERROR: need to lock record before read/update (at void FCB::writeUpdateRec(char *))");
+		//if (lock == false)//הבדיקה קימת קודם בערכון, לא אמורים לבדוק בכתיבה של רשומה חדשה
+		//	throw exception("ERROR: need to lock record before read/update (at void FCB::writeUpdateRec(char *))");
 
 		memcpy(&(Buffer.rawData[(currRecNrInBuff*fileDesc.maxRecSize)]),data,fileDesc.maxRecSize);
 		changeBuf = true;
@@ -264,15 +266,15 @@ void  FCB::writeRec(char * data)
 	{
 		unsigned int keyStart =  currRecNrInBuff * fileDesc.maxRecSize + fileDesc.keyOffset;//המיקום של המפתח בכל רשומה
 
-		if (isKeyNull())
+		if (!isKeyNull())
 				throw exception("ERROR:can not write, another record is writen here. (at void  FCB::writeRec(char * data))");
-		writeUpdateRec(data);
-
-		if ( currRecNr== fileDesc.eofRecNr+1)//אם הוספנו רשומה חדשה בסוף הרשומות
+		if ( currRecNr== fileDesc.eofRecNr)//אם הוספנו רשומה חדשה בסוף הרשומות
 		{
 			fileDesc.eofRecNr++;
 			changeDir=true;
 		}
+		writeUpdateRec(data);
+
 
 	}
 	catch (exception ex)

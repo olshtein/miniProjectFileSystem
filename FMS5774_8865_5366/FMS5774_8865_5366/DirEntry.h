@@ -15,9 +15,9 @@ const unsigned int KEY_DEFAULT_LENGTH = 4; //int
 **************************************************/
 enum EntryStatus
 {
-	empty,
-	active,
-	inactive
+	empty='0',
+	active= '1',
+	inactive = '2'
 };
 
 /*************************************************

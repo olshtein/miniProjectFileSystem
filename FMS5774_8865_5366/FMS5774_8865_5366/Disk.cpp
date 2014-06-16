@@ -267,14 +267,17 @@ void Disk::format(string & nameOwner)
 	{
 		throw exception("ERROR: unable to open file, or file owner does not match data in vhd (at Disk::format(string&))");
 	}
-
+	this->mountdisk(string(vhd.diskName));
 	resetDat();
 
 	for (int i=0; i < MAX_DIR_IN_SECTOR; i++)
-		*rootdir[i] = DirEntry();
+		rootdir[i]->entryStatus = empty;
 
 	Functions::dateNow( vhd.formatDate);
 	vhd.isFormated=true;
+
+	savechanges();
+	this->unmountdisk();
 
 }
 
@@ -412,8 +415,8 @@ void Disk::dealloc(DATtype & fat)
 void Disk::createfile (string & fileName,  string & fileOwner, string & fileFormat, unsigned int entryLen, unsigned int requestedSectors, string & keyDT, unsigned int offset, unsigned int keyLen, FitType fitType)
 {
 	//check file name does not exist
-	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != 0; i++)
-		if (rootdir[i]->Filename == fileName)
+	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != empty; i++)
+		if (rootdir[i]->Filename == fileName&&rootdir[i]->entryStatus == active)
 			throw exception("ERROR: file name already exists (at void Disk::createfile(string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int))");
 
 	// check key format
@@ -427,7 +430,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	//search RootDir for space for entry
 	int i;
 
-	for (i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus == 1; i++) ;
+	for (i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus == active; i++) ;
 
 	if (i == ROOT_DIR_LENGTH) // no empty slot was found
 		throw exception("ERROR: can't add entry, rootDir is full. (at void Disk::createfile (string &,  string &, string &, unsigned int, unsigned int, string &, unsigned int, unsigned int=KEY_DEFAULT_LENGTH))");
@@ -439,7 +442,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	rootdir[i]->maxRecSize = entryLen;
 	rootdir[i]->actualRecSize = fileFormat == "F"? entryLen : 0;
 	rootdir[i]->fileSize = requestedSectors;
-	rootdir[i]->eofRecNr = requestedSectors;
+	rootdir[i]->eofRecNr = 2;
 	strcpy_s(rootdir[i]->keyType, 2, keyDT.c_str());
 	rootdir[i]->keyOffset = offset;
 	rootdir[i]->keySize = keyLen;
@@ -464,7 +467,6 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 		}
 		j=j*2;
 		rootdir[i]->fileAddr=j;
-		rootdir[i]->entryStatus=1;
 		fh.fileDesc = *rootdir[i];
 		fh.sectorNr=j;
 		writeSector(j,(Sector*)&fh);
@@ -483,9 +485,9 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 void Disk::delfile(string & fileName, string & fileOwner)
 {
 	//search file in rootdir
-	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != 0; i++)
+	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != empty; i++)
 	{
-		if (rootdir[i]->Filename == fileName&&rootdir[i]->entryStatus==1)
+		if (rootdir[i]->Filename == fileName&&rootdir[i]->entryStatus==active)
 		{
 			if (rootdir[i]->fileOwner != fileOwner)
 				throw exception("ERROR: user not allowed to delete the file (at void Disk::delfile(string &, string &)");
@@ -527,9 +529,9 @@ void Disk::delfile(string & fileName, string & fileOwner)
 void Disk::extendfile(string & fileName, string & fileOwner, unsigned int addedSectors)
 {
 	//search file in rootdir
-	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != 0; i++)
+	for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus != empty; i++)
 	{
-		if (rootdir[i]->Filename == fileName)
+		if (rootdir[i]->Filename == fileName&&rootdir[i]->entryStatus==active)
 		{
 			if (rootdir[i]->fileOwner != fileOwner)
 				throw exception("ERROR: user not allowed to delete the file (at void Disk::extendfile(string &, string &, unsigned int)");
@@ -581,9 +583,9 @@ FCB *Disk::openfile(string & filename, string & fileOwner, string & io)
 	try
 	{
 		FCB *newFcb=new FCB(this);
-		for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus !=0; i++)
+		for (int i=0; i < ROOT_DIR_LENGTH && rootdir[i]->entryStatus !=empty; i++)
 		{
-			if (rootdir[i]->Filename==filename && rootdir[i]->entryStatus ==1)
+			if (rootdir[i]->Filename==filename && rootdir[i]->entryStatus ==active)
 			{
 				readSector(rootdir[i]->fileAddr,&newFcb->Buffer);
 				FileHeader my;

@@ -33,6 +33,8 @@
                     <ToolTip>
                         <StackPanel>
                             <TextBlock x:Name="TextBlockFileUse"/>
+                            <TextBlock x:Name="TextBlockFileUseOwner"/>
+
                         </StackPanel>
                     </ToolTip>
                 </StackPanel.ToolTip>
