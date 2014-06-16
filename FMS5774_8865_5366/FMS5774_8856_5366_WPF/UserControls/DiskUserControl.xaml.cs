@@ -24,10 +24,7 @@ namespace FMS5774_8856_5366_WPF
                 Dsk = my;
                 this.container = container;
                 InitializeComponent();
-                int Used = 1600 - my.Howmuchempty(my.myDiskPointer);
-                sizeBar.Value =( (((float)Used) / 16) * 2);
-                TextBlockDiskUse.Text = "Used: " + (2 * Used).ToString() + " KB";
-                TextBlockDiskFree.Text = "Free: " + (2 * (1600 - Used)).ToString() + " KB";
+                UpdateSizeOfDisk(my);
                 TextBlockOwner.Text = "Owner: " + Dsk.GetVolumeHeader().DiskOwner;
 
                 nameLabel.Content = my.GetVolumeHeader().DiskName;
@@ -36,6 +33,14 @@ namespace FMS5774_8856_5366_WPF
             {
                 ErrorHandling.ShowError(exp.Message);
             }
+        }
+
+        private void UpdateSizeOfDisk(Disk my)
+        {
+            int Used = 1600 - my.Howmuchempty(my.myDiskPointer);
+            sizeBar.Value = (((float)Used * 2) / 32);
+            TextBlockDiskUse.Text = "Used: " + (2 * Used).ToString() + " KB";
+            TextBlockDiskFree.Text = "Free: " + (2 * (1600 - Used)).ToString() + " KB";
         }
 
         private void DiskUserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -78,6 +83,7 @@ namespace FMS5774_8856_5366_WPF
             try
             {
                 container.Visibility = Visibility.Visible;
+                UpdateSizeOfDisk(Dsk);
             }
             catch (Exception exp)
             {

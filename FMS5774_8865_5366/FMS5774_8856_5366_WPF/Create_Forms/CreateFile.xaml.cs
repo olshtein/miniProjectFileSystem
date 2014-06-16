@@ -124,7 +124,7 @@ namespace FMS5774_8856_5366_WPF
         private void ChangeMaxRecords()
         {
             sizeRec();
-            numRec.Maximum = (int?)(myDisk.Howmuchempty(myDisk.myDiskPointer) * (1020 / sizeClass));
+            numRec.Maximum = (int?)(myDisk.Howmuchempty(myDisk.myDiskPointer) * 2 * (1020 / sizeClass)) - 1;
         }
 
     }
