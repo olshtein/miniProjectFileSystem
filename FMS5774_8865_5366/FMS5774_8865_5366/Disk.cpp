@@ -442,7 +442,7 @@ void Disk::createfile (string & fileName,  string & fileOwner, string & fileForm
 	rootdir[i]->maxRecSize = entryLen;
 	rootdir[i]->actualRecSize = fileFormat == "F"? entryLen : 0;
 	rootdir[i]->fileSize = requestedSectors;
-	rootdir[i]->eofRecNr = 2;
+	rootdir[i]->eofRecNr = 0;
 	strcpy_s(rootdir[i]->keyType, 2, keyDT.c_str());
 	rootdir[i]->keyOffset = offset;
 	rootdir[i]->keySize = keyLen;

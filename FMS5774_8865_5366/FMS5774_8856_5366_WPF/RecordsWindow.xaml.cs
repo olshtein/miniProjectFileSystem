@@ -346,10 +346,10 @@ namespace FMS5774_8856_5366_WPF
                 //FCB.seekRec(0, (int)FCB.GetFileDescription().FileAddr - 4 + (int)FCB.GetFileDescription().EofRecNr - 1);
  //               FCB.seekRec(0, (int)FCB.GetFileDescription().EofRecNr - 1);
                 GoToIntegerUpDown.Value = (int)FCB.GetFileDescription().EofRecNr;
-                NextButton.IsEnabled = false;
-                BackButton.IsEnabled = true;
 
                 GoTo();
+                NextButton.IsEnabled = false;
+                BackButton.IsEnabled = true;
             }
             catch (Exception exp)
             {
